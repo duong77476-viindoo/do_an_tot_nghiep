@@ -1,1 +1,1 @@
-console.log('github');
+console.log('quản lý sản phẩm');
