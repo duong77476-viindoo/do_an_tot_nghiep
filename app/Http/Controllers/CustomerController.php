@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\CategoryProduct;
 use App\Models\Customer;
+use App\Models\PostType;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Database\Eloquent\Model;
@@ -37,7 +38,10 @@ class CustomerController extends Controller
         $meta_keywords = 'Customer';
         $meta_title = 'Customer';
         $url_canonical = '';
+        $post_types = PostType::where('status',1)->get();
+
         return view('frontend.pages.login')
+            ->with('post_types',$post_types)
             ->with('meta_desc',$meta_desc)
             ->with('meta_keywords',$meta_keywords)
             ->with('meta_title',$meta_title)
