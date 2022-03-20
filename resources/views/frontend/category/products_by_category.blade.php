@@ -6,33 +6,36 @@
     <div class="features_items"><!--features_items-->
         <h2 class="title text-center">Danh mục {{$category_product->category_product_name}}</h2>
         @foreach($sanphams_by_category as $san_pham)
-            <a href="{{route('product',['code'=>$san_pham->code])}}">
+
             <div class="col-sm-4">
                 <div class="product-image-wrapper">
                     <div class="single-products">
                         <div class="productinfo text-center">
-                            <form>
-                                @csrf
-                                <input type="hidden"  class="cart_product_id_{{$san_pham->id}}" value="{{$san_pham->id}}">
-                                <input type="hidden"  class="cart_product_name_{{$san_pham->id}}" value="{{$san_pham->name}}">
-                                <input type="hidden"  class="cart_product_image_{{$san_pham->id}}" value="{{$san_pham->anh_dai_dien}}">
-                                <input type="hidden"  class="cart_product_price_{{$san_pham->id}}" value="{{$san_pham->gia_ban}}">
-                                <input type="hidden"  class="cart_product_qty_{{$san_pham->id}}" value="1" >
-                                <input type="hidden"  class="product_qty_{{$san_pham->id}}" value="{{$san_pham->so_luong}}">
+{{--                            <form>--}}
+{{--                                @csrf--}}
+{{--                                <input type="hidden"  class="cart_product_id_{{$san_pham->id}}" value="{{$san_pham->id}}">--}}
+{{--                                <input type="hidden"  class="cart_product_name_{{$san_pham->id}}" value="{{$san_pham->name}}">--}}
+{{--                                <input type="hidden"  class="cart_product_image_{{$san_pham->id}}" value="{{$san_pham->anh_dai_dien}}">--}}
+{{--                                <input type="hidden"  class="cart_product_price_{{$san_pham->id}}" value="{{$san_pham->gia_ban}}">--}}
+{{--                                <input type="hidden"  class="cart_product_qty_{{$san_pham->id}}" value="1" >--}}
+{{--                                <input type="hidden"  class="product_qty_{{$san_pham->id}}" value="{{$san_pham->so_luong}}">--}}
 
-                                <a href="{{route('product',['code'=>$san_pham->code])}}">
+                                @foreach($san_pham->products as $product)
+                                    <a href="{{route('product',['code'=>$product->code])}}">
+                                        @break
+                                        @endforeach
                                     <img src="{{url('public/uploads/products/'.$san_pham->anh_dai_dien)}}" alt="" />
                                     <h2>{{number_format($san_pham->gia_ban,0,'','.')}} đ</h2>
                                     <p>{{$san_pham->name}}</p>
                                     {{--                    <a href="{{route('product',['code'=>$san_pham->code])}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>--}}
 
                                 </a>
-                                <button type="button" class="btn btn-default add-to-cart" name="add-to-cart" data-product_id="{{$san_pham->id}}">
-                                    <i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</button>
+{{--                                <button type="button" class="btn btn-default add-to-cart" name="add-to-cart" data-product_id="{{$san_pham->id}}">--}}
+{{--                                    <i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</button>--}}
                                 <button type="button" class="btn btn-default quick_view" data-toggle="modal" data-target="#quick_view"
                                         name="add-to-cart" data-product_id="{{$san_pham->id}}">
                                     <i class="fa fa-eye"></i>Xem nhanh</button>
-                            </form>
+{{--                            </form>--}}
 
                         </div>
                         {{--                <div class="product-overlay">--}}
@@ -52,7 +55,6 @@
                 </div>
 
             </div>
-            </a>
         @endforeach
 
     </div><!--features_items-->

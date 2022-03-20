@@ -6,7 +6,7 @@ use App\Models\Brand;
 use App\Models\CategoryProduct;
 use App\Models\Customer;
 use App\Models\PostType;
-use App\Models\Product;
+use App\Models\ProductGroup;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductVariationValue;
+use App\Models\NganhHang;
 use Illuminate\Http\Request;
 
-class ProductVariationValueController extends Controller
+class NganhHangController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ProductVariationValueController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ProductVariationValue  $productVariationValue
+     * @param  \App\Models\NganhHang  $nganhHang
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductVariationValue $productVariationValue)
+    public function show(NganhHang $nganhHang)
     {
         //
     }
@@ -52,10 +52,10 @@ class ProductVariationValueController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ProductVariationValue  $productVariationValue
+     * @param  \App\Models\NganhHang  $nganhHang
      * @return \Illuminate\Http\Response
      */
-    public function edit(ProductVariationValue $productVariationValue)
+    public function edit(NganhHang $nganhHang)
     {
         //
     }
@@ -64,10 +64,10 @@ class ProductVariationValueController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProductVariationValue  $productVariationValue
+     * @param  \App\Models\NganhHang  $nganhHang
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductVariationValue $productVariationValue)
+    public function update(Request $request, NganhHang $nganhHang)
     {
         //
     }
@@ -75,10 +75,10 @@ class ProductVariationValueController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ProductVariationValue  $productVariationValue
+     * @param  \App\Models\NganhHang  $nganhHang
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductVariationValue $productVariationValue)
+    public function destroy(NganhHang $nganhHang)
     {
         //
     }

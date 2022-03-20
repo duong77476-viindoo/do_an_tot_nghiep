@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\CategoryProduct;
 use App\Models\PostType;
-use App\Models\Product;
+use App\Models\ProductGroup;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -66,7 +66,7 @@ class CartController extends Controller
         $product_id = $request->product_id;
         $so_luong = $request->so_luong;
 
-        $san_pham_chon = Product::find($product_id);
+        $san_pham_chon = ProductGroup::find($product_id);
         $data['id'] = $san_pham_chon->id;
         $data['qty'] = $so_luong;
         $data['name'] = $san_pham_chon->name;

@@ -21,8 +21,8 @@ class CategoryProduct extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function products(){
-        return $this->belongsToMany(Product::class);
+    public function product_groups(){
+        return $this->belongsToMany(ProductGroup::class);
     }
 
     protected static function boot() {

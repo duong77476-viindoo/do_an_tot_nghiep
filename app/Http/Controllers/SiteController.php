@@ -10,6 +10,7 @@ use App\Models\Gallery;
 use App\Models\Post;
 use App\Models\PostType;
 use App\Models\Product;
+use App\Models\ProductGroup;
 use App\Models\Slider;
 use App\Models\Tag;
 use App\Models\Video;
@@ -30,7 +31,7 @@ class SiteController extends Controller
         $category_products = CategoryProduct::where('category_product_status',1)->get();
         $brands = Brand::where('brand_status',1)->get();
         $category_product = CategoryProduct::where('code',$code)->first();
-        $sanphams_by_category = $category_product->products;
+        $sanphams_by_category = $category_product->product_groups;
         $sliders = Slider::where('an_hien',1)->get();
 
         $meta_desc = $category_product->category_product_desc;
@@ -60,7 +61,7 @@ class SiteController extends Controller
         $category_products = CategoryProduct::where('category_product_status',1)->get();
         $brands = Brand::where('brand_status',1)->get();
         $brand = Brand::where('brand_slug',$code)->first();
-        $sanphams_by_brand = $brand->products;
+        $sanphams_by_brand = $brand->product_groups;
         $sliders = Slider::where('an_hien',1)->get();
 
 
@@ -92,33 +93,32 @@ class SiteController extends Controller
         $category_products = CategoryProduct::where('category_product_status',1)->get();
         $brands = Brand::where('brand_status',1)->get();
 
-        $san_pham_chi_tiet = Product::where('code',$code)->first();
+//        $san_pham_chi_tiet = ProductGroup::where('code',$code)->first();
+        $phien_ban_san_pham = Product::where('code',$code)->first();
+        $nhom_san_pham = ProductGroup::where('id',$phien_ban_san_pham->product_group_id)->first();
         $sliders = Slider::where('an_hien',1)->get();
 
 
-        $meta_desc = $san_pham_chi_tiet->mo_ta_ngan_gon;
-        $meta_keywords = $san_pham_chi_tiet->meta_keywords;
-        $meta_title = $san_pham_chi_tiet->name;
+        $meta_desc = $nhom_san_pham->mo_ta_ngan_gon;
+        $meta_keywords = $nhom_san_pham->meta_keywords;
+        $meta_title = $nhom_san_pham->name;
         $url_canonical = $request->url();
 
 
         $san_pham_lien_quan = array();
-        foreach ($san_pham_chi_tiet->category_products as $category_product){
-            $san_pham_lien_quan[] = DB::table('ds_san_pham')
-                ->where('category_product_id',$category_product->id)
-                ->where('id','!=',$san_pham_chi_tiet->id)//ko tính sản phẩm đang xem chi tiết
-                ->groupBy('name')
-                ->get();
-
+        foreach ($nhom_san_pham->category_products as $category_product){
+            $san_pham_lien_quan[] = CategoryProductProduct::where('category_product_id',$category_product->id)
+            ->where('product_group_id','!=',$nhom_san_pham->id)->get();
         }
         $id_san_pham = array();
-        //VarDumper::dump($san_pham_lien_quan);
+//        VarDumper::dump($san_pham_lien_quan);
+//        exit();
         foreach ($san_pham_lien_quan as $san_pham)
             foreach ($san_pham as $item)
-                $id_san_pham[]=($item->id);
+                $id_san_pham[]=$item->product_group_id;
 
         //VarDumper::dump(array_unique($id_san_pham));
-        $san_phams_lien_quan = Product::find($id_san_pham);
+        $san_phams_lien_quan = ProductGroup::find($id_san_pham);
 //        VarDumper::dump($san_phams_lien_quan);
 //        foreach ($san_phams_lien_quan as $san_pham)
 //            VarDumper::dump($san_pham->anh_dai_dien);
@@ -128,7 +128,8 @@ class SiteController extends Controller
         return view('frontend.product.chi-tiet-san-pham')
             ->with('post_types',$post_types)
             ->with('categories',$categories)
-            ->with('san_pham_chi_tiet',$san_pham_chi_tiet)
+            ->with('phien_ban_san_pham',$phien_ban_san_pham)
+            ->with('nhom_san_pham',$nhom_san_pham)
             ->with('category_products',$category_products)
             ->with('brands',$brands)
             ->with('san_phams_lien_quan',$san_phams_lien_quan)
@@ -256,7 +257,7 @@ class SiteController extends Controller
 
     public function quick_view(Request $request){
         $product_id = $request->product_id;
-        $product = Product::find($product_id);
+        $product = ProductGroup::find($product_id);
 
         $gallery = Gallery::where('product_id',$product_id)->get();
 

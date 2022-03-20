@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gallery;
-use App\Models\Product;
+use App\Models\ProductGroup;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -90,7 +90,7 @@ class GalleryController extends Controller
     }
 
     public function add_gallery($product_id){
-        $product = Product::find($product_id);
+        $product = ProductGroup::find($product_id);
         return view('admin.gallery.create')->with('product',$product);
     }
 

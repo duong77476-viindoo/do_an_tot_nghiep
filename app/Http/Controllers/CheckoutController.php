@@ -12,7 +12,7 @@ use App\Models\Payment;
 use App\Models\PostType;
 use App\Models\Province;
 use App\Models\shipping;
-use App\Models\Product;
+use App\Models\ProductGroup;
 use App\Models\Ward;
 use Decimal\Decimal;
 use Gloudemans\Shoppingcart\Facades\Cart;

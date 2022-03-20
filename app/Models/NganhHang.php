@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Field extends Model
+class NganhHang extends Model
 {
     use HasFactory;
-    public function field_values(){
-        return $this->hasMany(FieldValue::class);
+    public function product_groups(){
+        return $this->hasMany(ProductGroup::class);
     }
 }

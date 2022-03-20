@@ -13,7 +13,7 @@
         <div class="col-lg-12">
             <section class="panel">
                 <header class="panel-heading">
-                    Thêm sản phẩm
+                    Thêm nhóm sản phẩm
                 </header>
                 <?php
                 $message = \Illuminate\Support\Facades\Session::get('message');
@@ -42,7 +42,7 @@
                                                     <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                                 </div>
                                                 <select name="brand_id" id="brand_id" class="form-control brand choose">
-                                                    <option value="">---Chọn---</option>
+{{--                                                    <option value="">---Chọn---</option>--}}
                                                 @foreach($brands as $key=>$brand)
                                                         <option value="{{$brand->id}}">{{$brand->brand_name}}</option>
                                                     @endforeach
@@ -55,14 +55,16 @@
 
                                         <!-- phone mask -->
                                         <div class="form-group">
-                                            <label>Dòng sản phẩm:</label>
+                                            <label>Ngành hàng:</label>
 
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                                 </div>
-                                                <select name="product_line" id="product_line" class="form-control product_line">
-                                                    <option value="">---Chọn---</option>
+                                                <select name="nganh_hang_id" id="nganh_hang" class="form-control">
+                                                    @foreach($nganh_hangs as $key=>$nganh_hang)
+                                                        <option value="{{$nganh_hang->id}}">{{$nganh_hang->name}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <!-- /.input group -->
@@ -73,34 +75,13 @@
                                 </div>
                                 <!-- /.card -->
 
-                                <div class="card card-info">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Thông số sản phẩm</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        @foreach($fields as $field)
-                                        <!-- Color Picker -->
-                                        <div class="form-group">
-                                            <label>{{$field->name}}</label>
-                                            @foreach($field->field_values as $key=>$field_value)
-                                                {{$field_value->name}}
-                                                <input id="thong_so_san_pham" class="" type="radio" value="{{$field_value->name}}" name="{{$field->name}}">
-                                            @endforeach
-                                        </div>
-                                        <!-- /.form group -->
-                                            @endforeach
-                                    </div>
-                                    <!-- /.card-body -->
-                                </div>
-                                <!-- /.card -->
-
                                 <div class="card card-primary">
                                     <div class="card-header">
-                                        <h3 class="card-title">Thông tin chi tiết sản phẩm</h3>
+                                        <h3 class="card-title">Thông tin chi tiết nhóm sản phẩm</h3>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Tên sản phẩm</label>
+                                            <label for="exampleInputEmail1">Tên nhóm sản phẩm</label>
                                             <input type="text" class="form-control" id="exampleInputEmail1" name="name" placeholder="Nhập sản phẩm">
                                         </div>
                                         <div class="form-group">
@@ -110,14 +91,6 @@
                                         <div class="form-group">
                                             <label for="exampleInputPassword1">Mô tả chi tiết</label>
                                             <textarea id="mo_ta_chi_tiet" style="resize: none" class="form-control" id="exampleInputPassword1" name="mo_ta_chi_tiet" placeholder="Nhập mô tả chi tiết"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Giá bán</label>
-                                            <input type="number" class="form-control" id="exampleInputEmail1" name="gia_ban" placeholder="Nhập giá bán">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Giá cạnh tranh</label>
-                                            <input type="number" class="form-control" id="exampleInputEmail1" name="gia_canh_tranh" placeholder="Nhập giá cạnh tranh">
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Ảnh đại diện</label>

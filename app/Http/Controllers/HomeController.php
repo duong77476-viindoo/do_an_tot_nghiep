@@ -5,7 +5,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\PostType;
-use App\Models\Product;
+use App\Models\ProductGroup;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 
@@ -29,7 +29,7 @@ class HomeController extends Controller
         $brands = Brand::where('brand_status',1)->get();
         $sliders = Slider::where('an_hien',1)->get();
 
-        $san_pham_mois = Product::where('an_hien',1)->get();
+        $san_pham_mois = ProductGroup::where('an_hien',1)->get();
         return view('frontend.pages.home')
             ->with('post_types',$post_types)
             ->with('categories',$categories)
@@ -54,7 +54,7 @@ class HomeController extends Controller
         $brands = Brand::where('brand_status',1)->get();
         $sliders = Slider::where('an_hien',1)->get();
         $tu_khoa = $request->tu_khoa;
-        $san_pham_tim_kiem = Product::where('an_hien',1)->where('name','like','%'.$tu_khoa.'%')->get();
+        $san_pham_tim_kiem = ProductGroup::where('an_hien',1)->where('name','like','%'.$tu_khoa.'%')->get();
         return view('frontend.product.search')
             ->with('post_types',$post_types)
             ->with('categories',$categories)
@@ -72,7 +72,7 @@ class HomeController extends Controller
     public function autocomplete_ajax(Request $request){
         $data = $request->all();
         if($data['query']){
-            $san_pham_tim_kiem = Product::where('an_hien',1)->where('name','like','%'.$data['query'].'%')->get();
+            $san_pham_tim_kiem = ProductGroup::where('an_hien',1)->where('name','like','%'.$data['query'].'%')->get();
             $output = '';
             foreach ($san_pham_tim_kiem as $san_pham){
                 $output.='

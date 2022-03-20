@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\Product;
+use App\Models\ProductGroup;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -121,7 +121,7 @@ class OrderController extends Controller
         }
         else if($data['order_status']=="Đang xử lý" || $data['order_status']=="Đang giao hàng" || $data['order_status']=="Đã giao hàng" ){
             foreach ($data['order_product_id'] as $key1=>$product_id){
-                $product = Product::find($product_id);
+                $product = ProductGroup::find($product_id);
                 $so_luong_ton = $product->so_luong;
                 $so_luong_da_ban = $product->so_luong_da_ban;
                 foreach ($data['order_product_qty'] as $key2=>$product_qty){
@@ -136,7 +136,7 @@ class OrderController extends Controller
         }
         else if($data['order_status']=="Đã hủy"){
             foreach ($data['order_product_id'] as $key1=>$product_id){
-                $product = Product::find($product_id);
+                $product = ProductGroup::find($product_id);
                 $so_luong_ton = $product->so_luong;
                 $so_luong_da_ban = $product->so_luong_da_ban;
                 foreach ($data['order_product_qty'] as $key2=>$product_qty){

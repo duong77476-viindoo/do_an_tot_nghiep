@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class TagProduct extends Model
 {
     use HasFactory;
-    protected $table = "product_tag";
+    protected $table = "product_group_tag";
 }

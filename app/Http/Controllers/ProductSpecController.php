@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductAttribute;
+use App\Models\ProductSpec;
 use Illuminate\Http\Request;
 
-class ProductAttributeController extends Controller
+class ProductSpecController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ProductAttributeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ProductAttribute  $productAttribute
+     * @param  \App\Models\ProductSpec  $productSpec
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductAttribute $productAttribute)
+    public function show(ProductSpec $productSpec)
     {
         //
     }
@@ -52,10 +52,10 @@ class ProductAttributeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ProductAttribute  $productAttribute
+     * @param  \App\Models\ProductSpec  $productSpec
      * @return \Illuminate\Http\Response
      */
-    public function edit(ProductAttribute $productAttribute)
+    public function edit(ProductSpec $productSpec)
     {
         //
     }
@@ -64,10 +64,10 @@ class ProductAttributeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProductAttribute  $productAttribute
+     * @param  \App\Models\ProductSpec  $productSpec
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductAttribute $productAttribute)
+    public function update(Request $request, ProductSpec $productSpec)
     {
         //
     }
@@ -75,10 +75,10 @@ class ProductAttributeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ProductAttribute  $productAttribute
+     * @param  \App\Models\ProductSpec  $productSpec
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductAttribute $productAttribute)
+    public function destroy(ProductSpec $productSpec)
     {
         //
     }
