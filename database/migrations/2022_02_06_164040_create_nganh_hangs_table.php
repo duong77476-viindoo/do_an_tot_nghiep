@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFieldsTable extends Migration
+class CreateNganhHangsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateFieldsTable extends Migration
      */
     public function up()
     {
-        Schema::create('fields', function (Blueprint $table) {
+        Schema::create('nganh_hangs', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment('ví dụ ram,màu sắc,rom');
+            $table->string('name')->comment('Tên ngành hàng : điện thoại, laptop, đồng hồ');
+            $table->string('code');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateFieldsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fields');
+        Schema::dropIfExists('nganh_hangs');
     }
 }

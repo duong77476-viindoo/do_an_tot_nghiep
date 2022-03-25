@@ -16,10 +16,12 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostTypeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductGroupController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\VideoController;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Sendportal\Base\Facades\Sendportal;
 
@@ -104,6 +106,7 @@ Route::get('/danh-muc-san-pham/{code}',[SiteController::class,'products_by_categ
 //Chi tiết sản phẩm
 Route::get('/product/{code}',[SiteController::class,'product_by_id'])
     ->name('product');
+
 
 
 
@@ -239,26 +242,32 @@ Route::middleware('check_login_admin')->group(function (){
 });
 
 
-//Sản phẩm
+//Nhóm Sản phẩm
 Route::middleware('check_login_admin')->group(function (){
 
-    Route::get('/all-product',[ProductController::class,'index'])->name('all-product');
-    Route::get('/add-product',[ProductController::class,'create'])->name('add-product');
-    Route::get('/edit-product/{id}',[ProductController::class,'edit'])->name('edit-product');
-    Route::get('/delete-product/{id}',[ProductController::class,'destroy'])->name('delete-product');
-    Route::post('/update-product/{id}',[ProductController::class,'update'])->name('update-product');
-    Route::get('/view-product/{id}',[ProductController::class,'show'])->name('view-product');
+    Route::get('/all-product',[ProductGroupController::class,'index'])->name('all-product');
+    Route::get('/add-product',[ProductGroupController::class,'create'])->name('add-product');
+    Route::get('/edit-product/{id}',[ProductGroupController::class,'edit'])->name('edit-product');
+    Route::get('/delete-product/{id}',[ProductGroupController::class,'destroy'])->name('delete-product');
+    Route::post('/update-product/{id}',[ProductGroupController::class,'update'])->name('update-product');
+    Route::get('/view-product/{id}',[ProductGroupController::class,'show'])->name('view-product');
 
-    Route::post('/save-product',[ProductController::class,'store'])->name('save-product');
+    Route::post('/save-product',[ProductGroupController::class,'store'])->name('save-product');
 
-    Route::post('/select-product-line',[ProductController::class,'select_product_line'])->name('select-product-line');
+    Route::post('/select-product-line',[ProductGroupController::class,'select_product_line'])->name('select-product-line');
 
 
-    Route::get('/active-product/{id}',[ProductController::class,'active_product'])->name('active-product');
-    Route::get('/unactive-product/{id}',[ProductController::class,'unactive_product'])->name('unactive-product');
+    Route::get('/active-product/{id}',[ProductGroupController::class,'active_product'])->name('active-product');
+    Route::get('/unactive-product/{id}',[ProductGroupController::class,'unactive_product'])->name('unactive-product');
 
-    Route::get('/con-product/{id}',[ProductController::class,'con_product'])->name('con-product');
-    Route::get('/het-product/{id}',[ProductController::class,'het_product'])->name('het-product');
+    Route::get('/con-product/{id}',[ProductGroupController::class,'con_product'])->name('con-product');
+    Route::get('/het-product/{id}',[ProductGroupController::class,'het_product'])->name('het-product');
+
+    //Thêm product_spec theo thầy
+    Route::get('/add-product-spec/{id}',[ProductController::class,'add_product_spec'])->name('add-product-spec');
+    Route::post('/insert-product-spec/{id}',[ProductController::class,'insert_product_spec'])->name('insert-product-spec');
+    Route::post('/select-product-spec',[ProductController::class,'select_product_spec'])->name('select-product-spec');
+
 });
 
 //Gallery sản phẩm
@@ -267,7 +276,7 @@ Route::middleware('check_login_admin')->group(function (){
 //    Route::get('/all-gallery',[GalleryController::class,'index'])->name('all-gallery');
     Route::get('/add-gallery/{id}',[GalleryController::class,'add_gallery'])->name('add-gallery');
     Route::post('/select-gallery',[GalleryController::class,'select_gallery'])->name('select-gallery');
-    Route::post('/insert-gallery{id}',[GalleryController::class,'insert_gallery'])->name('insert-gallery');
+    Route::post('/insert-gallery/{id}',[GalleryController::class,'insert_gallery'])->name('insert-gallery');
     Route::post('/update-gallery-name',[GalleryController::class,'update_gallery_name'])->name('update-gallery-name');
     Route::post('/delete-gallery',[GalleryController::class,'delete_gallery'])->name('delete-gallery');
     Route::post('/update-gallery',[GalleryController::class,'update_gallery'])->name('/update-gallery');

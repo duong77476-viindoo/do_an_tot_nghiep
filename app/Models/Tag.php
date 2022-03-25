@@ -9,8 +9,8 @@ use Illuminate\Support\Str;
 class Tag extends Model
 {
     use HasFactory;
-    public function products(){
-        return $this->belongsToMany(Product::class);
+    public function product_groups(){
+        return $this->belongsToMany(ProductGroup::class);
     }
 
     protected static function boot() {

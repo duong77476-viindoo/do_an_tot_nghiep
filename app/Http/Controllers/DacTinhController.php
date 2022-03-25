@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Field;
+use App\Models\DacTinh;
 use Illuminate\Http\Request;
 
-class FieldController extends Controller
+class DacTinhController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class FieldController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Field  $field
+     * @param  \App\Models\DacTinh  $dacTinh
      * @return \Illuminate\Http\Response
      */
-    public function show(Field $field)
+    public function show(DacTinh $dacTinh)
     {
         //
     }
@@ -52,10 +52,10 @@ class FieldController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Field  $field
+     * @param  \App\Models\DacTinh  $dacTinh
      * @return \Illuminate\Http\Response
      */
-    public function edit(Field $field)
+    public function edit(DacTinh $dacTinh)
     {
         //
     }
@@ -64,10 +64,10 @@ class FieldController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Field  $field
+     * @param  \App\Models\DacTinh  $dacTinh
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Field $field)
+    public function update(Request $request, DacTinh $dacTinh)
     {
         //
     }
@@ -75,10 +75,10 @@ class FieldController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Field  $field
+     * @param  \App\Models\DacTinh  $dacTinh
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Field $field)
+    public function destroy(DacTinh $dacTinh)
     {
         //
     }

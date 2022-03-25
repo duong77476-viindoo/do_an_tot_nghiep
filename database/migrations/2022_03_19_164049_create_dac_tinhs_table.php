@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductVariationsTable extends Migration
+class CreateDacTinhsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateProductVariationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_variations', function (Blueprint $table) {
+        Schema::create('dac_tinhs', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('product_line_id')->unsigned();
-            $table->foreign('product_line_id')
+            $table->bigInteger('nganh_hang_id')->unsigned();
+            $table->foreign('nganh_hang_id')
                 ->references('id')
-                ->on('product_lines')
+                ->on('nganh_hangs')
                 ->onDelete('cascade');
-            $table->string('name')->comment('tên biến thể sản phẩm');
+            $table->string('name')->comment('ví dụ : ram,rom cho điện thoại/ GPU,CPU cho laptop');
+            $table->string('code');
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CreateProductVariationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_variations');
+        Schema::dropIfExists('dac_tinhs');
     }
 }

@@ -18,8 +18,8 @@ class Brand extends Model
         'meta_keywords'
     ];
 
-    public function product_lines(){
-        return $this->hasMany(ProductLine::class);
+    public function product_groups(){
+        return $this->hasMany(ProductGroup::class);
     }
 
 
