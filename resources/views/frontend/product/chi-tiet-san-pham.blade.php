@@ -71,7 +71,7 @@
                     <span>{{number_format($phien_ban_san_pham->gia_ban,0,'','.')}} đ</span>
                     <label>Quantity:</label>
                     <input name="so_luong" class="cart_product_qty_{{$phien_ban_san_pham->id}}" type="number" min="1" max="{{$phien_ban_san_pham->so_luong}}" value="1" />
-                    <input name="product_id" type="hidden" value="{{$phien_ban_san_pham->id}}" />
+                    <input name="product_id" class="product_id" type="hidden" value="{{$phien_ban_san_pham->id}}" />
                     <button type="button" class="btn btn-fefault add-to-cart" name="add-to-cart" data-product_id="{{$phien_ban_san_pham->id}}">
                         <i class="fa fa-shopping-cart"></i>
                         Thêm vào giỏ hàng
@@ -115,6 +115,25 @@
                     @endforeach
                 </p>
             </fieldset>
+            <ul class="list-inline" title="Average Rating">
+                @for($count=1;$count<=5;$count++)
+                    @php
+                        if ($count<=$rating)
+                            $color = 'color:#ffcc00;';//nếu count<rating thì hiện màu vàng để hiển thị sao
+                        else
+                            $color = 'color:#ccc;';//Ngược lại sao màu xám
+                    @endphp
+                    <li title="Đánh giá sao"
+                        id=""
+                        data-index="{{$count}}"
+                        data-product_id="{{$phien_ban_san_pham->id}}"
+                        data-rating="{{$rating}}"
+                        class=""
+                        style="cursor: pointer; {{$color}} font-size: 30px">
+                        &#9733;
+                    </li>
+                @endfor
+            </ul>
             <div class="fb-like"
                  data-href="{{$url_canonical}}"
                  data-width="" data-layout="button_count"
@@ -130,8 +149,8 @@
             <li class="active"><a href="#video_review" data-toggle="tab">Video review</a></li>
             <li><a href="#details" data-toggle="tab">Mô tả sản phẩm</a></li>
             <li><a href="#companyprofile" data-toggle="tab">Thông số kỹ thuật</a></li>
-
-            <li><a href="#reviews" data-toggle="tab">Bình luận (5)</a></li>
+            <li><a href="#comments" data-toggle="tab">Bình luận ({{$phien_ban_san_pham->comments->count()}})</a></li>
+            <li><a href="#reviews" data-toggle="tab">Đánh giá (5)</a></li>
         </ul>
     </div>
     <div class="tab-content">
@@ -201,30 +220,64 @@
             </div>
         </div>
 
-        <div class="tab-pane fade " id="reviews" >
+        <div class="tab-pane fade " id="comments" >
             <div class="col-sm-12">
-                <ul>
-                    <li><a href=""><i class="fa fa-user"></i>EUGEN</a></li>
-                    <li><a href=""><i class="fa fa-clock-o"></i>12:41 PM</a></li>
-                    <li><a href=""><i class="fa fa-calendar-o"></i>31 DEC 2014</a></li>
-                </ul>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                <div id="load-comment">
+
+                </div>
+
                 <p><b>Để lại bình luận</b></p>
 
-                <form action="#">
-										<span>
-											<input type="text" placeholder="Tên của bạn"/>
-											<input type="email" placeholder="Địa chỉ email"/>
-										</span>
-                    <textarea name="" ></textarea>
-                    <b>Rating: </b> <img src="images/product-details/rating.png" alt="" />
-                    <button type="button" class="btn btn-default pull-right">
-                        Submit
+                <form id="form-comment" action="#">
+                    <span>
+                        <input class="comment_name form-control" type="text" placeholder="Tên của bạn"/>
+                        <input class="comment_email form-control" type="email" placeholder="Địa chỉ email"/>
+                    </span>
+                    <textarea class="comment_content form-control" rows="8" name="" ></textarea>
+                    <button type="button" class="btn btn-default pull-right send-comment">
+                        Gửi
                     </button>
+                    <div id="notify-comment">
+
+                    </div>
                 </form>
             </div>
         </div>
+        <div class="tab-pane fade " id="reviews" >
+            <div class="col-sm-12">
+                <div id="load-rating">
 
+                </div>
+                <h4><b>Để lại đánh giá của bạn</b></h4>
+                <ul class="list-inline" title="Average Rating">
+                    @for($count=1;$count<=5;$count++)
+
+                    <li title="Đánh giá sao"
+                    id="{{$phien_ban_san_pham->id}}-{{$count}}"
+                    data-index="{{$count}}"
+                    data-product_id="{{$phien_ban_san_pham->id}}"
+                    data-rating="{{$rating}}"
+                    class="rating"
+                    style="cursor: pointer; {{$color}} font-size: 30px">
+                    &#9733;
+                    </li>
+                    @endfor
+                </ul>
+                <form id="form-rating" action="#">
+                    <span>
+                        <input class="rating_name" type="text" placeholder="Tên của bạn"/>
+                        <input class="rating_email" type="email" placeholder="Địa chỉ email"/>
+                    </span>
+                    <textarea class="rating_content" name="" ></textarea>
+                    <button type="button" class="btn btn-default pull-right send-rating">
+                        Gửi
+                    </button>
+                    <div id="notify-rating">
+
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
 </div><!--/category-tab-->
@@ -287,6 +340,52 @@
 @endsection
 
 @section('pagescript')
+{{--    script load comment của sản phẩm, thêm comments--}}
+    <script type="text/javascript">
+        $(document).ready(function (){
+            // var product_id = $('.product_id').val();
+            // alert(product_id);
+            load_comment();
+            $('.send-comment').click(function (){
+                var product_id = $('.product_id').val();
+                var comment_name = $('.comment_name').val();
+                var comment_email = $('.comment_email').val();
+                var comment_content = $('.comment_content').val();
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:'{{url('/send-comment')}}',
+                    method:'POST',
+                    data:{
+                        product_id:product_id,
+                        comment_name:comment_name,
+                        comment_email:comment_email,
+                        comment_content:comment_content,
+                        _token:_token
+                    },
+                    success:function (data){
+                        $('#form-comment')[0].reset();
+                        $('#notify-comment').html('<span class="text text-success">Bình luận của bạn đang được duyệt</span>');
+                        load_comment();
+                        $('#notify-comment').fadeOut(2000);
+                    }
+                });
+            });
+            function load_comment(){
+                var product_id = $('.product_id').val();
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:'{{url('/load-comment')}}',
+                    method:'POST',
+                    data:{product_id:product_id,_token:_token},
+                    success:function (data){
+                        $('#load-comment').html(data);
+                    }
+                });
+            }
+        })
+    </script>
+
+{{--script cho slider sản phẩm liên quan--}}
     <script type="text/javascript">
         $(document).ready(function() {
             $('#related_product').lightSlider({
@@ -299,6 +398,89 @@
         });
     </script>
 
+{{--script load rating và thêm rating    --}}
+<script type="text/javascript">
+    $(document).ready(function (){
+        load_rating();
+        function load_rating(){
+            var product_id = $('.product_id').val();
+            $.ajax({
+                url:'{{url('/load-rating')}}',
+                method:'POST',
+                headers:{
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data:{product_id:product_id},
+                success:function (data){
+                    $('#load-rating').html(data);
+                }
+            });
+        }
+    });
+    function remove_background(product_id){
+        for(var count=1;count<=5;count++){
+            $('#'+product_id+'-'+count).css('color','#ccc');
+        }
+    }
+
+    //hover chuột đánh giá sao
+    $(document).on('click','.rating',function (){
+       var index = $(this).data('index');
+       var product_id = $(this).data('product_id');
+       remove_background(product_id);
+       //Đổi màu sao theo index đang hover vào
+        for(var count=1;count<=index;count++){
+            $('#'+product_id+'-'+count).css('color','#ffcc00');
+        }
+             $('#'+product_id+'-'+index).addClass('active-index');
+    });
+
+    //Nhả chuột không đánh giá
+    // $(document).on('mouseleave','.rating',function (){
+    //     var index = $(this).data('index');
+    //     var product_id = $(this).data('product_id');
+    //     var rating = $(this).data('rating');
+    //     remove_background(product_id);
+    //     //Đổi màu sao theo index đang hover vào
+    //     for(var count=1;count<=rating;count++){
+    //         $('#'+product_id+'-'+count).css('color','#ffcc00');
+    //     }
+    // });
+
+    $(document).on('click','.send-rating',function (){
+       var index = $('.active-index').data('index');
+        var product_id = $('.product_id').val();
+        var rating_name = $('.rating_name').val();
+        var rating_email = $('.rating_email').val();
+        var rating_content = $('.rating_content').val();
+
+
+        $.ajax({
+            url: "{{url('/insert-rating')}}",
+            method: "POST",
+            headers:{
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data:{
+                index:index,
+                product_id:product_id,
+                rating_name:rating_name,
+                rating_email:rating_email,
+                rating_content:rating_content
+            },
+            success:function (data){
+                $('#form-rating')[0].reset();
+                $('#notify-rating').html('<span class="text text-success">Cảm ơn bạn đã đánh giá</span>');
+                // load_rating();
+                $('#notify-rating').fadeOut(2000);
+            }
+        });
+    });
+
+
+</script>
+
 @endsection
+
 
 

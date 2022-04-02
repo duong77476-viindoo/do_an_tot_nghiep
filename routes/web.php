@@ -6,6 +6,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DeliveryController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\ProductGroupController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\VideoController;
+use App\Models\Comment;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -107,6 +109,13 @@ Route::get('/danh-muc-san-pham/{code}',[SiteController::class,'products_by_categ
 Route::get('/product/{code}',[SiteController::class,'product_by_id'])
     ->name('product');
 
+//Load comment sản phẩm bằng ajax, thêm comment
+Route::post('/load-comment',[SiteController::class,'load_comment'])->name('load-comment');
+Route::post('/send-comment',[SiteController::class,'send_comment'])->name('send-comment');
+
+//Thêm rating, load rating
+Route::post('/insert-rating',[SiteController::class,'insert_rating'])->name('insert-rating');
+Route::post('/load-rating',[SiteController::class,'load_rating'])->name('load-rating');
 
 
 
@@ -263,11 +272,18 @@ Route::middleware('check_login_admin')->group(function (){
     Route::get('/con-product/{id}',[ProductGroupController::class,'con_product'])->name('con-product');
     Route::get('/het-product/{id}',[ProductGroupController::class,'het_product'])->name('het-product');
 
-    //Thêm product_spec theo thầy
+    //Thêm product_spec theo thầy Trung Đức
     Route::get('/add-product-spec/{id}',[ProductController::class,'add_product_spec'])->name('add-product-spec');
     Route::post('/insert-product-spec/{id}',[ProductController::class,'insert_product_spec'])->name('insert-product-spec');
     Route::post('/select-product-spec',[ProductController::class,'select_product_spec'])->name('select-product-spec');
 
+});
+//Comment về sản phẩm
+Route::middleware('check_login_admin')->group(function (){
+    Route::get('/all-comment',[CommentController::class,'index'])->name('all-comment');
+    Route::get('/delete-comment/{id}',[CommentController::class,'destroy'])->name('delete-comment');
+    Route::post('/reply-comment',[CommentController::class,'reply_comment'])->name('reply-comment');
+    Route::post('/duyet-comment',[CommentController::class,'duyet_comment'])->name('duyet-comment');
 });
 
 //Gallery sản phẩm

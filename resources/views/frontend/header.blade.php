@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="logo pull-left">
-                    <a href="{{\Illuminate\Support\Facades\URL::to('/trang-chu')}}"><img src="{{url('public/frontend/images/home/logo.png')}}" alt="" /></a>
+                    <a href="{{\Illuminate\Support\Facades\URL::to('/trang-chu')}}"><img src="{{url('public/frontend/images/home/logo.png')}}" width="90px" alt="" /></a>
                 </div>
                 <div class="btn-group pull-right">
                     <div class="btn-group">

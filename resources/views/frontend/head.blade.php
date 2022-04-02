@@ -6,6 +6,9 @@
 <meta name="robots" content="INDEX,FOLLOW">
 <link rel="canonical" href="{{$url_canonical}}">
 <meta name="author" content="">
+
+<meta name="csrf-token" content="{{csrf_token()}}">
+
 <link rel="icon" type="image/x-icon" href="">
 
 {{--<meta property="og:image" content="{{url('public/uploads/products/1644420353_oppo-reno-5.jpg')}}">--}}

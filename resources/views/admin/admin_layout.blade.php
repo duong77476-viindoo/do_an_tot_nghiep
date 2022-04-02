@@ -5,7 +5,7 @@ else{
     $admin = Session::get('admin_name');
 }
 ?>
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     @include('admin.head')
@@ -18,7 +18,7 @@ else{
 {{--        <img class="animation__shake" src="{{asset('public/backend/dist/img/AdminLTELogo.png')}}" alt="AdminLTELogo" height="60" width="60">--}}
 {{--    </div>--}}
 
-    <!-- Navbar -->
+<!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
         <!-- Left navbar links -->
         <ul class="navbar-nav">
@@ -33,7 +33,7 @@ else{
             </li>
             <li class="nav-item d-none d-sm-inline-block">
                 @if(\Illuminate\Support\Facades\Auth::id())
-                <a href="{{route('logout-admin')}}" class="nav-link">Đăng xuất</a>
+                    <a href="{{route('logout-admin')}}" class="nav-link">Đăng xuất</a>
                 @else
                     <a href="{{route('logout')}}" class="nav-link">Đăng xuất</a>
                 @endif
@@ -163,9 +163,9 @@ else{
     </nav>
     <!-- /.navbar -->
 
-    @include('admin.sidebar')
+@include('admin.sidebar')
 
-    <!-- Content Wrapper. Contains page content -->
+<!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <div class="container-fluid">@yield('admin_content')</div>
     </div>
