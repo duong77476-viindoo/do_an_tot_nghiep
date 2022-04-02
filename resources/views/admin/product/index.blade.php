@@ -63,7 +63,7 @@
                                     @else
                                         <a href="{{\Illuminate\Support\Facades\URL::to('/active-product_group/'.$product_group->id)}}"><span class="text-success fa fa-check-circle"></span></a>
                                     @endif
-                            </span>
+                            </span></td>
                             <td><span class="text-ellipsis">
                                 @if($product_group->trang_thai==0)
                                         <a href="{{\Illuminate\Support\Facades\URL::to('/het-product_group/'.$product_group->id)}}"><span class="text-danger fa fa-times-circle"></span></a>

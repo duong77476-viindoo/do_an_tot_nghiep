@@ -6,11 +6,13 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\CategoryProductProduct;
+use App\Models\Comment;
 use App\Models\Gallery;
 use App\Models\Post;
 use App\Models\PostType;
 use App\Models\Product;
 use App\Models\ProductGroup;
+use App\Models\Rating;
 use App\Models\Slider;
 use App\Models\Tag;
 use App\Models\Video;
@@ -98,6 +100,10 @@ class SiteController extends Controller
         $nhom_san_pham = ProductGroup::where('id',$phien_ban_san_pham->product_group_id)->first();
         $sliders = Slider::where('an_hien',1)->get();
 
+        //Rating sản phẩm
+        $rating = Rating::where('product_id',$phien_ban_san_pham->id)->avg('rating');//tính trung bình rating
+        $rating = round($rating);
+
 
         $meta_desc = $nhom_san_pham->mo_ta_ngan_gon;
         $meta_keywords = $nhom_san_pham->meta_keywords;
@@ -129,6 +135,7 @@ class SiteController extends Controller
             ->with('post_types',$post_types)
             ->with('categories',$categories)
             ->with('phien_ban_san_pham',$phien_ban_san_pham)
+            ->with('rating',$rating)
             ->with('nhom_san_pham',$nhom_san_pham)
             ->with('category_products',$category_products)
             ->with('brands',$brands)
@@ -291,6 +298,142 @@ class SiteController extends Controller
         $output['go_to_product_detail'] = '<a class="btn btn-primary" href="'.route('product',['code'=>$product->code]).'">Đi tới sản phẩm</a>';
 
         echo json_encode($output);
+    }
+
+    public function load_comment(Request $request){
+        $data = $request->all();
+        $comments_by_product = Comment::where('product_id',$data['product_id'])->where('da_duyet',1)->get();
+        $output = '';
+        foreach ($comments_by_product as $key=>$comment){
+            if ($comment->parent_id==null){
+                $output .='
+            <div class="container">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="post-content">
+                                    <div class="post-container">
+                                        <img src="'.url('public/uploads/others/customer.png').'" alt="user" class="profile-photo-md pull-left">
+                                        <div class="post-detail">
+                                            <div class="user-info">
+                                                <h5><a href="timeline.html" class="profile-link">'.$comment->name.'</a> </h5>
+                                                <p class="text-muted">'.date('d-m-Y H:i:s', strtotime($comment->created_at)).'</p>
+                                            </div>
+                                            <div class="line-divider"></div>
+                                            <div class="post-text">
+                                                <p>'.$comment->content.'<i class="em em-anguished"></i> <i class="em em-anguished"></i> <i class="em em-anguished"></i></p>
+                                            </div>
+                                            <div class="line-divider"></div>';
+            }
+            foreach ($comments_by_product as $key=>$comment_reply)
+                if($comment_reply->parent_id==$comment->id){
+                    $output.='
+                                            <div class="post-comment">
+                                                <img src="'.url('public/uploads/others/admin.jpg').'" alt="" class="profile-photo-sm">
+                                                <p class="reply-name"><a href="" class="profile-link">'.$comment_reply->name.'</a></p>
+                                                </br>
+                                                <p class="reply-content" style="margin-left: 5px">  '.$comment_reply->content.'</p>
+                                                </br>
+                                            </div>
+                                            <p> '.date('d-m-Y H:i:s', strtotime($comment_reply->created_at)).'</p>
+
+            ';
+                }
+            $output.='                     </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>';
+
+        }
+        if($output!=''){
+            echo $output;
+        }
+        else{
+            $output = "Chưa có bình luận cho sản phẩm này";
+            echo $output;
+        }
+    }
+
+    public function send_comment(Request $request){
+        $data = $request->all();
+        $comment = new Comment();
+        $comment->name = $data['comment_name'];
+        $comment->product_id = $data['product_id'];
+        $comment->email = $data['comment_email'];
+        $comment->content = $data['comment_content'];
+        $comment->save();
+    }
+
+    public function load_rating(Request $request){
+        $data = $request->all();
+        $reviews_by_product = Rating::where('product_id',$data['product_id'])->get();
+        $output = '';
+        foreach ($reviews_by_product as $key=>$review){
+                $output .='
+            <div class="container">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="post-content">
+                                    <div class="post-container">
+                                        <img src="'.url('public/uploads/others/customer.png').'" alt="user" class="profile-photo-md pull-left">
+                                        <div class="post-detail">
+                                            <div class="user-info">
+                                                <h5><a href="timeline.html" class="profile-link">'.$review->name.'</a> </h5>
+                                                <p class="text-muted">'.date('d-m-Y H:i:s', strtotime($review->created_at)).'</p>
+                                            </div>
+                                            <div class="line-divider"></div>
+                                            <div class="post-text">
+                                                <p>'.$review->content.'<i class="em em-anguished"></i> <i class="em em-anguished"></i> <i class="em em-anguished"></i></p>
+                                            </div>
+                                            <ul class="list-inline" title="Average Rating">';
+
+                    for($count=1;$count<=5;$count++){
+                            if ($count<=$review->rating)
+                                $color = 'color:#ffcc00;';//nếu count<rating thì hiện màu vàng để hiển thị sao
+                            else
+                                $color = 'color:#ccc;';//Ngược lại sao màu xám
+            $output.='
+                        <li title="Đánh giá sao"
+                    id=""
+                    data-index=""
+                    data-product_id=""
+                    data-rating=""
+                    class=""
+                    style="cursor: pointer; '.$color.' font-size: 30px">
+                    &#9733;
+                    </li>';
+          }
+                    $output.='
+                </ul>
+                                            <div class="line-divider"></div>';
+
+            $output.='                     </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>';
+
+        }
+        if($output!=''){
+            echo $output;
+        }
+        else{
+            $output = "Chưa có đánh giá cho sản phẩm này";
+            echo $output;
+        }
+    }
+
+    public function insert_rating(Request $request){
+        $data = $request->all();
+        $rating = new Rating();
+        $rating->product_id = $data['product_id'];
+        $rating->rating = $data['index'];
+        $rating->name = $data['rating_name'];
+        $rating->email = $data['rating_email'];
+        $rating->content = $data['rating_content'];
+        $rating->save();
     }
 }
 

@@ -105,6 +105,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{route('all-comment')}}" class="nav-link">
+                                <i class="fas fa-comment nav-icon"></i>
+                                <p>Bình luận</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{route('all-coupon')}}" class="nav-link">
                                 <i class="fas fa-gift nav-icon"></i>
                                 <p>Mã giảm giá</p>
