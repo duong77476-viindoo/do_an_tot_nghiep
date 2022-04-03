@@ -29,7 +29,7 @@ class VideoController extends Controller
         $output = '
           <form>
             '.csrf_field().'
-            <table class="table table-hover">
+            <table id="myTable" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th>STT</th>

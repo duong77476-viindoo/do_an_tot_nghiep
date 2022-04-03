@@ -308,13 +308,13 @@
     $(document).ready(function (){
         load_gallery();
         function load_gallery(){
-            var product_id = $('.product_id').val();
+            var product_group_id = $('.product_group_id').val();
             var _token = $('input[name="_token"]').val();
             $.ajax({
                url: "{{url('/select-gallery')}}",
                method: "POST",
                data: {
-                   product_id:product_id,
+                   product_group_id:product_group_id,
                    _token:_token
                },
                success:function (data){

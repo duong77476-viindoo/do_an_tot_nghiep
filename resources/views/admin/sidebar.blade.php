@@ -75,6 +75,18 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="{{route('all-nha-cung-cap')}}" class="nav-link">
+                                <i class="fa fa-address-book nav-icon"></i>
+                                <p>Nhà cung cấp</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('all-nganh-hang')}}" class="nav-link">
+                                <i class="fa fa-tag nav-icon"></i>
+                                <p>Ngành hàng</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{route('all-category')}}" class="nav-link">
                                 <i class="fas fa-list nav-icon"></i>
                                 <p>Loại phân loại</p>
@@ -108,6 +120,12 @@
                             <a href="{{route('all-comment')}}" class="nav-link">
                                 <i class="fas fa-comment nav-icon"></i>
                                 <p>Bình luận</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('all-rating')}}" class="nav-link">
+                                <i class="fas fa-star nav-icon"></i>
+                                <p>Đánh giá sản phẩm</p>
                             </a>
                         </li>
                         <li class="nav-item">

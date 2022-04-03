@@ -3,7 +3,7 @@
     <div class="table-agile-info">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Danh sách người dùng hệ thống
+                Danh mục ngành hàng
             </div>
             <?php
             $message = \Illuminate\Support\Facades\Session::get('message');
@@ -23,48 +23,45 @@
                     <button class="btn btn-sm btn-default">Apply</button>
                 </div>
                 <div class="col-sm-4">
-                    <a href="{{route('register-admin')}}"><span class="btn btn-primary fa fa-plus">Thêm người dùng</span></a>
+                    <a href="{{route('add-nganh-hang')}}"><span class="btn btn-primary fa fa-plus">Thêm ngành hàng</span></a>
                 </div>
             </div>
             <div class="table-responsive">
                 <table id="myTable" class="table table-striped b-t b-light">
                     <thead>
                     <tr>
-                        <th>Tên người dùng</th>
-                        <th>Email</th>
-                        @foreach($roles as $key=>$role)
-                            <th>{{$role->name}}</th>
-                        @endforeach
+                        <th style="width:20px;">
+                            <label class="i-checks m-b-none">
+                                <input type="checkbox"><i></i>
+                            </label>
+                        </th>
+                        <th>Tên ngành hàng</th>
+                        <th>Code ngành hàng</th>
+                        <th>Đặc tính</th>
+                        <th>Ngày cập nhật</th>
                         <th>Hành động</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($admins as $key => $admin)
-                        <form action="{{route('assign-roles')}}" method="post">
-                            @csrf
+                    @foreach($nganh_hangs as $key => $nganh_hang)
                         <tr>
-                            <td>{{$admin->name}}</td>
+                            <td><label class="i-checks m-b-none"><input type="checkbox" name="nganh_hang[]"><i></i></label></td>
+                            <td>{{$nganh_hang->name}}</td>
+                            <td>{{$nganh_hang->code}}</td>
+                            <td><a href="{{route('add-dac-tinh',['id'=>$nganh_hang->id])}}">Thêm đặc tính</a></td>
+                            <td>{{$nganh_hang->updated_at}}</td>
                             <td>
-                                {{$admin->email}}
-                                <input type="hidden" name="email" value="{{$admin->email}}">
-                            </td>
-                            @foreach($roles as $key=>$role)
-                                <td><input type="checkbox" name="{{$role->id}}" {{$admin->hasRole($role->name) ? 'checked' : ''}}></td>
-                            @endforeach
-                            <td>
-                                <input type="submit" value="Phân quyền" class="btn btn-sm btn-default">
-                                <a href="{{route('edit-admin',['id'=>$admin->id])}}" class="active" ui-toggle-class="">
+                                <a href="{{route('edit-nganh-hang',['id'=>$nganh_hang->id])}}" class="active" ui-toggle-class="">
                                     <i class="fa fa-pen text-success text-active"></i>
                                 </a>
-                                <a href="{{route('delete-admin',['id'=>$admin->id])}}"
+                                <a href="{{route('delete-nganh-hang',['id'=>$nganh_hang->id])}}"
                                    onclick="return confirm('Bạn có chắc muốn xóa?')"
                                    class="active" ui-toggle-class=""><i class="fa fa-trash text-danger text"></i></a>
-                                <a href="{{route('view-admin',['id'=>$admin->id])}}" class="active" ui-toggle-class="">
+                                <a href="{{route('view-nganh-hang',['id'=>$nganh_hang->id])}}" class="active" ui-toggle-class="">
                                     <i class="fa fa-eye text-success text-active"></i>
                                 </a>
                             </td>
                         </tr>
-                        </form>
                     @endforeach
                     </tbody>
                 </table>
@@ -77,7 +74,7 @@
                     {{--                    </div>--}}
                     <div class="col-sm-7 text-right text-center-xs">
                         <ul class="pagination pagination-sm m-t-none m-b-none">
-                            {{ $admins->links() }}
+                            {{ $nganh_hangs->links() }}
                             {{--                            <li><a href=""><i class="fa fa-chevron-left"></i></a></li>--}}
                             {{--                            <li><a href="">1</a></li>--}}
                             {{--                            <li><a href="">2</a></li>--}}
