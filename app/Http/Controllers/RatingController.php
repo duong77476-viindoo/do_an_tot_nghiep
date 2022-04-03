@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Rating;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 
 class RatingController extends Controller
 {
@@ -15,6 +16,10 @@ class RatingController extends Controller
     public function index()
     {
         //
+        Paginator::useBootstrap();
+        $ratings = Rating::paginate(5);
+
+        return view('admin.rating.index')->with('ratings',$ratings);
     }
 
     /**

@@ -13,7 +13,7 @@
         <div class="col-lg-12">
             <section class="panel">
                 <header class="panel-heading">
-                    Thêm thư viện ảnh cho <span class="text-primary">sản phẩm {{$product->name}}</span>
+                    Thêm thư viện ảnh cho <span class="text-primary">sản phẩm {{$product_group->name}}</span>
                 </header>
                 <?php
                 $message = \Illuminate\Support\Facades\Session::get('message');
@@ -22,7 +22,7 @@
                     \Illuminate\Support\Facades\Session::put('message',null);
                 }
                 ?>
-                <form action="{{route('insert-gallery',['id'=>$product->id])}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('insert-gallery',['id'=>$product_group->id])}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-3">
@@ -40,7 +40,7 @@
 
                 <div class="panel-body">
                     <div class="position-center">
-                        <input type="hidden" value="{{$product->id}}" name="product_id" class="product_id">
+                        <input type="hidden" value="{{$product_group->id}}" name="product_group_id" class="product_group_id">
                         <form>
                             @csrf
                         <div id="load-gallery">

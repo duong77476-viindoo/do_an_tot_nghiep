@@ -39,8 +39,8 @@
                     <thead>
                     <tr>
                         <th>Tên nhóm sản phẩm</th>
-                        <th>Phiên bản sản phẩm</th>
                         <th>Thư viện ảnh</th>
+                        <th>Phiên bản sản phẩm</th>
                         <th>Slug sản phẩm</th>
                         <th>Hiển thị</th>
                         <th>Trạng thái</th>

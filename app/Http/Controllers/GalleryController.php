@@ -89,19 +89,19 @@ class GalleryController extends Controller
         //
     }
 
-    public function add_gallery($product_id){
-        $product = ProductGroup::find($product_id);
-        return view('admin.gallery.create')->with('product',$product);
+    public function add_gallery($product_group_id){
+        $product_group = ProductGroup::find($product_group_id);
+        return view('admin.gallery.create')->with('product_group',$product_group);
     }
 
     public function select_gallery(Request $request){
-        $product_id = $request->product_id;
-        $gallery =  Gallery::where('product_id',$product_id)->get();
+        $product_group_id = $request->product_group_id;
+        $gallery =  Gallery::where('product_group_id',$product_group_id)->get();
         $gallery_count = $gallery->count();
         $output = '
           <form>
             '.csrf_field().'
-            <table class="table table-hover">
+            <table id="myTable" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th>STT</th>
@@ -148,7 +148,7 @@ class GalleryController extends Controller
         echo $output;
     }
 
-    public function insert_gallery(Request $request, $product_id){
+    public function insert_gallery(Request $request, $product_group_id){
         $validated = $request->validate([
             'file'=>'required',
         ]);
@@ -164,7 +164,7 @@ class GalleryController extends Controller
                     $image->move('public/uploads/gallery',$new_image);
                     $gallery->name = $new_image;
                     $gallery->image = $new_image;
-                    $gallery->product_id = $product_id;
+                    $gallery->product_group_id = $product_group_id;
                     $gallery->save();
             }
         }

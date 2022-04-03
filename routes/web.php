@@ -13,11 +13,14 @@ use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\NganhHangController;
+use App\Http\Controllers\NhaCungCapController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostTypeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductGroupController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\VideoController;
@@ -148,6 +151,56 @@ Route::middleware('check_login_admin')->group(function (){
         Route::post('/assign-roles',[AdminController::class,'assign_roles'])->name('assign-roles');
     });
 });
+//Ngành hàng
+Route::middleware('check_login_admin')->group(function (){
+    Route::get('/all-nganh-hang',[NganhHangController::class,'index'])->name('all-nganh-hang');
+    Route::get('/add-nganh-hang',[NganhHangController::class,'create'])->name('add-nganh-hang');
+    Route::get('/edit-nganh-hang/{id}',[NganhHangController::class,'edit'])->name('edit-nganh-hang');
+    Route::get('/delete-nganh-hang/{id}',[NganhHangController::class,'destroy'])->name('delete-nganh-hang');
+    Route::post('/update-nganh-hang/{id}',[NganhHangController::class,'update'])->name('update-nganh-hang');
+    Route::get('/view-nganh-hang/{id}',[NganhHangController::class,'show'])->name('view-nganh-hang');
+
+
+    Route::post('/save-nganh-hang',[NganhHangController::class,'store'])->name('save-nganh-hang');
+
+    Route::get('/active-nganh-hang/{id}',[NganhHangController::class,'active_nganh-hang'])->name('active-nganh-hang');
+    Route::get('/unactive-nganh-hang/{id}',[NganhHangController::class,'unactive_nganh-hang'])->name('unactive-nganh-hang');
+
+    Route::get('/add-dac-tinh/{id}',[NganhHangController::class,'add_dac_tinh'])->name('add-dac-tinh');
+    Route::post('/save-dac-tinh',[NganhHangController::class,'save_dac_tinh'])->name('save-dac-tinh');
+    Route::get('/delete-dac-tinh/{id}',[NganhHangController::class,'delete_dac_tinh'])->name('delete-dac-tinh');
+
+    //import export excel
+//    Route::post('/post/import-csv',[NganhHangController::class,'import_csv'])->name('post-import-csv');
+//    Route::post('/post/export-csv',[NganhHangController::class,'export_csv'])->name('post-export-csv');
+
+});
+
+//Nhà cung cấp
+Route::middleware('check_login_admin')->group(function (){
+    Route::get('/all-nha-cung-cap',[NhaCungCapController::class,'index'])->name('all-nha-cung-cap');
+    Route::get('/add-nha-cung-cap',[NhaCungCapController::class,'create'])->name('add-nha-cung-cap');
+    Route::get('/edit-nha-cung-cap/{id}',[NhaCungCapController::class,'edit'])->name('edit-nha-cung-cap');
+    Route::get('/delete-nha-cung-cap/{id}',[NhaCungCapController::class,'destroy'])->name('delete-nha-cung-cap');
+    Route::post('/update-nha-cung-cap/{id}',[NhaCungCapController::class,'update'])->name('update-nha-cung-cap');
+    Route::get('/view-nha-cung-cap/{id}',[NhaCungCapController::class,'show'])->name('view-nha-cung-cap');
+
+
+    Route::post('/save-nha-cung-cap',[NhaCungCapController::class,'store'])->name('save-nha-cung-cap');
+
+    Route::get('/active-nha-cung-cap/{id}',[NhaCungCapController::class,'active_nha-cung-cap'])->name('active-nha-cung-cap');
+    Route::get('/unactive-nha-cung-cap/{id}',[NhaCungCapController::class,'unactive_nha-cung-cap'])->name('unactive-nha-cung-cap');
+
+    Route::get('/add-dac-tinh/{id}',[NhaCungCapController::class,'add_dac_tinh'])->name('add-dac-tinh');
+    Route::post('/save-dac-tinh',[NhaCungCapController::class,'save_dac_tinh'])->name('save-dac-tinh');
+    Route::get('/delete-dac-tinh/{id}',[NhaCungCapController::class,'delete_dac_tinh'])->name('delete-dac-tinh');
+
+    //import export excel
+//    Route::post('/post/import-csv',[NhaCungCapController::class,'import_csv'])->name('post-import-csv');
+//    Route::post('/post/export-csv',[NhaCungCapController::class,'export_csv'])->name('post-export-csv');
+
+});
+
 
 //Loại phân loại (danh mục cha)
 Route::middleware('check_login_admin')->group(function (){
@@ -285,6 +338,11 @@ Route::middleware('check_login_admin')->group(function (){
     Route::post('/reply-comment',[CommentController::class,'reply_comment'])->name('reply-comment');
     Route::post('/duyet-comment',[CommentController::class,'duyet_comment'])->name('duyet-comment');
 });
+
+Route::middleware('check_login_admin')->group(function (){
+    Route::get('/all-rating',[RatingController::class,'index'])->name('all-rating');
+});
+
 
 //Gallery sản phẩm
 Route::middleware('check_login_admin')->group(function (){

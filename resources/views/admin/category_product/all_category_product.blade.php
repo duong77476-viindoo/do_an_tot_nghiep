@@ -29,17 +29,10 @@
                 <div class="col-sm-4">
                     <a href="{{route('add-category-product')}}"><span class="btn btn-primary fa fa-plus">Thêm phân loại</span></a>
                 </div>
-                <div class="col-sm-3">
-                    <div class="input-group">
-                        <input type="text" class="input-sm form-control" placeholder="Search">
-                        <span class="input-group-btn">
-            <button class="btn btn-sm btn-default" type="button">Go!</button>
-          </span>
-                    </div>
-                </div>
+
             </div>
             <div class="table-responsive">
-                <table class="table table-striped b-t b-light">
+                <table id="myTable" class="table table-striped b-t b-light">
                     <thead>
                     <tr>
                         <th style="width:20px;">
@@ -53,7 +46,6 @@
                         <th>Hiển thị</th>
                         <th>Ngày cập nhật</th>
                         <th>Hành động</th>
-                        <th style="width:30px;"></th>
                     </tr>
                     </thead>
                     <tbody>
