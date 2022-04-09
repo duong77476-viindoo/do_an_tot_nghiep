@@ -10,7 +10,7 @@ class OrderDetail extends Model
     use HasFactory;
 
     public function product(){
-        return $this->belongsTo(ProductGroup::class);
+        return $this->belongsTo(Product::class);
     }
 
     public function order(){

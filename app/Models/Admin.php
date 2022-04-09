@@ -18,6 +18,10 @@ class Admin extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function phieu_nhaps(){
+        return $this->hasMany(PhieuNhap::class);
+    }
+
     public function getAuthPassword(){
         return $this->password;
     }

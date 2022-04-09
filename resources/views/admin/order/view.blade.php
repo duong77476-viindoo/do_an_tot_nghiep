@@ -96,7 +96,7 @@
                     @foreach($order_detail as $key => $item)
                         <tr class="color_qty_{{$item->product_id}}">
                             <td>{{$item->product_id}}</td>
-                            <td>{{$item->product_name}}</td>
+                            <td>{{$item->product->code}}</td>
                             <td>{{$item->product->so_luong}}</td>
                             <input type="hidden" name="so_luong_ton" class="so_luong_ton_{{$item->product_id}}" value="{{$item->product->so_luong}}">
                             <input type="hidden" name="so_luong_dat" class="so_luong_dat_{{$item->product_id}}" value="{{$item->so_luong}}">

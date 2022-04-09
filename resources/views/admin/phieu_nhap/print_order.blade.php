@@ -236,12 +236,12 @@
                     <div class="payment-info">
                         <div class="row">
                             <div class="col-xs-6">
-                                <span>Số hóa đơn</span>
-                                <strong>{{$order->id}}</strong>
+                                <span>Phiếu nhập</span>
+                                <strong>#{{$phieu_nhap->id}}</strong>
                             </div>
                             <div style="margin: 0px" class="col-xs-6 text-right">
                                 <span>Ngày</span>
-                                <strong>{{$order->updated_at}}</strong>
+                                <strong>{{$phieu_nhap->updated_at}}</strong>
                             </div>
                         </div>
                     </div>
@@ -249,29 +249,23 @@
                     <div class="payment-details">
                         <div class="row">
                             <div class="col-xs-6">
-                                <span>Khách hàng</span>
+                                <span>Nhà cung cấp</span>
                                 <strong>
-                                    {{$order->customer->name}}
+                                    {{$phieu_nhap->nha_cung_cap->name}}
                                 </strong>
                                 <p>
-                                    {{$order->customer->address}} <br>
-                                    {{$order->customer->phone}} <br>
-                                    <a href="#">
-                                        {{$order->customer->email}}
-                                    </a>
+                                    {{$phieu_nhap->nha_cung_cap->address}} <br>
+                                    {{$phieu_nhap->nha_cung_cap->phone}} <br>
                                 </p>
                             </div>
                             <div style="margin: 0px" class="col-xs-6 text-right">
-                                <span>Vận chuyển tới</span>
+                                <span>Nhập tại: </span>
                                 <strong>
-                                    {{$order->shipping->name}}
+                                    Công ty TNHH Thương mại và Truyền thông BC
                                 </strong>
                                 <p>
-                                    {{$order->shipping->address}} <br>
-                                    {{$order->shipping->phone}} <br>
-                                    <a href="#">
-                                        {{$order->shipping->email}}
-                                    </a>
+                                    81C Mê Linh, Lê Chân, Hải Phòng <br>
+                                     <br>
                                 </p>
                             </div>
                         </div>
@@ -280,53 +274,62 @@
                     <div class="line-items">
                         <div class="headers clearfix">
                             <div class="row">
-                                <div class="col-xs-2">Mã sản phẩm</div>
-                                <div class="col-xs-3">Tên sản phẩm</div>
-                                <div class="col-xs-2">Đơn giá</div>
-                                <div class="col-xs-2 text-right">Số lượng</div>
+                                <div class="col-xs-1">STT</div>
+                                <div class="col-xs-2">Tên sản phẩm</div>
+                                <div class="col-xs-2">Số lượng yêu cầu</div>
+                                <div class="col-xs-2">Số lượng thực nhập</div>
+                                <div class="col-xs-2">Giá nhập</div>
+                                <div class="col-xs-2">Thành tiền</div>
                             </div>
                         </div>
                         <div class="items">
                                 @php
-                                    $subtotal = 0;
+                                    $dem = 0;
                                 @endphp
-                            @foreach($order_detail as $key => $item)
+                            @foreach($chi_tiet_phieu_nhap as $key => $item)
                                 <div class="row item">
-                                    <div class="col-xs-2 desc">
-                                        {{$item->product_id}}
-                                    </div>
-                                    <div class="col-xs-3 qty">
-                                        {{$item->product->code}}
-                                    </div>
-                                    <div class="col-xs-2 amount">
-                                        {{number_format($item->product_price,0,',','.')}} VND
-                                    </div>
-                                    <div class="col-xs-2 amount text-right">
-                                        {{$item->so_luong}}
+                                    <div class="col-xs-1">
+                                        {{$dem+=1}}
                                     </div>
                                     @php
-                                        $subtotal += $item->product_price * $item->so_luong;
+                                        $product = \App\Models\Product::find($item->product_id);
                                     @endphp
+                                    <div class="col-xs-2 desc">
+                                        {{$product->name}}
+                                    </div>
+                                    <div class="col-xs-2 qty">
+                                        {{$item->so_luong_yeu_cau}}
+                                    </div>
+                                    <div class="col-xs-2 amount">
+                                        {{$item->so_luong_thuc_nhap}}
+                                    </div>
+                                    <div class="col-xs-2 amount">
+                                        {{number_format($item->gia_nhap,0,',','.')}} VND
+                                    </div>
+                                    <div class="col-xs-2">
+                                        {{number_format($item->thanh_tien,0,',','.')}} VND
+                                    </div>
+{{--                                    @php--}}
+{{--                                        $subtotal += $item->product_price * $item->so_luong;--}}
+{{--                                    @endphp--}}
                                 </div>
                             @endforeach
                         </div>
                     </div>
                     <div style="border-bottom: 2px solid #EBECEE;" class="tong-tien row">
                         <div class="col-xs-6">
-                            Thành tiền: <span style="font-weight: bold" class="">{{number_format($subtotal,0,',','.')}} VND</span>
+                            Thành tiền: <span style="font-weight: bold" class="">{{number_format($phieu_nhap->tong_tien,0,',','.')}} VND</span>
                             <br>
-                            Phí vận chuyển: <span style="font-weight: bold">{{number_format($order->fee_ship,0,',','.')}} VND</span>
-                            <br>
-                            Được giảm giá: <span style="font-weight: bold">{{number_format($order->coupon,2,',','.')}} VND</span>
+                            Chiết khấu: <span style="font-weight: bold">0 %</span>
                             <br>
                             VAT: <span style="font-weight: bold">0 VNĐ</span>
                             <br>
-                            Tổng: <span style="font-weight: bold" class="text-primary">{{number_format($order->tong_tien,0,',','.')}} VND</span>
+                            Tổng: <span style="font-weight: bold" class="text-primary">{{number_format($phieu_nhap->tong_tien,0,',','.')}} VND</span>
                         </div>
                         <div class="col-xs-5">
                             <p class="extra-notes">
-                                <strong>Ghi chú đơn hàng: </strong>
-                                {{$order->shipping->ghi_chu}}
+                                <strong>Nội dung: </strong>
+                                {{$phieu_nhap->content}}
                             </p>
                         </div>
                     </div>
@@ -335,13 +338,16 @@
                             <span style="font-weight: bold;color: black; margin-left: 5px">Người lập phiếu</span>
                             <br>
                             <br>
-                            <p>Nguyễn Đại Dương</p>
+                            @php
+                                $nguoi_lap = \App\Models\Admin::find($phieu_nhap->nguoi_lap_id);
+                            @endphp
+                            <p>{{$nguoi_lap->name}}</p>
                         </div>
                         <div class="col-xs-6">
-                            <span style="font-weight: bold;color: black;margin-left: 5px">Khách hàng</span>
+                            <span style="font-weight: bold;color: black;margin-left: 5px">Người nhận hàng</span>
                             <br>
                             <br>
-                            <p>{{$order->customer->name}}</p>
+                            <p></p>
                         </div>
                     </div>
                 </div>

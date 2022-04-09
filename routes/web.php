@@ -16,6 +16,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\NganhHangController;
 use App\Http\Controllers\NhaCungCapController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PhieuNhapController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostTypeController;
 use App\Http\Controllers\ProductController;
@@ -24,9 +25,6 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\VideoController;
-use App\Models\Comment;
-use App\Models\Order;
-use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Sendportal\Base\Facades\Sendportal;
 
@@ -191,9 +189,35 @@ Route::middleware('check_login_admin')->group(function (){
     Route::get('/active-nha-cung-cap/{id}',[NhaCungCapController::class,'active_nha-cung-cap'])->name('active-nha-cung-cap');
     Route::get('/unactive-nha-cung-cap/{id}',[NhaCungCapController::class,'unactive_nha-cung-cap'])->name('unactive-nha-cung-cap');
 
-    Route::get('/add-dac-tinh/{id}',[NhaCungCapController::class,'add_dac_tinh'])->name('add-dac-tinh');
-    Route::post('/save-dac-tinh',[NhaCungCapController::class,'save_dac_tinh'])->name('save-dac-tinh');
-    Route::get('/delete-dac-tinh/{id}',[NhaCungCapController::class,'delete_dac_tinh'])->name('delete-dac-tinh');
+    //import export excel
+//    Route::post('/post/import-csv',[NhaCungCapController::class,'import_csv'])->name('post-import-csv');
+//    Route::post('/post/export-csv',[NhaCungCapController::class,'export_csv'])->name('post-export-csv');
+
+});
+
+//Phiếu nhập
+Route::middleware('check_login_admin')->group(function (){
+    Route::prefix('/phieu-nhap')->group(function (){
+        Route::get('/all',[PhieuNhapController::class,'index'])->name('all-phieu-nhap');
+        Route::get('/add',[PhieuNhapController::class,'create'])->name('add-phieu-nhap');
+        Route::get('/edit/{id}',[PhieuNhapController::class,'edit'])->name('edit-phieu-nhap');
+        Route::get('/delete-/{id}',[PhieuNhapController::class,'destroy'])->name('delete-phieu-nhap');
+        Route::post('/update/{id}',[PhieuNhapController::class,'update'])->name('update-phieu-nhap');
+        Route::get('/view/{id}',[PhieuNhapController::class,'show'])->name('view-phieu-nhap');
+
+
+        Route::post('/save-phieu-nhap',[PhieuNhapController::class,'store'])->name('save-phieu-nhap');
+        Route::get('/print-order/{id}',[PhieuNhapController::class,'print_order'])->name('print-phieu-nhap');
+
+    });
+
+//
+//    Route::get('/active-nha-cung-cap/{id}',[NhaCungCapController::class,'active_nha-cung-cap'])->name('active-nha-cung-cap');
+//    Route::get('/unactive-nha-cung-cap/{id}',[NhaCungCapController::class,'unactive_nha-cung-cap'])->name('unactive-nha-cung-cap');
+//
+//    Route::get('/add-dac-tinh/{id}',[NhaCungCapController::class,'add_dac_tinh'])->name('add-dac-tinh');
+//    Route::post('/save-dac-tinh',[NhaCungCapController::class,'save_dac_tinh'])->name('save-dac-tinh');
+//    Route::get('/delete-dac-tinh/{id}',[NhaCungCapController::class,'delete_dac_tinh'])->name('delete-dac-tinh');
 
     //import export excel
 //    Route::post('/post/import-csv',[NhaCungCapController::class,'import_csv'])->name('post-import-csv');

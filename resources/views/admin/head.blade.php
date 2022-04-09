@@ -26,6 +26,8 @@
 <link rel="stylesheet" href="{{asset('public/backend/plugins/daterangepicker/daterangepicker.css')}}">
 <!-- summernote -->
 <link rel="stylesheet" href="{{asset('public/backend/plugins/summernote/summernote-bs4.min.css')}}">
+<link rel="stylesheet" href="{{asset('public/backend/css/style.css')}}">
+
 <link href="{{asset('public/frontend/css/sweetalert.css')}}" rel="stylesheet">
 {{--css cho tìm kiếm data ở các table sản phẩm, bài viết, đơn hàng--}}
 <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css" rel="stylesheet">
