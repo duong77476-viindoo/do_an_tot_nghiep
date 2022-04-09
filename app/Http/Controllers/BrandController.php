@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\api\API_V1;
+use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;

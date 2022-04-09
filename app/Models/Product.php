@@ -24,4 +24,12 @@ class Product extends Model
         return $this->hasMany(Rating::class);
     }
 
+    public function orders(){
+        return $this->belongsToMany(Order::class);
+    }
+
+    public function phieu_nhaps(){
+        return $this->belongsToMany(PhieuNhap::class);
+    }
+
 }

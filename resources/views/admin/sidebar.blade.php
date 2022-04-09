@@ -167,6 +167,29 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-choose">
+                        <i class="nav-icon fa fa-barcode"></i>
+                        <p>
+                            Quản lý kho
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('all-phieu-nhap')}}" class="nav-link">
+                                <i class="fa fa-file nav-icon"></i>
+                                <p>Phiếu nhập</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="fa fa-file-alt nav-icon"></i>
+                                <p>Phiếu xuất</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link nav-choose">
                         <i class="nav-icon fa fa-truck"></i>
                         <p>
                             Quản lý vận chuyển

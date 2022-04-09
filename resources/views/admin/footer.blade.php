@@ -47,6 +47,7 @@
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 {{--link script cho thêm từ khóa, tag sản phẩm--}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js">
 <!-- morris JavaScript -->
 @yield('pagescript')
 <script>
@@ -143,6 +144,7 @@
     CKEDITOR.replace('mo_ta_chi_tiet');
     CKEDITOR.replace('content');
 </script>
+
 
 {{--script dể thêm từ khóa, tag sản phẩm--}}
 <script type="text/javascript">
