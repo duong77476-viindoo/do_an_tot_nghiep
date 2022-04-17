@@ -158,9 +158,15 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('all-brand')}}" class="nav-link">
+                            <a href="" class="nav-link">
                                 <i class="fas fa-circle nav-icon"></i>
-                                <p>bla bla</p>
+                                <p>Quản lý vận chuyển</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="fas fa-circle nav-icon"></i>
+                                <p>Quản lý thanh toán đơn hàng</p>
                             </a>
                         </li>
                     </ul>
@@ -181,9 +187,38 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{route('all-phieu-xuat')}}" class="nav-link">
                                 <i class="fa fa-file-alt nav-icon"></i>
                                 <p>Phiếu xuất</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('all-ton-kho')}}" class="nav-link">
+                                <i class="fa fa-store-alt-slash nav-icon"></i>
+                                <p>Tồn kho</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link nav-choose">
+                        <i class="nav-icon fa fa-money-check"></i>
+                        <p>
+                            Quản lý công nợ
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('all-cong-no-ncc')}}" class="nav-link">
+                                <i class="fa fa-money-bill-wave nav-icon"></i>
+                                <p>Công nợ nhà cung cấp</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('all-thanh-toan-cong-no')}}" class="nav-link">
+                                <i class="fa fa-money-bill nav-icon"></i>
+                                <p>Thanh toán công nợ</p>
                             </a>
                         </li>
                     </ul>

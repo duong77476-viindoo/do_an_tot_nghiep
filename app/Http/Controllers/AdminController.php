@@ -147,7 +147,7 @@ class AdminController extends Controller
         $validated = $request->validate([
             'email'=>'required',
             'password'=>'required',
-            'g-recaptcha-response'=>new Captcha(),
+//            'g-recaptcha-response'=>new Captcha(),
         ]);
         $data = $request->all();
         if(Auth::attempt(['email'=>$data['email'],'password'=>$data['password']])){
@@ -173,7 +173,7 @@ class AdminController extends Controller
         $data = $request->validate([
             'email'=>'required',
             'password'=>'required',
-            'g-recaptcha-response'=>new Captcha(),
+//            'g-recaptcha-response'=>new Captcha(),
         ]);
         $admin_email = $data['email'];
         $admin_password = md5($data['password']);

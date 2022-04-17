@@ -415,21 +415,6 @@
             var product_qty = $('.product_qty_'+ id).val();//số lượng tồn
             var so_luong_da_dat = $('.so_luong_da_dat_' + id).val();
             var _token = $('input[name="_token"]').val();
-            if((cart_product_qty)>parseInt(product_qty)){
-                swal({
-                        title: "Thêm sản phẩm thất bại",
-                        text: "Số lượng sản phẩm trong kho hiện không đáp ứng đủ nhu cầu của quý khách!, xin quý khách thông cảm",
-                        type: "warning",
-                        showCancelButton: true,
-                        cancelButtonText: "Xem tiếp",
-                        confirmButtonClass: "btn-success",
-                        confirmButtonText: "Đi đến giỏ hàng",
-                        closeOnConfirm: false
-                    },
-                    function() {
-                        window.location.href = "{{url('/gio-hang')}}";
-                    });
-            }else {
                 $.ajax({
                     url: '{{url('/add-cart-ajax')}}',
                     method: 'POST',
@@ -478,7 +463,7 @@
                     }
 
                 });
-            }
+
 
         });
     });

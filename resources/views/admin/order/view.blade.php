@@ -83,9 +83,9 @@
                     <tr>
                         <th>Mã sản phẩm</th>
                         <th>Tên sản phẩm</th>
-                        <th>Số lượng kho</th>
+                        <th>Số lượng tồn</th>
                         <th>Đơn giá</th>
-                        <th>Số lượng</th>
+                        <th>Số lượng đặt</th>
                         <th style="width:30px;"></th>
                     </tr>
                     </thead>

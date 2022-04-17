@@ -21,4 +21,8 @@ class Order extends Model
     public function products(){
         return $this->belongsToMany(Product::class);
     }
+
+    public function phieu_xuat(){
+        return $this->hasOne(PhieuXuat::class);
+    }
 }

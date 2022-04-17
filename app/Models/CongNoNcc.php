@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TonKho extends Model
+class CongNoNcc extends Model
 {
     use HasFactory;
-
-    public function product(){
-        return $this->belongsTo(Product::class);
+    public function nha_cung_cap(){
+        return $this->belongsTo(NhaCungCap::class);
     }
 }

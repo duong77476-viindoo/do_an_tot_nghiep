@@ -32,4 +32,8 @@ class Product extends Model
         return $this->belongsToMany(PhieuNhap::class);
     }
 
+    public function phieu_xuats(){
+        return $this->belongsToMany(PhieuXuat::class);
+    }
+
 }

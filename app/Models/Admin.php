@@ -22,6 +22,10 @@ class Admin extends Authenticatable
         return $this->hasMany(PhieuNhap::class);
     }
 
+    public function phieu_xuats(){
+        return $this->hasMany(PhieuXuat::class);
+    }
+
     public function getAuthPassword(){
         return $this->password;
     }

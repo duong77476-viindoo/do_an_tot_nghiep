@@ -6,6 +6,7 @@ use App\Models\DacTinh;
 use App\Models\Product;
 use App\Models\ProductGroup;
 use App\Models\ProductSpec;
+use App\Models\TonKho;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -58,8 +59,25 @@ class ProductController extends Controller
            }
            $product->code=$product_group->code.$sku;
            $product->sku=$product_group->code.$sku;
-           $product->name = substr($attr,1);
+           $product->name = $product_group->name.$sku;
            $product->save();
+           //Tạo tồn kho cho sản phẩm mới
+           $month = \date("m");
+           $year = \date('Y');
+           $ton_kho_by_product = TonKho::where('product_id',$product->id)->where('year',$year)->where('month',$month)->first();
+           if(is_null($ton_kho_by_product)){
+               $ton_kho_by_product = new TonKho();
+               $ton_kho_by_product->year = $year;
+               $ton_kho_by_product->month = $month;
+               $ton_kho_by_product->ton_dau_thang = 0;
+               $ton_kho_by_product->nhap_trong_thang = 0;
+               $ton_kho_by_product->xuat_trong_thang = 0;
+               $ton_kho_by_product->xuat_trong_thang = 0;
+               $ton_kho_by_product->ton = 0;
+               $ton_kho_by_product->product_id = $product->id;
+           }
+           $ton_kho_by_product->save();
+
            foreach ($dac_tinhs as $key=>$dac_tinh){
                $product_spec = new ProductSpec();
                $product_spec->name = $dac_tinh->name;
