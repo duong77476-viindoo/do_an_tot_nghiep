@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\ChiTietPhieuNhap;
+use App\Models\CongNoNcc;
 use App\Models\NhaCungCap;
 use App\Models\PhieuNhap;
 use App\Models\Product;
 use App\Models\TonKho;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +25,6 @@ class PhieuNhapController extends Controller
     public function index()
     {
         //
-        Paginator::useBootstrap();
         $phieu_nhaps = PhieuNhap::all();
         return view('admin.phieu_nhap.index')->with('phieu_nhaps',$phieu_nhaps);
     }
@@ -70,6 +71,8 @@ class PhieuNhapController extends Controller
         $phieu_nhap->nguoi_lap_id = Auth::id();
         $phieu_nhap->save();
 
+
+
         $tong_tien = 0;
         foreach ($data['san_pham'] as $key=>$val){
 //            VarDumper::dump($val);
@@ -109,6 +112,8 @@ class PhieuNhapController extends Controller
             $ton_kho_by_product->save();
 
 
+
+
             $chi_tiet_phieu_nhap = new ChiTietPhieuNhap();
             $chi_tiet_phieu_nhap->phieu_nhap_id = $phieu_nhap->id;
             $chi_tiet_phieu_nhap->product_id = $val;
@@ -119,7 +124,25 @@ class PhieuNhapController extends Controller
             $chi_tiet_phieu_nhap->save();
         }
         $phieu_nhap->tong_tien = $tong_tien;
+        //Cập nhật bảng công nợ ncc
+        $month = \date("m");
+        $year = \date('Y');
+        $cong_no_ncc = CongNoNcc::where('nha_cung_cap_id',$data['nha_cung_cap_id'])
+            ->where('year',$year)->where('month',$month)->first();
+        if(is_null($cong_no_ncc)){
+            $cong_no_ncc = new CongNoNcc();
+            $cong_no_ncc->year = $year;
+            $cong_no_ncc->month = $month;
+            $cong_no_ncc->cong_no_dau_thang = 0;
+            $cong_no_ncc->cong_no_cuoi_thang = $tong_tien;
+            $cong_no_ncc->cong_no_da_thanh_toan = 0;
+            $cong_no_ncc->cong_no_con = 0;
+            $cong_no_ncc->nha_cung_cap_id = $data['nha_cung_cap_id'];
+        }else{
+            $cong_no_ncc->cong_no_cuoi_thang += $tong_tien;
+        }
         $phieu_nhap->save();
+        $cong_no_ncc->save();
         //Cộng số tiền nợ của nhà cung cấp
         $nha_cung_cap = NhaCungCap::find($data['nha_cung_cap_id']);
         $nha_cung_cap->so_tien_no += $tong_tien;

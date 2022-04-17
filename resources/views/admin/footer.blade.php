@@ -47,7 +47,6 @@
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 {{--link script cho thêm từ khóa, tag sản phẩm--}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js">
 <!-- morris JavaScript -->
 @yield('pagescript')
 <script>
@@ -556,19 +555,6 @@
      var dem=0;
      //Kiểm tra số lượng đặt với số lượng trong kho
      if(order_status!="Đã hủy" && order_status!="Chờ xác nhận hủy"){
-         for(i=0;i<order_product_id.length;i++){
-             var so_luong_ton = $('.so_luong_ton_'+order_product_id[i]).val();
-             var so_luong_dat = $('.so_luong_dat_'+order_product_id[i]).val();
-             // alert(so_luong_ton);
-             // alert(so_luong_dat);
-             // alert(so_luong_ton-so_luong_dat);
-             if(so_luong_dat>so_luong_ton){
-                 dem=dem+1;
-                 $('.color_qty_'+order_product_id[i]).css('background','red');
-             }
-         }
-         if(dem>0)
-            alert("Vượt quá số lượng trong kho");
          $.ajax({
              url: '{{url('/update-order-status')}}',
              method: 'POST',

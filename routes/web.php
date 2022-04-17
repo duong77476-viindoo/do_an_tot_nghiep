@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CongNoNccController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DeliveryController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\NganhHangController;
 use App\Http\Controllers\NhaCungCapController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PhieuNhapController;
+use App\Http\Controllers\PhieuXuatController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostTypeController;
 use App\Http\Controllers\ProductController;
@@ -24,6 +26,8 @@ use App\Http\Controllers\ProductGroupController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\ThanhToanCongNoNccController;
+use App\Http\Controllers\TonKhoController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 use Sendportal\Base\Facades\Sendportal;
@@ -211,6 +215,7 @@ Route::middleware('check_login_admin')->group(function (){
 
     });
 
+
 //
 //    Route::get('/active-nha-cung-cap/{id}',[NhaCungCapController::class,'active_nha-cung-cap'])->name('active-nha-cung-cap');
 //    Route::get('/unactive-nha-cung-cap/{id}',[NhaCungCapController::class,'unactive_nha-cung-cap'])->name('unactive-nha-cung-cap');
@@ -224,6 +229,110 @@ Route::middleware('check_login_admin')->group(function (){
 //    Route::post('/post/export-csv',[NhaCungCapController::class,'export_csv'])->name('post-export-csv');
 
 });
+
+//Phiếu xuất
+Route::middleware('check_login_admin')->group(function (){
+    Route::prefix('/phieu-xuat')->group(function (){
+        Route::get('/all',[PhieuXuatController::class,'index'])->name('all-phieu-xuat');
+        Route::get('/add',[PhieuXuatController::class,'create'])->name('add-phieu-xuat');
+        Route::get('/edit/{id}',[PhieuXuatController::class,'edit'])->name('edit-phieu-xuat');
+        Route::get('/delete-/{id}',[PhieuXuatController::class,'destroy'])->name('delete-phieu-xuat');
+        Route::post('/update/{id}',[PhieuXuatController::class,'update'])->name('update-phieu-xuat');
+        Route::get('/view/{id}',[PhieuXuatController::class,'show'])->name('view-phieu-xuat');
+
+
+        Route::post('/save-phieu-xuat',[PhieuXuatController::class,'store'])->name('save-phieu-xuat');
+        Route::get('/print-order/{id}',[PhieuXuatController::class,'print_order'])->name('print-phieu-xuat');
+
+    });
+
+
+//
+//    Route::get('/active-nha-cung-cap/{id}',[NhaCungCapController::class,'active_nha-cung-cap'])->name('active-nha-cung-cap');
+//    Route::get('/unactive-nha-cung-cap/{id}',[NhaCungCapController::class,'unactive_nha-cung-cap'])->name('unactive-nha-cung-cap');
+//
+//    Route::get('/add-dac-tinh/{id}',[NhaCungCapController::class,'add_dac_tinh'])->name('add-dac-tinh');
+//    Route::post('/save-dac-tinh',[NhaCungCapController::class,'save_dac_tinh'])->name('save-dac-tinh');
+//    Route::get('/delete-dac-tinh/{id}',[NhaCungCapController::class,'delete_dac_tinh'])->name('delete-dac-tinh');
+
+    //import export excel
+//    Route::post('/post/import-csv',[NhaCungCapController::class,'import_csv'])->name('post-import-csv');
+//    Route::post('/post/export-csv',[NhaCungCapController::class,'export_csv'])->name('post-export-csv');
+
+});
+
+//Tồn kho sản phẩm
+Route::middleware('check_login_admin')->group(function (){
+    Route::prefix('/ton-kho')->group(function (){
+        Route::get('/all',[TonKhoController::class,'index'])->name('all-ton-kho');
+        Route::get('/add',[TonKhoController::class,'create'])->name('add-ton-kho');
+        Route::get('/edit/{id}',[TonKhoController::class,'edit'])->name('edit-ton-kho');
+        Route::get('/delete-/{id}',[TonKhoController::class,'destroy'])->name('delete-ton-kho');
+        Route::post('/update/{id}',[TonKhoController::class,'update'])->name('update-ton-kho');
+        Route::get('/view/{id}',[TonKhoController::class,'show'])->name('view-ton-kho');
+
+
+        Route::post('/save-ton-kho',[TonKhoController::class,'store'])->name('save-ton-kho');
+        Route::post('/chot-ton-kho',[TonKhoController::class,'chot_ton_kho'])->name('chot-ton-kho');
+
+//        Route::get('/print-order/{id}',[TonKhoController::class,'print_order'])->name('print-phieu-xuat');
+        Route::post('/export-csv',[TonKhoController::class,'export_csv'])->name('ton-kho-export-csv');
+
+    });
+
+    //import export excel
+//    Route::post('/post/import-csv',[NhaCungCapController::class,'import_csv'])->name('post-import-csv');
+//    Route::post('/post/export-csv',[NhaCungCapController::class,'export_csv'])->name('post-export-csv');
+
+});
+
+//Bảng công nợ ncc
+Route::middleware('check_login_admin')->group(function (){
+    Route::prefix('/cong-no-ncc')->group(function (){
+        Route::get('/all',[CongNoNccController::class,'index'])->name('all-cong-no-ncc');
+        Route::get('/add',[CongNoNccController::class,'create'])->name('add-cong-no-ncc');
+        Route::get('/edit/{id}',[CongNoNccController::class,'edit'])->name('edit-cong-no-ncc');
+        Route::get('/delete-/{id}',[CongNoNccController::class,'destroy'])->name('delete-cong-no-ncc');
+        Route::post('/update/{id}',[CongNoNccController::class,'update'])->name('update-cong-no-ncc');
+        Route::get('/view/{id}',[CongNoNccController::class,'show'])->name('view-cong-no-ncc');
+
+
+        Route::post('/save-cong-no-ncc',[CongNoNccController::class,'store'])->name('save-cong-no-ncc');
+        Route::post('/chot-cong-no',[CongNoNccController::class,'chot_cong_no'])->name('chot-cong-no');
+
+//        Route::get('/print-order/{id}',[CongNoNccController::class,'print_order'])->name('print-phieu-xuat');
+        Route::get('/export-csv/{id}',[CongNoNccController::class,'export_csv'])->name('export-bang-cong-no');
+        Route::get('/export-xac-nhan-cong-no/{id}',[CongNoNccController::class,'export_xac_nhan_cong_no'])->name('export-xac-nhan-cong-no');
+        Route::get('/export-doi-chieu-cong-no/{id}',[CongNoNccController::class,'export_doi_chieu_cong_no'])->name('export-doi-chieu-cong-no');
+        Route::post('/export-so-cong-no',[CongNoNccController::class,'export_so_cong_no'])->name('export-so-cong-no');
+
+    });
+
+    //import export excel
+//    Route::post('/post/import-csv',[NhaCungCapController::class,'import_csv'])->name('post-import-csv');
+//    Route::post('/post/export-csv',[NhaCungCapController::class,'export_csv'])->name('post-export-csv');
+
+});
+
+
+//Thanh toán công nợ nhà cung cấp
+Route::middleware('check_login_admin')->group(function (){
+    Route::prefix('/thanh-toan-cong-no-ncc')->group(function (){
+        Route::get('/all',[ThanhToanCongNoNccController::class,'index'])->name('all-thanh-toan-cong-no');
+        Route::get('/add',[ThanhToanCongNoNccController::class,'create'])->name('add-thanh-toan-cong-no');
+        Route::get('/edit/{id}',[ThanhToanCongNoNccController::class,'edit'])->name('edit-thanh-toan-cong-no');
+        Route::get('/delete-/{id}',[ThanhToanCongNoNccController::class,'destroy'])->name('delete-thanh-toan-cong-no');
+        Route::post('/update/{id}',[ThanhToanCongNoNccController::class,'update'])->name('update-thanh-toan-cong-no');
+        Route::get('/view/{id}',[ThanhToanCongNoNccController::class,'show'])->name('view-thanh-toan-cong-no');
+
+
+        Route::post('/save',[ThanhToanCongNoNccController::class,'store'])->name('save-thanh-toan-cong-no');
+        Route::get('/print-order/{id}',[ThanhToanCongNoNccController::class,'print_order'])->name('print-thanh-toan-cong-no');
+
+    });
+
+});
+
 
 
 //Loại phân loại (danh mục cha)

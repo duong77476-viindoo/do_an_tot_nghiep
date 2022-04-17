@@ -72,13 +72,13 @@
 
                     <!-- /.col -->
                 </div>
-                <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
-                <br/>
-                @if($errors->has('g-recaptcha-response'))
-                    <span class="invalid-feedback" style="display:block">
-	                    <strong>{{$errors->first('g-recaptcha-response')}}</strong>
-                    </span>
-                @endif
+{{--                <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>--}}
+{{--                <br/>--}}
+{{--                @if($errors->has('g-recaptcha-response'))--}}
+{{--                    <span class="invalid-feedback" style="display:block">--}}
+{{--	                    <strong>{{$errors->first('g-recaptcha-response')}}</strong>--}}
+{{--                    </span>--}}
+{{--                @endif--}}
             </form>
 
             <div class="social-auth-links text-center mb-3">

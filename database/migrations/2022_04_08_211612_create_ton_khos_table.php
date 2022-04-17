@@ -21,6 +21,7 @@ class CreateTonKhosTable extends Migration
             $table->integer('nhap_trong_thang');
             $table->integer('xuat_trong_thang');
             $table->integer('ton');
+            $table->enum('trang_thai',['Chưa hoàn thành','Hoàn thành'])->default('Chưa hoàn thành');
             $table->bigInteger('product_id')->unsigned();
             $table->foreign('product_id')
                 ->references('id')
