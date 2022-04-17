@@ -995,6 +995,8 @@ h2.title {
 	color:#FF4136;
 }
 
+
+
 .category-tab {
   overflow: hidden;
 }
@@ -2612,6 +2614,10 @@ img.profile-photo-sm {
     color: #8dc63f;
     font-size: 12px;
     margin-left: 20px;
+}
+
+.col-md-8.info_wishlist{
+    margin: 0;
 }
 
 
