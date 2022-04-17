@@ -8,6 +8,25 @@
             <li class="breadcrumb-item active" aria-current="page">{{$nhom_san_pham->name}}</li>
         </ol>
     </nav>
+    <div class="choose">
+        <ul class="nav nav-pills nav-justified">
+            <li><i class="fa fa-plus-square"></i>
+                <input type="hidden" id="wishlist_productname{{$phien_ban_san_pham->id}}"
+                       value="{{$phien_ban_san_pham->name}}">
+                <input type="hidden" id="wishlist_productprice{{$phien_ban_san_pham->id}}"
+                       value="{{number_format($phien_ban_san_pham->gia_ban,0,'','.')}} đ">
+                <input type="hidden" id="wishlist_producturl{{$phien_ban_san_pham->id}}"
+                       value="{{route('product',['code'=>$phien_ban_san_pham->code])}}">
+                <input type="hidden" id="wishlist_productimage{{$phien_ban_san_pham->id}}"
+                       value="{{url('public/uploads/products/'.$nhom_san_pham->anh_dai_dien)}}">
+                <button class="button_wishlist btn btn-primary" id="{{$phien_ban_san_pham->id}}"
+                        onclick="add_wishlist(this.id)"><span>Yêu thích</span></button>
+            </li>
+            <li><i class="fa fa-plus-square"></i>
+                <button class="button_wishlist btn btn-primary"><span>So sánh</span></button>
+            </li>
+        </ul>
+    </div>
 <div class="product-details"><!--product-details-->
     <div class="col-sm-5">
         <ul id="imageGallery">
@@ -340,6 +359,8 @@
 @endsection
 
 @section('pagescript')
+
+
 {{--    script load comment của sản phẩm, thêm comments--}}
     <script type="text/javascript">
         $(document).ready(function (){

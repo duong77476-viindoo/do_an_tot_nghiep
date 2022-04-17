@@ -43,6 +43,14 @@
         </div>
     </div><!--/price-range-->
 
+    <div class="brands_products"><!--sản phẩm yêu thích-->
+        <h2>Sản phẩm yêu thích</h2>
+        <div class="brands-name">
+               <div id="row_wishlist" class="row">
+
+               </div>
+        </div>
+    </div><!--sản phẩm yêu thích-->
     <div class="shipping text-center"><!--shipping-->
         <img src="images/home/shipping.jpg" alt="" />
     </div><!--/shipping-->
