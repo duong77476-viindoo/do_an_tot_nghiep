@@ -267,13 +267,14 @@ class ProductGroupController extends Controller
         $category_products = CategoryProduct::all();
         $product_group = ProductGroup::find($id);
 
-        $category_products_id = CategoryProductProduct::where('product_id',$id)->get();
+        $category_products_id = CategoryProductProduct::where('product_group_id',$id)->get();
 
 //        VarDumper::dump($category_products_id);
 //        exit();
         return view('admin.product.edit')
             ->with('tags',$tags)
             ->with('videos',$videos)
+            ->with('brands',$brands)
             ->with('product_group',$product_group)
             ->with('category_products',$category_products)
             ->with('category_products_id',$category_products_id);

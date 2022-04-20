@@ -43,7 +43,7 @@
 <link href="{{asset('public/frontend/css/vlite.css')}}" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" rel="stylesheet">
 
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
 <!--[if lt IE 9]>
     <script src="{{('public/frontend/js/html5shiv.js')}}"></script>
     <script src="{{('public/frontend/js/respond.min.js')}}"></script>

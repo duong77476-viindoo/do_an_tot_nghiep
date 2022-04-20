@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
 use Illuminate\Support\ServiceProvider;
 use Sendportal\Base\Facades\Sendportal;
 use function Clue\StreamFilter\fun;
@@ -36,6 +37,12 @@ class AppServiceProvider extends ServiceProvider
 
         Sendportal::setHeaderHtmlContentResolver(function () {
             return view('admin.marketing.userManagementHeader')->render();
+        });
+
+        view()->composer('*',function ($view){
+            $min_price = Product::min('gia_ban');
+            $max_price = Product::max('gia_ban') +1000;
+            $view->with('min_price',$min_price)->with('max_price',$max_price);
         });
     }
 }

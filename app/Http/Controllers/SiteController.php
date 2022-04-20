@@ -33,7 +33,8 @@ class SiteController extends Controller
         $category_products = CategoryProduct::where('category_product_status',1)->get();
         $brands = Brand::where('brand_status',1)->get();
         $category_product = CategoryProduct::where('code',$code)->first();
-        $sanphams_by_category = $category_product->product_groups;
+
+//        $sanphams_by_category = $category_product->product_groups;
         $sliders = Slider::where('an_hien',1)->get();
 
         $meta_desc = $category_product->category_product_desc;
@@ -41,7 +42,52 @@ class SiteController extends Controller
         $meta_title = $category_product->category_product_name;
         $url_canonical = $request->url();
 
+        $min_price = Product::min('gia_ban');
+        $max_price = Product::max('gia_ban') +1000;
+        if(isset($_GET['sort_by'])){
+            $sort_by = $_GET['sort_by'];
+            if($sort_by=='giam_dan'){
+                $sanphams_by_category = ProductGroup::join('products', 'products.product_group_id', '=', 'product_groups.id')
+                    ->join('category_product_product_group as cp','cp.product_group_id','product_groups.id')
+                    ->where('cp.category_product_id',$category_product->id)
+                    ->orderBy('products.gia_ban', 'DESC')->select('product_groups.*')
+                    ->distinct()->paginate(6)->appends(request()->query());
+//                ->appends(request()->query()) là để khi phân trang vẫn giữ nguyên lọc
+            }elseif ($sort_by=='tang_dan'){
+                $sanphams_by_category = ProductGroup::join('products', 'products.product_group_id', '=', 'product_groups.id')
+                    ->join('category_product_product_group as cp','cp.product_group_id','product_groups.id')
+                    ->where('cp.category_product_id',$category_product->id)
+                    ->orderBy('products.gia_ban', 'ASC')->select('product_groups.*')
+                    ->distinct()->paginate(6)->appends(request()->query());
+            }elseif ($sort_by=='kytu_za'){
+                $sanphams_by_category = ProductGroup::join('products', 'products.product_group_id', '=', 'product_groups.id')
+                    ->join('category_product_product_group as cp','cp.product_group_id','product_groups.id')
+                    ->where('cp.category_product_id',$category_product->id)
+                    ->orderBy('product_groups.name', 'DESC')->select('product_groups.*')
+                    ->distinct()->paginate(6)->appends(request()->query());
+            }elseif ($sort_by=='kytu_az'){
+                $sanphams_by_category = ProductGroup::join('products', 'products.product_group_id', '=', 'product_groups.id')
+                    ->join('category_product_product_group as cp','cp.product_group_id','product_groups.id')
+                    ->where('cp.category_product_id',$category_product->id)
+                    ->orderBy('product_groups.name', 'ASC')->select('product_groups.*')
+                    ->distinct()->paginate(6)->appends(request()->query());
+            }
+        }else if (isset($_GET['start_price']) && isset($_GET['end_price'])){
+            $min_price = $_GET['start_price'];
+            $max_price = $_GET['end_price'];
+            $sanphams_by_category = ProductGroup::join('products', 'products.product_group_id', '=', 'product_groups.id')
+                ->join('category_product_product_group as cp','cp.product_group_id','product_groups.id')
+                ->where('cp.category_product_id',$category_product->id)
+                ->whereBetween('products.gia_ban',[$min_price,$max_price])->orderBy('products.gia_ban','ASC')->select('product_groups.*')
+                ->distinct()->paginate(6)->appends(request()->query());
+        }else{
+            $sanphams_by_category = $category_product->product_groups;
+        }
+
+
         return view('frontend.category.products_by_category')
+            ->with('min_price',$min_price)
+            ->with('max_price',$max_price)
             ->with('post_types',$post_types)
             ->with('categories',$categories)
             ->with('category_product',$category_product)

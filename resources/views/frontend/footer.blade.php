@@ -167,6 +167,34 @@
 <script src="{{asset('public/frontend/js/vlite.js')}}"></script>
 <script src="{{asset('public/frontend/js/youtube.js')}}"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="{{asset('public/frontend/js/simple.money.format.js')}}"></script>
+
+{{--Script jquery lọc giá sản phẩm--}}
+<script type="text/javascript">
+    $(document).ready(function (){
+        $( "#slider-range" ).slider({
+            orientation: "horizontal",
+            range: true,
+            min:{{$min_price}},
+            max:{{$max_price}},
+            values: [ {{$min_price}},{{$max_price}} ],
+            step:10,
+            slide: function( event, ui ) {
+                $( "#amount_start" ).val( ui.values[ 0 ]).simpleMoneyFormat();
+                $( "#amount_end" ).val( ui.values[ 1 ]).simpleMoneyFormat();
+
+                $( "#start_price" ).val(ui.values[ 0 ]);
+                $( "#end_price" ).val( ui.values[ 1 ]);
+            }
+        });
+
+        $( "#amount_start" ).val( $( "#slider-range" ).slider( "values", 0 )).simpleMoneyFormat();
+        $( "#amount_end" ).val( $( "#slider-range" ).slider( "values", 1 )).simpleMoneyFormat();
+
+    })
+</script>
+
 {{-- script Thêm danh sách yêu thích   --}}
 <script type="text/javascript">
     $(document).on('click','.delete_wishlist',function(event){
