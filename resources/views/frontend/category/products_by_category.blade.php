@@ -5,6 +5,44 @@
 
     <div class="features_items"><!--features_items-->
         <h2 class="title text-center">Danh mục {{$category_product->category_product_name}}</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <label for="amount">Sắp xếp theo</label>
+
+                <form>
+                    @csrf
+                    <select name="sort" id="sort" class="form-control">
+                        <option value="{{\Illuminate\Support\Facades\Request::url()}}?sort_by=none">--Lọc--</option>
+                        <option value="{{\Illuminate\Support\Facades\Request::url()}}?sort_by=tang_dan">--Giá tăng dần--</option>
+                        <option value="{{\Illuminate\Support\Facades\Request::url()}}?sort_by=giam_dan">--Giá giảm dần--</option>
+                        <option value="{{\Illuminate\Support\Facades\Request::url()}}?sort_by=kytu_az">Lọc theo tên A đến Z</option>
+                        <option value="{{\Illuminate\Support\Facades\Request::url()}}?sort_by=kytu_za">Lọc theo tên Z đến A</option>
+                    </select>
+                </form>
+            </div>
+
+            <div class="col-md-4">
+                <label for="amount">Lọc giá theo</label>
+                <form>
+                    <div id="slider-range"></div>
+                    <style>
+                        .style-range p{
+                            float: left;
+                            width: 35%;
+                        }
+                    </style>
+                    <div class="style-range">
+                        <p><input type="text" id="amount_start" readonly style="border:0; color:#f6931f; font-weight:bold;"> VND</p>
+                        <p><input type="text" id="amount_end" readonly style="border:0; color:#f6931f; font-weight:bold;"> VND</p>
+                    </div>
+                    <input type="hidden" name="start_price" id="start_price">
+                    <input type="hidden" name="end_price" id="end_price">
+                    <br>
+                    <div class="clearfix"></div>
+                    <input type="submit" name="filter_price" value="Lọc giá" class="btn btn-sm btn-default">
+                </form>
+            </div>
+        </div>
         @foreach($sanphams_by_category as $san_pham)
 
             <div class="col-sm-4">
@@ -25,7 +63,10 @@
                                         @break
                                         @endforeach
                                     <img src="{{url('public/uploads/products/'.$san_pham->anh_dai_dien)}}" alt="" />
-                                    <h2>{{number_format($san_pham->gia_ban,0,'','.')}} đ</h2>
+                                        @php
+                                        $product = $san_pham->products;
+                                        @endphp
+                                    <h2>{{number_format($product->first()->gia_ban,0,'','.')}} đ</h2>
                                     <p>{{$san_pham->name}}</p>
                                     {{--                    <a href="{{route('product',['code'=>$san_pham->code])}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>--}}
 
@@ -46,12 +87,12 @@
                         {{--                    </div>--}}
                         {{--                </div>--}}
                     </div>
-                    <div class="choose">
-                        <ul class="nav nav-pills nav-justified">
-                            <li><a href="#"><i class="fa fa-plus-square"></i>Thêm vào danh sách yêu thích</a></li>
-                            <li><a href="#"><i class="fa fa-plus-square"></i>Thêm vào danh sách so sánh</a></li>
-                        </ul>
-                    </div>
+{{--                    <div class="choose">--}}
+{{--                        <ul class="nav nav-pills nav-justified">--}}
+{{--                            <li><a href="#"><i class="fa fa-plus-square"></i>Thêm vào danh sách yêu thích</a></li>--}}
+{{--                            <li><a href="#"><i class="fa fa-plus-square"></i>Thêm vào danh sách so sánh</a></li>--}}
+{{--                        </ul>--}}
+{{--                    </div>--}}
                 </div>
 
             </div>
@@ -529,4 +570,18 @@
         </div>
     </div>
 
+@endsection
+
+@section('pagescript')
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $('#sort').on('change',function (){
+                var url = $(this).val();
+                if(url){
+                    window.location = url;
+                }
+                return false;
+            })
+        })
+    </script>
 @endsection
