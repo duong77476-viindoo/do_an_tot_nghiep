@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Role;
 use App\Models\Social;
+use App\Models\StatisticVisitor;
 use App\Rules\Captcha;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -29,11 +31,24 @@ class AdminController extends Controller
             return Redirect::to('admin')->send();
         }
     }
-    public function index(){
+    public function index(Request $request){
         $admin_id_social = Session::get('admin_id');
         $admin_id_auth = Auth::id();
-        if($admin_id_auth || $admin_id_social)
+        if($admin_id_auth || $admin_id_social){
+            $user_ip_address = $request->ip();
+            $early_last_month =  Carbon::now('Asia/Ho_Chi_Minh')->subMonth()->startOfMonth()->toDateString();
+            $end_last_month =  Carbon::now('Asia/Ho_Chi_Minh')->subMonth()->endOfMonth()->toDateString();
+            $early_this_month =  Carbon::now('Asia/Ho_Chi_Minh')->startOfMonth()->toDateString();
+            $oneyears =  Carbon::now('Asia/Ho_Chi_Minh')->subDays(365)->toDateString();
+            $now =  Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
+
+            //total last month
+            $visitor_of_lastmonth = StatisticVisitor::whereBetween('date_visit',[$early_last_month,$end_last_month])->get();
+            $visitor_last_month_count = $visitor_of_lastmonth->count();
+
+            //total this month
             return view('admin.dashboard');
+        }
         return view('admin.admin_login');
     }
 

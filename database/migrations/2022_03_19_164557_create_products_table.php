@@ -27,6 +27,7 @@ class CreateProductsTable extends Migration
             $table->integer('so_luong_da_ban')->default(0);
             $table->decimal('gia_ban',14,2)->default(0);
             $table->decimal('gia_canh_tranh',14,2)->default(0);
+            $table->integer('views')->nullable();
             $table->timestamps();
         });
     }

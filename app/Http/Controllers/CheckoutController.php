@@ -18,6 +18,7 @@ use Decimal\Decimal;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\VarDumper\VarDumper;
@@ -232,9 +233,13 @@ class CheckoutController extends Controller
         $order->coupon = $tien_duoc_giam;
         $order->tong_tien =  $tong_tien-$tien_duoc_giam+$phi_van_chuyen;
         $order->trang_thai = 'Đang chờ xử lý';
+        //Thêm order date
+        $order_date =  Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d');
+        $order->order_date = $order_date;
         $order->save();
 
         //Thêm đơn hàng chi tiết
+        $tong_so_luong = 0;
         foreach (Session::get('cart') as $key=>$cart){
             $order_detail = new OrderDetail();
             $order_detail->order_id = $order->id;
@@ -242,8 +247,11 @@ class CheckoutController extends Controller
             $order_detail->product_name = $cart['product_name'];
             $order_detail->product_price = $cart['product_price'];
             $order_detail->so_luong = $cart['product_qty'];
+            $tong_so_luong += $cart['product_qty'];
             $order_detail->save();
         }
+        $order->tong_so_luong = $tong_so_luong;
+        $order->save();
         Session::forget('coupon');
         Session::forget('fee');
         Session::forget('cart');
