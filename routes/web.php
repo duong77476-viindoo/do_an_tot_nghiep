@@ -26,6 +26,7 @@ use App\Http\Controllers\ProductGroupController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\StatisticOrderController;
 use App\Http\Controllers\ThanhToanCongNoNccController;
 use App\Http\Controllers\TonKhoController;
 use App\Http\Controllers\VideoController;
@@ -132,6 +133,15 @@ Route::get('/admin',[AdminController::class,'index'])->name('admin');
 Route::post('/login-admin',[AdminController::class,'login_admin'])->name('login-admin');
 Route::post('/admin_dashboard',[AdminController::class,'admin_dashboard']);//đăng nhập không dùng auth
 
+//Báo cáo thống kê
+Route::middleware('check_login_admin')->group(function (){
+    Route::get('/statistic-order',[StatisticOrderController::class,'statistic_order'])->name('statistic-order');
+    Route::get('/statistic-product-post',[StatisticOrderController::class,'statistic_product_post'])->name('statistic-product-post');
+    Route::post('/filter-by-date',[StatisticOrderController::class,'filter_by_date'])->name('filter-by-date');
+    Route::post('/dashboard-filter',[StatisticOrderController::class,'dashboard_filter'])->name('dashboard-filter');
+    Route::post('/order-date',[StatisticOrderController::class,'order_date'])->name('order-date');
+    Route::post('/days-order',[StatisticOrderController::class,'days_order'])->name('days-order');
+});
 
 //Đăng ký người dùng, phân quyền
 Route::middleware('check_login_admin')->group(function (){

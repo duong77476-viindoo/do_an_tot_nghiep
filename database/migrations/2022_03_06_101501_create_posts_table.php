@@ -29,6 +29,7 @@ class CreatePostsTable extends Migration
             $table->string('image');
             $table->string('nguoi_tao');
             $table->string('nguoi_sua');
+            $table->integer('views')->nullable();
             $table->timestamps();
         });
     }

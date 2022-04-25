@@ -240,6 +240,32 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link nav-choose">
+                        <i class="nav-icon fa fa-newspaper"></i>
+                        <p>
+                            Báo cáo thống kê
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('statistic-order')}}" class="nav-link">
+                                <i class="fa fa-book nav-icon"></i>
+                                <p>Thống kê đơn hàng, doanh số</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('statistic-product-post')}}" class="nav-link">
+                                <i class="fa fa-book-open nav-icon"></i>
+                                <p>Thống kê sản phẩm, bài viết</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-header">Marketing</li>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-choose">
                         <i class="nav-icon fa fa-newspaper"></i>
@@ -263,8 +289,6 @@
                         </li>
                     </ul>
                 </li>
-
-                <li class="nav-header">Marketing</li>
                 <li class="nav-item">
                     <a href="{{route('sendportal.dashboard')}}" class="nav-link">
                         <i class="nav-icon fa fa-mail-bulk"></i>

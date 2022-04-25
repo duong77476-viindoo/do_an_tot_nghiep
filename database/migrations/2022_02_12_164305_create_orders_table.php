@@ -32,9 +32,11 @@ class CreateOrdersTable extends Migration
                 ->references('id')
                 ->on('payments')
                 ->onDelete('cascade');
+            $table->integer('tong_so_luong');
             $table->decimal('tong_tien',14,2);
             $table->enum('trang_thai',['Đang chờ xử lý',
                 'Đang xử lý','Đang giao hàng','Chờ xác nhận hủy','Đã hủy','Đã giao hàng']);
+            $table->date('order_date')->nullable();
             $table->timestamps();
         });
     }

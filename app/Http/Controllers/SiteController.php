@@ -176,6 +176,10 @@ class SiteController extends Controller
 //            VarDumper::dump($san_pham->anh_dai_dien);
 //        exit();
 
+        //update view of product
+        $phien_ban_san_pham->views+=1;
+        $phien_ban_san_pham->save();
+
 
         return view('frontend.product.chi-tiet-san-pham')
             ->with('post_types',$post_types)
@@ -238,6 +242,9 @@ class SiteController extends Controller
         $related_posts = Post::where('post_type_id',$post_type->id)
             ->where('id','!=',$post->id)
             ->get();
+        //update view of post
+        $post->views+=1;
+        $post->save();
 
         $meta_desc = $post->desc;
         $meta_keywords = $post->meta_keywords;
