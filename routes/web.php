@@ -45,24 +45,30 @@ use Sendportal\Base\Facades\Sendportal;
 */
 
 //========FRONTEND================
-Route::get('/',[HomeController::class,'index']);
-Route::get('/trang-chu',[HomeController::class,'index'])->name('trang-chu');
-Route::get('/contact',[HomeController::class,'contact'])->name('contact');
-Route::post('/tim-kiem',[HomeController::class,'search'])->name('tim-kiem');
-Route::post('/autocomplete-ajax',[HomeController::class,'autocomplete_ajax'])->name('autocomplete-ajax');
+Route::middleware('revalidate')->group(function() {
+    Route::get('/login',[CustomerController::class,'index'])->name('login');
+    Route::post('/login-customer',[CustomerController::class,'login_customer'])->name('login-customer');
+});
+Route::middleware('check_login_customer')->group(function(){
+    Route::get('/trang-chu',[HomeController::class,'index'])->name('trang-chu');
+    Route::get('/',[HomeController::class,'index']);
+    Route::get('/contact',[HomeController::class,'contact'])->name('contact');
+    Route::post('/tim-kiem',[HomeController::class,'search'])->name('tim-kiem');
+    Route::post('/autocomplete-ajax',[HomeController::class,'autocomplete_ajax'])->name('autocomplete-ajax');
 //Xem nhanh sản phẩm
-Route::post('/quickview',[SiteController::class,'quick_view'])->name('quick-view');
+    Route::post('/quickview',[SiteController::class,'quick_view'])->name('quick-view');
 
 
 
 //Danh mục bài viết và bài viết
-Route::get('/danh-muc-bai-viet/{code}',[SiteController::class,'danh_muc_bai_viet'])->name('danh-muc-bai-viet');
-Route::get('/danh_muc_{danh_muc}/{bai_viet}',[SiteController::class,'chi_tiet_bai_viet'])->name('chi-tiet-bai-viet');
+    Route::get('/danh-muc-bai-viet/{code}',[SiteController::class,'danh_muc_bai_viet'])->name('danh-muc-bai-viet');
+    Route::get('/danh_muc_{danh_muc}/{bai_viet}',[SiteController::class,'chi_tiet_bai_viet'])->name('chi-tiet-bai-viet');
 //Khách hàng
-Route::post('/add-customer',[CustomerController::class,'store'])->name('add-customer');
-Route::get('/login',[CustomerController::class,'create'])->name('login');
-Route::get('/logout-customer',[CustomerController::class,'logout'])->name('logout-customer');
-Route::post('/login-customer',[CustomerController::class,'login_customer'])->name('login-customer');
+    Route::post('/add-customer',[CustomerController::class,'store'])->name('add-customer');
+
+    Route::get('/logout-customer',[CustomerController::class,'logout'])->name('logout-customer');
+});
+
 Route::get('/account',[CustomerController::class,'create'])->name('account');
 
 //Mã giảm giá
@@ -127,11 +133,14 @@ Route::post('/load-rating',[SiteController::class,'load_rating'])->name('load-ra
 
 
 //========BACKEND===============
-Route::get('/admin',[AdminController::class,'index'])->name('admin');
+Route::middleware('revalidate')->group(function (){ //Middleware fix lỗi khi login vào xong back ra vẫn vô trang đăng nhập
+    Route::get('/admin',[AdminController::class,'index'])->name('admin');
 
 //Đăng nhập dùng auth
-Route::post('/login-admin',[AdminController::class,'login_admin'])->name('login-admin');
-Route::post('/admin_dashboard',[AdminController::class,'admin_dashboard']);//đăng nhập không dùng auth
+    Route::post('/login-admin',[AdminController::class,'login_admin'])->name('login-admin');
+    Route::post('/admin_dashboard',[AdminController::class,'admin_dashboard']);//đăng nhập không dùng auth
+});
+
 
 //Báo cáo thống kê
 Route::middleware('check_login_admin')->group(function (){

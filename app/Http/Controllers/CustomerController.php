@@ -23,7 +23,21 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $meta_desc = 'Customer';
+        $meta_keywords = 'Customer';
+        $meta_title = 'Customer';
+        $url_canonical = '';
+        $post_types = PostType::where('status',1)->get();
+        $customer_id = Session::get('customer_id');
+        if($customer_id){
+            return Redirect::to('/trang-chu');
+        }
+        return view('frontend.pages.login')
+            ->with('post_types',$post_types)
+            ->with('meta_desc',$meta_desc)
+            ->with('meta_keywords',$meta_keywords)
+            ->with('meta_title',$meta_title)
+            ->with('url_canonical',$url_canonical);
     }
 
     /**
@@ -34,18 +48,9 @@ class CustomerController extends Controller
     public function create()
     {
         //
-        $meta_desc = 'Customer';
-        $meta_keywords = 'Customer';
-        $meta_title = 'Customer';
-        $url_canonical = '';
-        $post_types = PostType::where('status',1)->get();
 
-        return view('frontend.pages.login')
-            ->with('post_types',$post_types)
-            ->with('meta_desc',$meta_desc)
-            ->with('meta_keywords',$meta_keywords)
-            ->with('meta_title',$meta_title)
-            ->with('url_canonical',$url_canonical);
+
+
     }
 
     /**
@@ -125,6 +130,8 @@ class CustomerController extends Controller
     }
 
     public function logout(){
+        Session::put('customer_name',null);
+        Session::put('customer_id',null);
         Session::flush();
         return Redirect::to('/login');
     }
