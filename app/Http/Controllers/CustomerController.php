@@ -156,4 +156,18 @@ class CustomerController extends Controller
 
     }
 
+    public function forget_pass(){
+        $meta_desc = 'Customer';
+        $meta_keywords = 'Customer';
+        $meta_title = 'Customer';
+        $url_canonical = '';
+        $post_types = PostType::where('status',1)->get();
+        return view('frontend.pages.forget_pass')
+            ->with('post_types',$post_types)
+            ->with('meta_desc',$meta_desc)
+            ->with('meta_keywords',$meta_keywords)
+            ->with('meta_title',$meta_title)
+            ->with('url_canonical',$url_canonical);
+    }
+
 }

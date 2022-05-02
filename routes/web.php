@@ -45,11 +45,8 @@ use Sendportal\Base\Facades\Sendportal;
 */
 
 //========FRONTEND================
+
 Route::middleware('revalidate')->group(function() {
-    Route::get('/login',[CustomerController::class,'index'])->name('login');
-    Route::post('/login-customer',[CustomerController::class,'login_customer'])->name('login-customer');
-});
-Route::middleware('check_login_customer')->group(function(){
     Route::get('/trang-chu',[HomeController::class,'index'])->name('trang-chu');
     Route::get('/',[HomeController::class,'index']);
     Route::get('/contact',[HomeController::class,'contact'])->name('contact');
@@ -66,68 +63,76 @@ Route::middleware('check_login_customer')->group(function(){
 //Khách hàng
     Route::post('/add-customer',[CustomerController::class,'store'])->name('add-customer');
 
-    Route::get('/logout-customer',[CustomerController::class,'logout'])->name('logout-customer');
-});
+    Route::get('/forget-pass',[CustomerController::class,'forget_pass'])->name('forget-pass');
+    Route::post('/request-pass',[CustomerController::class,'request_pass'])->name('request-pass');
+    Route::get('/login',[CustomerController::class,'index'])->name('login');
+    Route::post('/login-customer',[CustomerController::class,'login_customer'])->name('login-customer');
 
-Route::get('/account',[CustomerController::class,'create'])->name('account');
+    Route::get('/account',[CustomerController::class,'create'])->name('account');
 
 //Mã giảm giá
-Route::post('/check-coupon',[CouponController::class,'check_coupon'])->name('check-coupon');
-Route::get('/delete-coupon',[CouponController::class,'delete_coupon'])->name('delete-coupon');
+    Route::post('/check-coupon',[CouponController::class,'check_coupon'])->name('check-coupon');
+    Route::get('/delete-coupon',[CouponController::class,'delete_coupon'])->name('delete-coupon');
 
 //Giỏ hàng
-Route::post('/add-cart-ajax',[CartController::class,'add_cart_ajax'])->name('add-cart-ajax');
-Route::get('/gio-hang',[CartController::class,'gio_hang'])->name('gio-hang');
+    Route::post('/add-cart-ajax',[CartController::class,'add_cart_ajax'])->name('add-cart-ajax');
+    Route::get('/gio-hang',[CartController::class,'gio_hang'])->name('gio-hang');
 
-Route::post('/save-cart',[CartController::class,'save_cart'])->name('save-cart');
-Route::get('/show-cart',[CartController::class,'show_cart'])->name('show-cart');
-Route::get('/delete-cart-item/{id}',[CartController::class,'delete_cart_item'])->name('delete-cart-item');
-Route::post('/update-cart-quantity',[CartController::class,'update_cart_quantity'])->name('update-cart-quantity');
-Route::post('/update-cart-ajax',[CartController::class,'update_cart_ajax'])->name('update-cart-ajax');
-Route::get('/delete-cart-product/{session_id}',[CartController::class,'delete_cart_product'])->name('delete-cart-product');
-Route::get('/delete-all-cart',[CartController::class,'delete_all_cart'])->name('delete-all-cart');
+    Route::post('/save-cart',[CartController::class,'save_cart'])->name('save-cart');
+    Route::get('/show-cart',[CartController::class,'show_cart'])->name('show-cart');
+    Route::get('/delete-cart-item/{id}',[CartController::class,'delete_cart_item'])->name('delete-cart-item');
+    Route::post('/update-cart-quantity',[CartController::class,'update_cart_quantity'])->name('update-cart-quantity');
+    Route::post('/update-cart-ajax',[CartController::class,'update_cart_ajax'])->name('update-cart-ajax');
+    Route::get('/delete-cart-product/{session_id}',[CartController::class,'delete_cart_product'])->name('delete-cart-product');
+    Route::get('/delete-all-cart',[CartController::class,'delete_all_cart'])->name('delete-all-cart');
 
 
 //Thanh toán
-Route::get('/login-checkout',[CheckoutController::class,'login_checkout'])->name('login-checkout');
-Route::get('/checkout',[CheckoutController::class,'checkout'])->name('checkout');
-Route::post('/save-checkout',[CheckoutController::class,'save_checkout'])->name('save-checkout');
-Route::get('/payment',[CheckoutController::class,'payment'])->name('payment');
-Route::post('/customer-order',[CheckoutController::class,'customer_order'])->name('customer-order');
+    Route::get('/login-checkout',[CheckoutController::class,'login_checkout'])->name('login-checkout');
+    Route::get('/checkout',[CheckoutController::class,'checkout'])->name('checkout');
+    Route::post('/save-checkout',[CheckoutController::class,'save_checkout'])->name('save-checkout');
+    Route::get('/payment',[CheckoutController::class,'payment'])->name('payment');
+    Route::post('/customer-order',[CheckoutController::class,'customer_order'])->name('customer-order');
 
-Route::post('/confirm-order',[CheckoutController::class,'confirm_order'])->name('confirm-order');
+    Route::post('/confirm-order',[CheckoutController::class,'confirm_order'])->name('confirm-order');
 
 //Tính phí vận chuyển khi cbi thanh toán
-Route::post('/select-province-ward-frontend',[CheckoutController::class,'select_province_ward_home'])->name('select-province-ward-frontend');
-Route::post('/calculate-fee-ship',[CheckoutController::class,'calculate_fee_ship'])->name('calculate-fee-ship');
-Route::get('/delete-fee',[CheckoutController::class,'delete_fee'])->name('delete-fee');
+    Route::post('/select-province-ward-frontend',[CheckoutController::class,'select_province_ward_home'])->name('select-province-ward-frontend');
+    Route::post('/calculate-fee-ship',[CheckoutController::class,'calculate_fee_ship'])->name('calculate-fee-ship');
+    Route::get('/delete-fee',[CheckoutController::class,'delete_fee'])->name('delete-fee');
 
 //Xem video
-Route::post('/watch-video',[SiteController::class,'watch_video'])->name('watch-video');
+    Route::post('/watch-video',[SiteController::class,'watch_video'])->name('watch-video');
 
 //Tag sản phẩm
-Route::get('/tag/{code}',[SiteController::class,'products_by_tag'])->name('tag');
+    Route::get('/tag/{code}',[SiteController::class,'products_by_tag'])->name('tag');
 
 //Sản phẩm theo thương hiệu
-Route::get('/thuong-hieu/{code}',[SiteController::class,'products_by_brand'])
-    ->name('thuong-hieu');
+    Route::get('/thuong-hieu/{code}',[SiteController::class,'products_by_brand'])
+        ->name('thuong-hieu');
 
 
 //Sản phẩm theo phân loại danh mục
-Route::get('/danh-muc-san-pham/{code}',[SiteController::class,'products_by_category'])
-    ->name('danh-muc-san-pham');
+    Route::get('/danh-muc-san-pham/{code}',[SiteController::class,'products_by_category'])
+        ->name('danh-muc-san-pham');
 
 //Chi tiết sản phẩm
-Route::get('/product/{code}',[SiteController::class,'product_by_id'])
-    ->name('product');
+    Route::get('/product/{code}',[SiteController::class,'product_by_id'])
+        ->name('product');
 
 //Load comment sản phẩm bằng ajax, thêm comment
-Route::post('/load-comment',[SiteController::class,'load_comment'])->name('load-comment');
-Route::post('/send-comment',[SiteController::class,'send_comment'])->name('send-comment');
+    Route::post('/load-comment',[SiteController::class,'load_comment'])->name('load-comment');
+    Route::post('/send-comment',[SiteController::class,'send_comment'])->name('send-comment');
 
 //Thêm rating, load rating
-Route::post('/insert-rating',[SiteController::class,'insert_rating'])->name('insert-rating');
-Route::post('/load-rating',[SiteController::class,'load_rating'])->name('load-rating');
+    Route::post('/insert-rating',[SiteController::class,'insert_rating'])->name('insert-rating');
+    Route::post('/load-rating',[SiteController::class,'load_rating'])->name('load-rating');
+});
+Route::middleware('check_login_customer')->group(function(){
+    Route::get('/logout-customer',[CustomerController::class,'logout'])->name('logout-customer');
+});
+
+
 
 
 

@@ -26,9 +26,13 @@
                         <input type="text" name="email" placeholder="Tài khoản" />
                         <input type="password" name="password" placeholder="Mật khẩu" />
                         <span>
-								<input type="checkbox" class="checkbox">
+                            <input type="checkbox" class="checkbox">
 								Ghi nhớ đăng nhập
-							</span>
+                        </span>
+                        <span>
+                            <a href="{{route('forget-pass')}}">Quên mật khẩu</a>
+
+                        </span>
                         <button type="submit" class="btn btn-default">Đăng nhập</button>
                     </form>
                 </div><!--/login form-->
@@ -60,9 +64,4 @@
 
 
 
-<script src="{{url('public/frontend/js/jquery.js')}}js/jquery.js"></script>
-<script src="{{url('public/frontend/js/bootstrap.min.js')}}"></script>
-<script src="{{url('public/frontend/js/jquery.scrollUp.min.js')}}"></script>
-<script src="{{url('public/frontend/js/jquery.prettyPhoto.js')}}"></script>
-<script src="{{url('public/frontend/js/main.js')}}"></script>
 </body>
