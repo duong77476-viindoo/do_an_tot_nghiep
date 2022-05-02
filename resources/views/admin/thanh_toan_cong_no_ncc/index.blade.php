@@ -54,7 +54,7 @@
                             <td>{{$thanh_toan_cong_no->id}}</td>
                             <td>{{$thanh_toan_cong_no->nha_cung_cap->name}}</td>
                             <td>{{$thanh_toan_cong_no->noi_dung}}</td>
-                            <td>{{number_format($thanh_toan_cong_no->so_tien,0,",",".")}} đ</td>
+                            <td>{{number_format($thanh_toan_cong_no->so_tien,2,",",".")}} đ</td>
                             @php
                                 $nguoi_lap = \App\Models\Admin::find($thanh_toan_cong_no->nguoi_lap_id);
                             @endphp

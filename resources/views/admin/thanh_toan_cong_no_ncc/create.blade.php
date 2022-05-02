@@ -70,7 +70,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                 </div>
-                                                <input class="form-control" id="so_tien" type="number" name="so_tien" placeholder="Nhập số tiền">
+                                                <input class="form-control money" id="so_tien" type="text" name="so_tien" placeholder="Nhập số tiền">
                                             </div>
                                             <!-- /.input group -->
                                         </div>

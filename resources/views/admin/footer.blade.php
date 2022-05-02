@@ -50,6 +50,9 @@
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="//unpkg.com/autonumeric"></script>
+
+
 <!-- morris JavaScript -->
 @yield('pagescript')
 <script>
@@ -147,6 +150,18 @@
     CKEDITOR.replace('content');
 </script>
 
+{{--Format money--}}
+<script type="text/javascript">
+    $(document).ready(function (){
+        new AutoNumeric('.money', {
+            currencySymbol :'đ',
+            decimalPlaces: 2,
+            digitGroupSeparator : ',',
+            decimalCharacter : '.',
+            currencySymbolPlacement : 's'
+        });
+    })
+</script>
 
 {{--script dể thêm từ khóa, tag sản phẩm--}}
 <script type="text/javascript">

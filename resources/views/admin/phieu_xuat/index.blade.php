@@ -55,7 +55,7 @@
                             <td>{{$phieu_xuat->order_id}}</td>
                             <td>{{$phieu_xuat->content}}</td>
                             <td>{{$phieu_xuat->trang_thai}}</td>
-                            <td>{{number_format($phieu_xuat->tong_tien,0,",",".")}} đ</td>
+                            <td>{{number_format($phieu_xuat->tong_tien,2,",",".")}} đ</td>
                             @php
                                 $nguoi_lap = \App\Models\Admin::find($phieu_xuat->nguoi_lap_id);
                             @endphp

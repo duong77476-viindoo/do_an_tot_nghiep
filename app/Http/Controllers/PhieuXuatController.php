@@ -36,9 +36,10 @@ class PhieuXuatController extends Controller
     {
         //
         $products = Product::all();
-        $order = Order::where('trang_thai','Đang xử lý')->get();
+        $orders = Order::where('trang_thai','Đang xử lý')->get();
         return view('admin.phieu_xuat.create')
-            ->with('products',$products);
+            ->with('products',$products)
+            ->with('orders',$orders);
     }
 
     /**
@@ -71,7 +72,8 @@ class PhieuXuatController extends Controller
 //            VarDumper::dump($val);
 //            VarDumper::dump($data['so_luong_yeu_cau'][$key]);
             //Tính tổng tiền xuất
-            $tong_tien+=$data['thanh_tien'][$key];
+            $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
+            $tong_tien+=floatval($thanh_tien_format);
 
             //Cập nhật số lượng của mỗi sản phẩm trong tbl product
             $product = Product::find($val);
@@ -104,10 +106,10 @@ class PhieuXuatController extends Controller
             $chi_tiet_phieu_xuat = new ChiTietPhieuXuat();
             $chi_tiet_phieu_xuat->phieu_xuat_id = $phieu_xuat->id;
             $chi_tiet_phieu_xuat->product_id = $val;
-            $chi_tiet_phieu_xuat->gia_xuat = $data['gia_xuat'][$key];
+            $chi_tiet_phieu_xuat->gia_xuat = floatval($this->format_currency($data['gia_xuat'][$key]));
             $chi_tiet_phieu_xuat->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
             $chi_tiet_phieu_xuat->so_luong_thuc_xuat = $data['so_luong_thuc_xuat'][$key];
-            $chi_tiet_phieu_xuat->thanh_tien = $data['thanh_tien'][$key];
+            $chi_tiet_phieu_xuat->thanh_tien = floatval($thanh_tien_format);
             $chi_tiet_phieu_xuat->save();
         }
         $phieu_xuat->tong_tien = $tong_tien;
@@ -184,7 +186,8 @@ class PhieuXuatController extends Controller
 //            VarDumper::dump($val);
 //            VarDumper::dump($data['so_luong_yeu_cau'][$key]);
             //Tính tổng tiền xuất
-            $tong_tien+=$data['thanh_tien'][$key];
+            $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
+            $tong_tien+=floatval($thanh_tien_format);
 
             //Cập nhật số lượng của mỗi sản phẩm trong tbl product
             $product = Product::find($val);
@@ -214,10 +217,10 @@ class PhieuXuatController extends Controller
             $chi_tiet_phieu_xuat = new ChiTietPhieuXuat();
             $chi_tiet_phieu_xuat->phieu_xuat_id = $phieu_xuat->id;
             $chi_tiet_phieu_xuat->product_id = $val;
-            $chi_tiet_phieu_xuat->gia_xuat = $data['gia_xuat'][$key];
+            $chi_tiet_phieu_xuat->gia_xuat = floatval($this->format_currency($data['gia_xuat'][$key]));
             $chi_tiet_phieu_xuat->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
             $chi_tiet_phieu_xuat->so_luong_thuc_xuat = $data['so_luong_thuc_xuat'][$key];
-            $chi_tiet_phieu_xuat->thanh_tien = $data['thanh_tien'][$key];
+            $chi_tiet_phieu_xuat->thanh_tien = floatval($thanh_tien_format);
             $chi_tiet_phieu_xuat->save();
         }
         $phieu_xuat->tong_tien = $tong_tien;
@@ -246,5 +249,20 @@ class PhieuXuatController extends Controller
             ->setPaper('a4','landscape');
         return $pdf->download('Phieu_xuat.pdf');
 //        return $pdf->stream();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  string  $str
+     */
+    public function format_currency($str): string
+    {
+        $str = trim($str,"đ");
+        for($i=0;$i<strlen($str);$i++){
+            if(strpos($str, ',') !== false)
+                $str = str_replace(",","",$str);
+        }
+        return $str;
     }
 }

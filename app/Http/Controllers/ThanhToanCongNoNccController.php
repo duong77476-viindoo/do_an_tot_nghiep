@@ -51,10 +51,11 @@ class ThanhToanCongNoNccController extends Controller
             'so_tien'=>'required',
         ]);
         $data = $request->all();
+        $so_tien_thanh_toan = floatval($this->format_currency($data['so_tien']));
 
         $thanh_toan_cong_no_ncc = new ThanhToanCongNoNcc();
         $thanh_toan_cong_no_ncc->noi_dung = $data['noi_dung'];
-        $thanh_toan_cong_no_ncc->so_tien = $data['so_tien'];
+        $thanh_toan_cong_no_ncc->so_tien = $so_tien_thanh_toan;
         $thanh_toan_cong_no_ncc->da_thanh_toan = 0;
         $thanh_toan_cong_no_ncc->nguoi_lap_id =  Auth::id();
         $thanh_toan_cong_no_ncc->nha_cung_cap_id = $data['nha_cung_cap_id'];
@@ -77,11 +78,11 @@ class ThanhToanCongNoNccController extends Controller
             $cong_no_ncc->month = $month;
             $cong_no_ncc->cong_no_dau_thang = 0;
             $cong_no_ncc->cong_no_cuoi_thang = 0;
-            $cong_no_ncc->cong_no_da_thanh_toan = $data['so_tien'];
+            $cong_no_ncc->cong_no_da_thanh_toan = $so_tien_thanh_toan;
             $cong_no_ncc->cong_no_con = 0;
             $cong_no_ncc->nha_cung_cap_id = $data['nha_cung_cap_id'];
         }else{
-            $cong_no_ncc->cong_no_da_thanh_toan += $data['so_tien'];
+            $cong_no_ncc->cong_no_da_thanh_toan += $so_tien_thanh_toan;
         }
         $cong_no_ncc->save();
         return redirect()->to('thanh-toan-cong-no-ncc/all');
@@ -131,5 +132,20 @@ class ThanhToanCongNoNccController extends Controller
     public function destroy(ThanhToanCongNoNcc $thanhToanCongNoNcc)
     {
         //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  string  $str
+     */
+    public function format_currency($str): string
+    {
+        $str = trim($str,"đ");
+        for($i=0;$i<strlen($str);$i++){
+            if(strpos($str, ',') !== false)
+                $str = str_replace(",","",$str);
+        }
+        return $str;
     }
 }

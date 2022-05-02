@@ -53,7 +53,7 @@
                             <td>{{$phieu_nhap->name}}</td>
                             <td>{{$phieu_nhap->nha_cung_cap->name}}</td>
                             <td>{{$phieu_nhap->content}}</td>
-                            <td>{{number_format($phieu_nhap->tong_tien,0,",",".")}} đ</td>
+                            <td>{{number_format($phieu_nhap->tong_tien,2,",",".")}} đ</td>
                             @php
                                 $nguoi_lap = \App\Models\Admin::find($phieu_nhap->nguoi_lap_id);
                             @endphp

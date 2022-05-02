@@ -22,7 +22,7 @@ class CreatePhieuNhapsTable extends Migration
                 ->onDelete('cascade');
             $table->string('name')->comment('Tên phiếu nhập');
             $table->text('content')->comment('Nội dung phiếu nhập');
-            $table->decimal('tong_tien')->default(0);
+            $table->decimal('tong_tien',14,2)->default(0);
             $table->bigInteger('nguoi_lap_id')->unsigned();
             $table->foreign('nguoi_lap_id')
                 ->references('id')

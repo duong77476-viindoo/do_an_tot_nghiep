@@ -61,7 +61,14 @@ class PhieuNhapController extends Controller
             'san_pham'=>'required',
         ]);
 
+
         $data = $request->all();
+//        $money_format = trim($data['thanh_tien'][0],"đ");
+//        VarDumper::dump($money_format);
+//        VarDumper::dump(floatval($money_format));
+//        VarDumper::dump($data['gia_nhap'][0]);
+//        VarDumper::dump(floatval($this->format_currency($data['gia_nhap'][0])));
+//        exit();
         $phieu_nhap = new PhieuNhap();
         $phieu_nhap->name = $data['name'];
         $phieu_nhap->content = $data['noi_dung'];
@@ -78,15 +85,17 @@ class PhieuNhapController extends Controller
 //            VarDumper::dump($val);
 //            VarDumper::dump($data['so_luong_yeu_cau'][$key]);
             //Tính tổng tiền nhập
-            $tong_tien+=$data['thanh_tien'][$key];
+            $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
+            $tong_tien+=floatval($thanh_tien_format);
 
             //Cập nhật số lượng của mỗi sản phẩm trong tbl product
             $product = Product::find($val);
             //Cập nhật giá tiền sản phẩm
             $phan_tram_loi_nhuan = 10;
+
             $product->gia_ban =
                 round(
-                    ($data['gia_nhap'][$key] / (100 - $phan_tram_loi_nhuan)) * 100
+                    (floatval($this->format_currency($data['gia_nhap'][$key])) / (100 - $phan_tram_loi_nhuan)) * 100
                 );
             $product->so_luong += $data['so_luong_thuc_nhap'][$key];
             $product->save();
@@ -117,10 +126,10 @@ class PhieuNhapController extends Controller
             $chi_tiet_phieu_nhap = new ChiTietPhieuNhap();
             $chi_tiet_phieu_nhap->phieu_nhap_id = $phieu_nhap->id;
             $chi_tiet_phieu_nhap->product_id = $val;
-            $chi_tiet_phieu_nhap->gia_nhap = $data['gia_nhap'][$key];
+            $chi_tiet_phieu_nhap->gia_nhap = floatval($this->format_currency($data['gia_nhap'][$key]));
             $chi_tiet_phieu_nhap->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
             $chi_tiet_phieu_nhap->so_luong_thuc_nhap = $data['so_luong_thuc_nhap'][$key];
-            $chi_tiet_phieu_nhap->thanh_tien = $data['thanh_tien'][$key];
+            $chi_tiet_phieu_nhap->thanh_tien = floatval($thanh_tien_format);
             $chi_tiet_phieu_nhap->save();
         }
         $phieu_nhap->tong_tien = $tong_tien;
@@ -210,5 +219,20 @@ class PhieuNhapController extends Controller
             ->setPaper('a4','landscape');
         return $pdf->download('Phieu_nhap.pdf');
 //        return $pdf->stream();
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  string  $str
+     */
+    public function format_currency($str): string
+    {
+        $str = trim($str,"đ");
+        for($i=0;$i<strlen($str);$i++){
+            if(strpos($str, ',') !== false)
+                $str = str_replace(",","",$str);
+        }
+        return $str;
     }
 }
