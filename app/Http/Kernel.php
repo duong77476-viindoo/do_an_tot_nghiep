@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\AccessAdmin;
 use App\Http\Middleware\CheckLoginAdmin;
 use App\Http\Middleware\CheckLoginCustomer;
+use App\Http\Middleware\CheckResetPass;
 use App\Http\Middleware\RevalidateBackHistory;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -71,6 +72,7 @@ class Kernel extends HttpKernel
         'admin'=>AccessAdmin::class,
         'revalidate' => RevalidateBackHistory::class,
         'check_login_customer' => CheckLoginCustomer::class,
+        'check_reset_pass' => CheckResetPass::class,
 
     ];
 }

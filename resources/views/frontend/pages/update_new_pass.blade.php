@@ -21,10 +21,17 @@
         <div class="row">
             <div class="col-sm-9">
                 <div class="login-form"><!--login form-->
-                    <h2>Điền email khôi phục mật khẩu</h2>
-                    <form action="{{route('request-pass')}}" method="post">
+                    <?php
+                    $token = $_GET['token'];
+                    $email = $_GET['email'];
+                    ?>
+                    <h2>Điền mật khẩu mới</h2>
+                    <form action="{{route('save-new-pass')}}" method="post">
                         @csrf
-                        <input type="text" name="email" placeholder="Nhập email..." />
+                        <input type="hidden" name="email" value="{{$email}}" />
+                        <input type="hidden" name="token" value="{{$token}}">
+                        <input type="password" name="new_password" placeholder="Nhập mật khẩu mới" />
+                        <input type="password" name="confirm_password" placeholder="Nhập lại mật khẩu mới" />
                         <button type="submit" class="btn btn-default">Xác nhận</button>
                     </form>
                 </div><!--/login form-->

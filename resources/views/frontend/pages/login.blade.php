@@ -13,13 +13,15 @@
 
             <div class="col-sm-4 col-sm-offset-1">
                 <div class="login-form"><!--login form-->
-                    <?php
-                    $message = \Illuminate\Support\Facades\Session::get('message');
-                    if($message){
-                        echo '<span class="text-danger">'.$message.'</span>';
-                        \Illuminate\Support\Facades\Session::put('message',null);
-                    }
-                    ?>
+                    @if(session()->has('message'))
+                        <div class="alert alert-success">
+                            {!! session()->get('message') !!}
+                        </div>
+                    @elseif(session()->has('error'))
+                        <div class="alert alert-danger">
+                            {!! session()->get('error') !!}
+                        </div>
+                    @endif
                     <h2>Đăng nhập tài khoản</h2>
                     <form action="{{route('login-customer')}}" method="post">
                         @csrf

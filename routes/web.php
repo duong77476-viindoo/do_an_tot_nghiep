@@ -45,6 +45,12 @@ use Sendportal\Base\Facades\Sendportal;
 */
 
 //========FRONTEND================
+Route::middleware('check_reset_pass')->group(function (){
+    Route::post('/save-new-pass',[CustomerController::class,'save_new_pass'])->name('save-new-pass');
+    Route::get('/update-new-pass',[CustomerController::class,'update_new_pass'])->name('update-new-pass');
+    Route::get('/forget-pass',[CustomerController::class,'forget_pass'])->name('forget-pass');
+    Route::post('/request-pass',[CustomerController::class,'request_pass'])->name('request-pass');
+});
 
 Route::middleware('revalidate')->group(function() {
     Route::get('/trang-chu',[HomeController::class,'index'])->name('trang-chu');
@@ -63,8 +69,6 @@ Route::middleware('revalidate')->group(function() {
 //Khách hàng
     Route::post('/add-customer',[CustomerController::class,'store'])->name('add-customer');
 
-    Route::get('/forget-pass',[CustomerController::class,'forget_pass'])->name('forget-pass');
-    Route::post('/request-pass',[CustomerController::class,'request_pass'])->name('request-pass');
     Route::get('/login',[CustomerController::class,'index'])->name('login');
     Route::post('/login-customer',[CustomerController::class,'login_customer'])->name('login-customer');
 
