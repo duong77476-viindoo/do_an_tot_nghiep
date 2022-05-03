@@ -58,6 +58,8 @@ Route::middleware('revalidate')->group(function() {
     //Login với google và facebook
     Route::get('/login-customer-google',[CustomerController::class,'login_customer_google'])->name('login-customer-google');
     Route::get('/customer/google/callback',[CustomerController::class,'callback_customer_google'])->name('callback-customer-google');
+    Route::get('/login-customer-facebook',[CustomerController::class,'login_customer_facebook'])->name('login-customer-facebook');
+    Route::get('/customer/facebook/callback',[CustomerController::class,'callback_customer_facebook'])->name('callback-customer-facebook');
 
     Route::get('/trang-chu',[HomeController::class,'index'])->name('trang-chu');
     Route::get('/',[HomeController::class,'index']);

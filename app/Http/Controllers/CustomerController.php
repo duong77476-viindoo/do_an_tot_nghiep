@@ -250,16 +250,11 @@ class CustomerController extends Controller
     {
         if(Session::get('customer_id')){
             return redirect('trang-chu')->with('message', 'Đăng nhập thành công');
-
-//            Session::put('customer_name',null);
-//            Session::put('customer_id',null);
-//            Session::put('customer_avatar',null);
-            //Session::flush();
         }
             config(['services.google.redirect'=>env('GOOGLE_CLIENT_URL')]);
             $provider = Socialite::driver('google')->user();
             $account = Social::where('provider', 'google')->where('provider_id', $provider->getId())->where('provider_email',$provider->getEmail())->first();
-            if ($account) {
+            if ($account!=null) {
                 $account_name = Customer::where('id', $account->customer_id)->first();
                 if(is_null($account_name->avatar))
                     $account_name->avatar = $provider->getAvatar();
@@ -298,6 +293,60 @@ class CustomerController extends Controller
                 Session::put('customer_avatar', $account_name->avatar);
 
             }
+        return redirect('trang-chu')->with('message', 'Đăng nhập thành công');
+    }
+
+    public function login_customer_facebook(){
+        config(['services.facebook.redirect'=>env('FACEBOOK_CLIENT_REDIRECT')]);
+        return Socialite::driver('facebook')->redirect();
+    }
+    public function callback_customer_facebook()
+    {
+        if(Session::get('customer_id')){
+            return redirect('trang-chu')->with('message', 'Đăng nhập thành công');
+        }
+        config(['services.facebook.redirect'=>env('FACEBOOK_CLIENT_REDIRECT')]);
+        $provider = Socialite::driver('facebook')->user();
+        $account = Social::where('provider', 'facebook')->where('provider_id', $provider->getId())->where('provider_email',$provider->getEmail())->first();
+        if ($account!=null) {
+            $account_name = Customer::where('id', $account->customer_id)->first();
+            if(is_null($account_name->avatar))
+                $account_name->avatar = $provider->getAvatar();
+            $account_name->save();
+            Session::put('customer_name', $account_name->name);
+            Session::put('customer_id', $account_name->id);
+            Session::put('customer_avatar', $account_name->avatar);
+
+        } else {
+
+            $customer_login = new Social([
+                'provider_id' => $provider->getId(),
+                'provider_email'=>$provider->getEmail(),
+                'provider' => 'facebook'
+            ]);
+
+            $orang = Customer::where('email', $provider->getEmail())->first();
+
+            if (!$orang) {
+                $orang = Customer::create([
+                    'name' => $provider->getName(),
+                    'email' => $provider->getEmail(),
+                    'password' => '',
+                    'phone' => '',
+                    'avatar'=>$provider->getAvatar()
+
+                ]);
+            }
+            $customer_login->customer()->associate($orang);
+            $customer_login->save();
+
+            $account_name = Customer::find($customer_login->customer_id);
+
+            Session::put('customer_name', $account_name->name);
+            Session::put('customer_id', $account_name->id);
+            Session::put('customer_avatar', $account_name->avatar);
+
+        }
         return redirect('trang-chu')->with('message', 'Đăng nhập thành công');
     }
 }

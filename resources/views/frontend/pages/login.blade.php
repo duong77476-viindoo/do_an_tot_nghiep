@@ -54,7 +54,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="{{url('login-customer-facebook')}}">
                                 <img src="{{asset('public/frontend/images/facebook.png')}}" width="10%" alt="Đăng nhập với facebook">
                             </a>
                         </li>
