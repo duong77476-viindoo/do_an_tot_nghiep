@@ -17,10 +17,10 @@ class CreateSocialsTable extends Migration
             $table->id();
             $table->string('provider_id');
             $table->string('provider');
-            $table->bigInteger('user_id')->unsigned();//khóa ngoại với bảng admin
-            $table->foreign('user_id')
+            $table->bigInteger('customer_id')->unsigned();//khóa ngoại với bảng admin
+            $table->foreign('customer_id')
                 ->references('id')
-                ->on('tbl_admin')
+                ->on('customer')
                 ->onDelete('cascade');
             $table->timestamps();
         });

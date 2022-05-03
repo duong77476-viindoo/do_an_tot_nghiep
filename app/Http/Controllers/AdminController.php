@@ -261,7 +261,7 @@ class AdminController extends Controller
     }
     public function callback_google(){
         $provider = Socialite::driver('google')->user();
-        $account = Social::where('provider','facebook')->where('provider_id',$provider->getId())->first();
+        $account = Social::where('provider','google')->where('provider_id',$provider->getId())->first();
         if($account){
             //login in vao trang quan tri
             $account_name = Admin::where('id',$account->user_id)->first();
@@ -271,7 +271,7 @@ class AdminController extends Controller
 
             $admin_login = new Social([
                 'provider_id' => $provider->getId(),
-                'provider' => 'facebook'
+                'provider' => 'google'
             ]);
 
             $orang = Admin::where('email',$provider->getEmail())->first();

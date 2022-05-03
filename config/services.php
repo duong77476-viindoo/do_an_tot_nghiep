@@ -31,15 +31,15 @@ return [
     ],
 
     'facebook' => [
-        'client_id' => '5056988801048526',  //client face của bạn
-        'client_secret' => 'ef990aba562eaea617e38482d3fcf355',  //client app service face của bạn
-        'redirect' => 'https://myweb.com/shopbanhangdienthoai/admin/callback' //callback trả về
+        'client_id' => env('FACEBOOK_APP_ID'),  //client face của bạn
+        'client_secret' => env('FACEBOOK_APP_SECRET'),  //client app service face của bạn
+        'redirect' => env('FACEBOOK_REDIRECT') //callback trả về
     ],
 
     'google' => [
-        'client_id' => '905514727447-4s0et8q44tsato3fidk1b9ifpd2fft2c.apps.googleusercontent.com',
-        'client_secret' => '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',
-        'redirect' => 'https://myweb.com/shopbanhangdienthoai/google/callback'
+        'client_id' => env('GOOGLE_ID'),
+        'client_secret' => env('GOOGLE_SECRET'),
+        'redirect' => env('GOOGLE_URL')
     ],
 
 

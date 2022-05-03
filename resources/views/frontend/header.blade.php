@@ -60,6 +60,7 @@
                     @php
                         $customer_id = \Illuminate\Support\Facades\Session::get('customer_id');
                         $shipping_id = \Illuminate\Support\Facades\Session::get('shipping_id');
+                        $customer_avatar = \Illuminate\Support\Facades\Session::get('customer_avatar');
                     @endphp
                     <ul class="nav navbar-nav">
                         @if($customer_id!=null)
@@ -78,7 +79,13 @@
                         <li><a href="{{route('gio-hang')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
 
                         @if($customer_id!=null)
-                            <li><a href="{{route('logout-customer')}}"><i class="fa fa-lock"></i> Đăng xuất</a></li>
+                            <li><a href="{{route('logout-customer')}}"><i class="fa fa-lock"></i> Đăng xuất</a>
+                                @if($customer_avatar!=null)
+                                <img src="{{\Illuminate\Support\Facades\Session::get('customer_avatar')}}" width="15%" alt="Avatar">
+                                @endif
+                                {{\Illuminate\Support\Facades\Session::get('customer_name')}}
+                            </li>
+
                         @else
                             <li><a href="{{route('login')}}"><i class="fa fa-lock"></i> Đăng nhập</a></li>
                         @endif

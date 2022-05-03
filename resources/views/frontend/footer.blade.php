@@ -170,6 +170,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="{{asset('public/frontend/js/simple.money.format.js')}}"></script>
 
+
 {{--Script jquery lọc giá sản phẩm--}}
 <script type="text/javascript">
     $(document).ready(function (){

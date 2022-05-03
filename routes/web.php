@@ -50,9 +50,15 @@ Route::middleware('check_reset_pass')->group(function (){
     Route::get('/update-new-pass',[CustomerController::class,'update_new_pass'])->name('update-new-pass');
     Route::get('/forget-pass',[CustomerController::class,'forget_pass'])->name('forget-pass');
     Route::post('/request-pass',[CustomerController::class,'request_pass'])->name('request-pass');
+
+
 });
 
 Route::middleware('revalidate')->group(function() {
+    //Login với google và facebook
+    Route::get('/login-customer-google',[CustomerController::class,'login_customer_google'])->name('login-customer-google');
+    Route::get('/customer/google/callback',[CustomerController::class,'callback_customer_google'])->name('callback-customer-google');
+
     Route::get('/trang-chu',[HomeController::class,'index'])->name('trang-chu');
     Route::get('/',[HomeController::class,'index']);
     Route::get('/contact',[HomeController::class,'contact'])->name('contact');

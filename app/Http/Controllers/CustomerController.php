@@ -7,6 +7,7 @@ use App\Models\CategoryProduct;
 use App\Models\Customer;
 use App\Models\PostType;
 use App\Models\ProductGroup;
+use App\Models\Social;
 use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\VarDumper\VarDumper;
 
 class CustomerController extends Controller
@@ -238,5 +240,64 @@ class CustomerController extends Controller
         if(!is_null($customer_id)){
             return Redirect::to('trang-chu');
         }
+    }
+
+    public function login_customer_google(){
+        config(['services.google.redirect'=>env('GOOGLE_CLIENT_URL')]);
+        return Socialite::driver('google')->redirect();
+    }
+    public function callback_customer_google()
+    {
+        if(Session::get('customer_id')){
+            return redirect('trang-chu')->with('message', 'Đăng nhập thành công');
+
+//            Session::put('customer_name',null);
+//            Session::put('customer_id',null);
+//            Session::put('customer_avatar',null);
+            //Session::flush();
+        }
+            config(['services.google.redirect'=>env('GOOGLE_CLIENT_URL')]);
+            $provider = Socialite::driver('google')->user();
+            $account = Social::where('provider', 'google')->where('provider_id', $provider->getId())->where('provider_email',$provider->getEmail())->first();
+            if ($account) {
+                $account_name = Customer::where('id', $account->customer_id)->first();
+                if(is_null($account_name->avatar))
+                    $account_name->avatar = $provider->getAvatar();
+                $account_name->save();
+                Session::put('customer_name', $account_name->name);
+                Session::put('customer_id', $account_name->id);
+                Session::put('customer_avatar', $account_name->avatar);
+
+            } else {
+
+                $customer_login = new Social([
+                    'provider_id' => $provider->getId(),
+                    'provider_email'=>$provider->getEmail(),
+                    'provider' => 'google'
+                ]);
+
+                $orang = Customer::where('email', $provider->getEmail())->first();
+
+                if (!$orang) {
+                    $orang = Customer::create([
+                        'name' => $provider->getName(),
+                        'email' => $provider->getEmail(),
+                        'password' => '',
+                        'phone' => '',
+                        'avatar'=>$provider->getAvatar()
+
+                    ]);
+                }
+                $customer_login->customer()->associate($orang);
+                $customer_login->save();
+
+                $account_name = Customer::find($customer_login->customer_id);
+
+                Session::put('customer_name', $account_name->name);
+                Session::put('customer_id', $account_name->id);
+                Session::put('customer_avatar', $account_name->avatar);
+
+            }
+        return redirect('trang-chu')->with('message', 'Đăng nhập thành công');
     }
 }
