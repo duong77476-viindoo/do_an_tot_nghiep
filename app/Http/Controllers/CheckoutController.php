@@ -19,6 +19,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\VarDumper\VarDumper;
@@ -252,9 +253,23 @@ class CheckoutController extends Controller
         }
         $order->tong_so_luong = $tong_so_luong;
         $order->save();
+
+        $this->send_mail_confirm_order($order->id);
         Session::forget('coupon');
         Session::forget('fee');
         Session::forget('cart');
         Session::save();
+    }
+
+    public function send_mail_confirm_order($order_id){
+        $order = Order::find($order_id);
+        $order_detail = OrderDetail::where('order_id',$order_id)->get();
+        $now = Carbon::now()->toDateString();
+        $title = "Đơn hàng xác "."#".$order->id." xác nhận ngày ".$now;
+        Mail::send('frontend.checkout.mail_confirm_order',['order'=>$order,'order_detail'=>$order_detail],
+            function ($message) use($order,$title){
+                $message->to($order->customer->email)->subject($title);
+                $message->from(env('MAIL_USERNAME'),$title);
+        });
     }
 }

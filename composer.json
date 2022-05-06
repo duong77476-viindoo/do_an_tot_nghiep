@@ -21,7 +21,8 @@
         "laravel/tinker": "^2.5",
         "maatwebsite/excel": "^3.1",
         "mettle/sendportal-core": "^2.0",
-        "phpoffice/phpword": "^0.18.3"
+        "phpoffice/phpword": "^0.18.3",
+        "pusher/pusher-php-server": "^7.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

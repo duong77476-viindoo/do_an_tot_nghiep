@@ -43,6 +43,9 @@ use Sendportal\Base\Facades\Sendportal;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/test_noti',function (){
+    return view('admin.test_noti');
+});
 
 //========FRONTEND================
 Route::middleware('check_reset_pass')->group(function (){
@@ -53,6 +56,8 @@ Route::middleware('check_reset_pass')->group(function (){
 
 
 });
+
+
 
 Route::middleware('revalidate')->group(function() {
     //Login với google và facebook
@@ -141,6 +146,8 @@ Route::middleware('revalidate')->group(function() {
     Route::post('/load-rating',[SiteController::class,'load_rating'])->name('load-rating');
 });
 Route::middleware('check_login_customer')->group(function(){
+    Route::get('/download-order/{id}',[CustomerController::class,'download_order'])->name('download-order');
+
     Route::get('/logout-customer',[CustomerController::class,'logout'])->name('logout-customer');
 });
 

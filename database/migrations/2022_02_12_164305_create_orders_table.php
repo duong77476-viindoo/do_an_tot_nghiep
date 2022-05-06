@@ -18,8 +18,8 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('customer_id')->unsigned();
             $table->bigInteger('shipping_id')->unsigned();
             $table->bigInteger('payment_id')->unsigned();
-            $table->decimal('fee_ship',14,2);
-            $table->decimal('coupon',14,2);
+            $table->decimal('fee_ship',14,2)->default(0);
+            $table->decimal('coupon',14,2)->default(0);
             $table->foreign('customer_id')
                 ->references('id')
                 ->on('customers')
@@ -32,8 +32,8 @@ class CreateOrdersTable extends Migration
                 ->references('id')
                 ->on('payments')
                 ->onDelete('cascade');
-            $table->integer('tong_so_luong');
-            $table->decimal('tong_tien',14,2);
+            $table->integer('tong_so_luong')->default(0);
+            $table->decimal('tong_tien',14,2)->default(0);
             $table->enum('trang_thai',['Đang chờ xử lý',
                 'Đang xử lý','Đang giao hàng','Chờ xác nhận hủy','Đã hủy','Đã giao hàng']);
             $table->date('order_date')->nullable();

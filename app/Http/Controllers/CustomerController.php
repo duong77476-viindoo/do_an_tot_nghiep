@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\CategoryProduct;
 use App\Models\Customer;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\PostType;
 use App\Models\ProductGroup;
 use App\Models\Social;
@@ -348,5 +350,19 @@ class CustomerController extends Controller
 
         }
         return redirect('trang-chu')->with('message', 'Đăng nhập thành công');
+    }
+
+    public function download_order($id){
+        //$pdf = App::make('dompdf.wrapper');
+        $order = Order::find($id);
+        $order_detail = OrderDetail::where('order_id',$id)->get();
+        if(!is_null(Session::get('customer_id'))){
+            $customer_id = Session::get('customer_id');
+            if($order->customer_id !=$customer_id){
+                return \redirect()->to('/trang-chu')->with('message','Bạn không có quyền thực hiện việc này');
+            }
+        }
+        $pdf= \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.order.print_order',['order'=>$order,'order_detail'=>$order_detail])->setPaper('a4');
+        return $pdf->stream();
     }
 }

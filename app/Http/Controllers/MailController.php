@@ -15,7 +15,7 @@ class MailController extends Controller
 
         Mail::send('frontend.pages.send_mail',$data,function ($message) use ($to_name,$to_email){
             $message->to($to_email)->subject('Test gửi mail');
-            $message->from($to_email,$to_name);
+            $message->from(env('MAIL_USERNAME'),$to_name);
         });
 //        return redirect('/trang-chu')->with('message','');
     }

@@ -1,5 +1,6 @@
 <html>
 <head>
+    <title>Hóa đơn số #{{$order->id}}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="{{ltrim(public_path('bootstrap-3.3.7/dist/css/bootstrap.css'), '/')}}">
     <link rel="stylesheet" href="{{url('public/bootstrap-3.3.7/dist/css/bootstrap.css')}}">
