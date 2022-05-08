@@ -17,6 +17,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\VarDumper\VarDumper;
 
@@ -145,22 +146,11 @@ class OrderController extends Controller
                 $chi_tiet_phieu_xuat->so_luong_yeu_cau = $data['order_product_qty'][$key];
                 $chi_tiet_phieu_xuat->save();
             }
-
-            //            foreach ($data['order_product_id'] as $key1=>$product_id){
-//                $product = ProductGroup::find($product_id);
-//                $so_luong_ton = $product->so_luong;
-//                $so_luong_da_ban = $product->so_luong_da_ban;
-//                foreach ($data['order_product_qty'] as $key2=>$product_qty){
-//                    if($key1 == $key2){
-//                        $product->so_luong = $so_luong_ton - $product_qty;
-//                        $product->so_luong_da_ban = $so_luong_da_ban + $product_qty;
-//                        $product->save();
-//                        break;
-//                    }
-//                }
-//            }
+            $title = "Đơn hàng "."#".$order->id." đang được xử lý";
+            $this->send_mail_customer($order->id,$title);
         }else if($data['order_status']=="Đang giao hàng"){
-
+            $title = "Đơn hàng "."#".$order->id." đang được giao hàng";
+            $this->send_mail_customer($order->id,$title);
         }else if($data['order_status']=="Đã giao hàng"){
             //Đã giao hàng xong thì update vào bảng statistic order
             //Cập nhật số lượng mua, số, tổng số đơn hàng, doanh thu, lợi nhuận
@@ -212,9 +202,23 @@ class OrderController extends Controller
                 $stat_order->total_order += 1;
             }
             $stat_order->save();
+            $title = "Đơn hàng "."#".$order->id." đã giao thành công";
+            $this->send_mail_customer($order->id,$title);
         }
         else if($data['order_status']=="Đã hủy"){
+            $title = "Đơn hàng "."#".$order->id." đã hủy";
+            $this->send_mail_customer($order->id,$title);
         }
+    }
+
+    public function send_mail_customer($order_id,$title){
+        $order = Order::find($order_id);
+        $order_detail = OrderDetail::where('order_id',$order_id)->get();
+        Mail::send('frontend.checkout.mail_confirm_order',['title'=>$title,'order'=>$order,'order_detail'=>$order_detail],
+            function ($message) use($order,$title){
+                $message->to($order->customer->email)->subject($title);
+                $message->from(env('MAIL_USERNAME'),$title);
+            });
     }
 
 }

@@ -265,8 +265,8 @@ class CheckoutController extends Controller
         $order = Order::find($order_id);
         $order_detail = OrderDetail::where('order_id',$order_id)->get();
         $now = Carbon::now()->toDateString();
-        $title = "Đơn hàng xác "."#".$order->id." xác nhận ngày ".$now;
-        Mail::send('frontend.checkout.mail_confirm_order',['order'=>$order,'order_detail'=>$order_detail],
+        $title = "Đơn hàng "."#".$order->id." xác nhận ngày ".$now;
+        Mail::send('frontend.checkout.mail_confirm_order',['title'=>$title,'order'=>$order,'order_detail'=>$order_detail],
             function ($message) use($order,$title){
                 $message->to($order->customer->email)->subject($title);
                 $message->from(env('MAIL_USERNAME'),$title);
