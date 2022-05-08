@@ -141,6 +141,7 @@
                                         <tbody>
                                         <tr>
                                             <td style="width:200px;">
+                                                <span style="text-align: center;font-weight: bold;font-size: 20px">{{$title}}</span>
                                             </td>
                                         </tr>
                                         </tbody>
