@@ -365,4 +365,46 @@ class CustomerController extends Controller
         $pdf= \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.order.print_order',['order'=>$order,'order_detail'=>$order_detail])->setPaper('a4');
         return $pdf->stream();
     }
+
+    public function purchase_history(){
+        $customer_id = Session::get('customer_id');
+        if(is_null($customer_id)){
+            return \redirect()->to('login')->with('message','Mời bạn vui lòng đăng nhập để xem lịch sử mua hàng');
+        }
+        $orders = Order::where('customer_id',$customer_id)->orderby('created_at','DESC')->get();
+        $meta_desc = 'Lịch sử mua hàng';
+        $meta_keywords = 'Lịch sử mua hàng';
+        $meta_title = 'Lịch sử mua hàng';
+        $url_canonical = '';
+        $post_types = PostType::where('status',1)->get();
+        return view('frontend.customer.purchase_history')
+            ->with('orders',$orders)
+            ->with('post_types',$post_types)
+            ->with('meta_desc',$meta_desc)
+            ->with('meta_keywords',$meta_keywords)
+            ->with('meta_title',$meta_title)
+            ->with('url_canonical',$url_canonical);
+    }
+
+    public function detail_purchase_history($order_id){
+        $customer_id = Session::get('customer_id');
+        if(is_null($customer_id)){
+            return \redirect()->to('login')->with('message','Mời bạn vui lòng đăng nhập để xem lịch sử mua hàng');
+        }
+        $order = Order::find($order_id);
+        $order_detail = OrderDetail::where('order_id',$order->id)->get();
+        $meta_desc = 'Lịch sử mua hàng';
+        $meta_keywords = 'Lịch sử mua hàng';
+        $meta_title = 'Lịch sử mua hàng';
+        $url_canonical = '';
+        $post_types = PostType::where('status',1)->get();
+        return view('frontend.customer.detail_purchase_history')
+            ->with('order',$order)
+            ->with('order_detail',$order_detail)
+            ->with('post_types',$post_types)
+            ->with('meta_desc',$meta_desc)
+            ->with('meta_keywords',$meta_keywords)
+            ->with('meta_title',$meta_title)
+            ->with('url_canonical',$url_canonical);
+    }
 }

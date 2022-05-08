@@ -147,6 +147,8 @@ Route::middleware('revalidate')->group(function() {
 });
 Route::middleware('check_login_customer')->group(function(){
     Route::get('/download-order/{id}',[CustomerController::class,'download_order'])->name('download-order');
+    Route::get('/purchase-history',[CustomerController::class,'purchase_history'])->name('purchase-history');
+    Route::get('/purchase-history/{id}',[CustomerController::class,'detail_purchase_history'])->name('detail-purchase-history');
 
     Route::get('/logout-customer',[CustomerController::class,'logout'])->name('logout-customer');
 });

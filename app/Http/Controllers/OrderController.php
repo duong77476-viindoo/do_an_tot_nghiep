@@ -32,7 +32,7 @@ class OrderController extends Controller
     {
         //
         Paginator::useBootstrap();
-        $orders = Order::orderby('created_at','DESC')->paginate(5);
+        $orders = Order::orderby('created_at','DESC')->get();
         return view('admin.order.index')->with('orders',$orders);
     }
 
