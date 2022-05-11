@@ -10,24 +10,24 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ConfirmOrder
+class ConfirmOrder implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
+    public $order;
 
-    public function __construct($message)
+    public function __construct($order)
     {
-        $this->message = $message;
+        $this->order = $order;
     }
 
     public function broadcastOn()
     {
-        return ['my-channel'];
+        return new PrivateChannel('channel-name');
     }
 
-    public function broadcastAs()
-    {
-        return 'my-event';
-    }
+//    public function broadcastAs()
+//    {
+//        return 'my-event';
+//    }
 }
