@@ -45,7 +45,10 @@ use Sendportal\Base\Facades\Sendportal;
 */
 Route::get('/test_noti',function (){
     return view('admin.test_noti');
+    //event(new \App\Events\ConfirmOrder("hello"));
 });
+
+Route::post('/mark-read-notification',[AdminController::class,'markNotificaion'])->name('admin.markNotification');
 
 //========FRONTEND================
 Route::middleware('check_reset_pass')->group(function (){

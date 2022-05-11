@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ConfirmOrder;
+use App\Listeners\SendNewOrderNotification;
 use App\Models\Brand;
 use App\Models\CategoryProduct;
 use App\Models\City;
@@ -16,6 +18,7 @@ use App\Models\ProductGroup;
 use App\Models\Ward;
 use Decimal\Decimal;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -255,6 +258,7 @@ class CheckoutController extends Controller
         $order->save();
 
         $this->send_mail_confirm_order($order->id);
+        event(new ConfirmOrder($order));
         Session::forget('coupon');
         Session::forget('fee');
         Session::forget('cart');

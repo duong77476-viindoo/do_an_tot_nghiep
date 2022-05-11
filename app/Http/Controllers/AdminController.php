@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Order;
 use App\Models\Role;
 use App\Models\Social;
 use App\Models\StatisticVisitor;
@@ -20,13 +21,16 @@ use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\VarDumper\VarDumper;
 
 
+
 class AdminController extends Controller
 {
     //
+
     public function AuthLogin(){
         $admin_id = Auth::id();
         if($admin_id){
-            return Redirect::to('dashboard');
+            $notifications = auth()->user()->unreadNotifications;
+            return \redirect()->to('dashboard')->with('notifications',$notifications);
         }else{
             return Redirect::to('admin')->send();
         }
@@ -35,6 +39,7 @@ class AdminController extends Controller
         $admin_id_social = Session::get('admin_id');
         $admin_id_auth = Auth::id();
         if($admin_id_auth || $admin_id_social){
+            $notifications = auth()->user()->unreadNotifications;
 //            $user_ip_address = $request->ip();
 //            $early_last_month =  Carbon::now('Asia/Ho_Chi_Minh')->subMonth()->startOfMonth()->toDateString();
 //            $end_last_month =  Carbon::now('Asia/Ho_Chi_Minh')->subMonth()->endOfMonth()->toDateString();
@@ -47,7 +52,7 @@ class AdminController extends Controller
 //            $visitor_last_month_count = $visitor_of_lastmonth->count();
 
             //total this month
-            return view('admin.dashboard');
+            return view('admin.dashboard')->with('notifications',$notifications);
         }
         return view('admin.admin_login');
     }
@@ -166,7 +171,8 @@ class AdminController extends Controller
         ]);
         $data = $request->all();
         if(Auth::attempt(['email'=>$data['email'],'password'=>$data['password']])){
-            return Redirect::to('/dashboard');
+            $notifications = auth()->user()->unreadNotifications;
+            return \redirect()->to('admin')->with('notifications',$notifications);
         }else{
             Session::put('message','<p style="color: red">Mật khẩu hoặc tài khoản không đúng auth</p>');
             return Redirect::to('/admin');
@@ -181,7 +187,8 @@ class AdminController extends Controller
 
 
     public function dashboard(){
-        return view('admin.dashboard');
+        $notifications = auth()->user()->unreadNotifications;
+        return view('admin.dashboard')->with('notifications',$notifications);
     }
 
     public function admin_dashboard(Request $request){
@@ -296,5 +303,13 @@ class AdminController extends Controller
         return redirect('/dashboard')->with('message', 'Đăng nhập Admin thành công');
     }
 
-
+    public function markNotificaion(Request $request){
+        auth()->user()
+            ->unreadNotifications
+            ->when($request->input('id'), function ($query) use ($request) {
+                return $query->where('id', $request->input('id'));
+            })
+            ->markAsRead();
+        return response()->noContent();
+    }
 }
