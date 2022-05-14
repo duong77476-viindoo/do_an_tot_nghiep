@@ -510,6 +510,7 @@ Route::middleware('check_login_admin')->group(function (){
     Route::get('/add-product-spec/{id}',[ProductController::class,'add_product_spec'])->name('add-product-spec');
     Route::post('/insert-product-spec/{id}',[ProductController::class,'insert_product_spec'])->name('insert-product-spec');
     Route::post('/select-product-spec',[ProductController::class,'select_product_spec'])->name('select-product-spec');
+    Route::post('/update-product-spec',[ProductController::class,'update_product_spec'])->name('update-product-spec');
 
 });
 //Comment về sản phẩm
