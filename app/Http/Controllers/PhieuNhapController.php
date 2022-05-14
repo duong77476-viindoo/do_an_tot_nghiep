@@ -88,17 +88,17 @@ class PhieuNhapController extends Controller
             $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
             $tong_tien+=floatval($thanh_tien_format);
 
-            //Cập nhật số lượng của mỗi sản phẩm trong tbl product
+//            //Cập nhật số lượng của mỗi sản phẩm trong tbl product
             $product = Product::find($val);
-            //Cập nhật giá tiền sản phẩm
-            $phan_tram_loi_nhuan = 10;
-
-            $product->gia_ban =
-                round(
-                    (floatval($this->format_currency($data['gia_nhap'][$key])) / (100 - $phan_tram_loi_nhuan)) * 100
-                );
-            $product->so_luong += $data['so_luong_thuc_nhap'][$key];
-            $product->save();
+//            //Cập nhật giá tiền sản phẩm
+//            $phan_tram_loi_nhuan = 10;
+//
+//            $product->gia_ban =
+//                round(
+//                    (floatval($this->format_currency($data['gia_nhap'][$key])) / (100 - $phan_tram_loi_nhuan)) * 100
+//                );
+              $product->so_luong += $data['so_luong_thuc_nhap'][$key];
+              $product->save();
 
 
             //Cộng dồn số lượng nhập của sản phẩm tương ứng vào bảng tồn kho
@@ -235,4 +235,6 @@ class PhieuNhapController extends Controller
         }
         return $str;
     }
+
+
 }

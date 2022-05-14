@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChiTietPhieuNhap;
 use App\Models\DacTinh;
 use App\Models\Product;
 use App\Models\ProductGroup;
@@ -47,7 +48,6 @@ class ProductController extends Controller
            $attr='';
            $product = new Product();
            $product->product_group_id = $product_group_id;
-
            $product->created_at = now();
            $product->updated_at = now();
 
@@ -60,6 +60,8 @@ class ProductController extends Controller
            $product->code=$product_group->code.$sku;
            $product->sku=$product_group->code.$sku;
            $product->name = $product_group->name.$sku;
+           $gia_ban_format = $this->format_currency($data['gia_ban'][$i]);
+           $product->gia_ban = floatval($gia_ban_format);
            $product->save();
            //Tạo tồn kho cho sản phẩm mới
            $month = \date("m");
@@ -82,7 +84,7 @@ class ProductController extends Controller
                $product_spec = new ProductSpec();
                $product_spec->name = $dac_tinh->name;
                $product_spec->value = $data[$dac_tinh->code][$i];
-               $product_spec->code=Str::slug($dac_tinh->name.$data[$dac_tinh->code][$i]);
+               $product_spec->code=Str::slug($dac_tinh->name);
                $product_spec->product_id = $product->id;
                $product_spec->created_at = now();
                $product_spec->updated_at = now();
@@ -110,42 +112,48 @@ class ProductController extends Controller
         $products_count = $products->count();
         $dac_tinhs = DacTinh::where('nganh_hang_id',$product_group->nganh_hang->id)->get();
         $output = '
-            <table class="table table-hover">
+            <table style="width: 150%" class="table table-responsive table-hover">
                                 <thead>
                                     <tr>
+
                                         <th>STT</th>
 
-                                        <th>Tên</th>';
+                                        <th style="width: 20%">Tên</th>';
 
         foreach($dac_tinhs as $dac_tinh)
             $output.='<th>'.$dac_tinh->name.'</th>';
 
-        $output.='                          <th>Hành động</th>
+        $output.='                          <th style="width: 10%">Giá bán</th><th>Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>';
 
         if($products_count>0){
-            $i=0;
+            $i=1;
             foreach ($products as $product){
                 $i++;
                 $output.='<tr>
+
                             <td>'.$i.'</td>
 
-                            <td>'.$product->name.'</td>';
+                            <td><input type="text" class="form-control" name="product_name[]" value="'.$product->name.'"></td>';
                 foreach ($product->product_specs as $pro)
-                    $output.='<td>'.$pro->value.'</td>';
-
+                    $output.='<td><input type="text" class="form-control" name="'.$pro->code.'[]" value="'.$pro->value.'"></td>';
+                $output.='<td><input min="'.$this->get_gia_goi_y($product->id).'" max="'.$this->get_gia_goi_y($product->id)*0.3.'" type="number" class="form-control" name="gia_ban[]" value="'.$product->gia_ban.'">
+                        <div class="tooltip1">Giá gợi ý
+                                                    <span class="tooltiptext1">'.$this->get_gia_goi_y($product->id).' đ</span>
+                                                </div></td>';
                 $output.='<td>
-                                <button type="button" data-product_id="'.$product->id.'" class="btn btn-danger delete-gallery">Xóa</button>
+                                <button type="button" data-product_id="'.$product->id.'" class="btn btn-danger delete-product">Xóa</button>
                             </td>
                          </tr>
-                    </form>';
+                    </form>
+                    <input type="hidden" name="product_id[]" value="'.$product->id.'">';
             }
         }else{
             $output.='
              <tr>
-                <td colspan="8">Sản phẩm chưa có phiên bản</td>
+                <td colspan="9">Sản phẩm chưa có phiên bản</td>
              </tr>
             ';
         }
@@ -154,5 +162,57 @@ class ProductController extends Controller
              </table>
             ';
         echo $output;
+    }
+
+    public function update_product_spec(Request $request){
+        $data = $request->all();
+        foreach ($data['product_id'] as $key=>$product_id){
+            $product = Product::find($product_id);
+            $product->name = $data['product_name'][$key];
+            $product->gia_ban = $data['gia_ban'][$key];
+            $sku = '';
+            foreach ($product->product_specs as$key1=>$pro){
+//                dd($pro);
+//                VarDumper::dump($data[$pro->code]);
+//                $product_spec = ProductSpec::where('product_id',$product_id)->where('code',$data[$pro->code])->first();
+//                VarDumper::dump($product_spec);
+//                VarDumper::dump($pro);
+//                VarDumper::dump($data[$pro->code]);
+                $product_spec = ProductSpec::find($pro->id);
+                $product_spec->value = $data[$pro->code][$key];
+                $product_spec->save();
+
+                if($key1<3){
+                    $sku .= '-'.Str::slug($product_spec->value);
+                }
+            }
+            $product->code = $product->product_group->code.$sku;
+            $product->sku = $product->product_group->code.$sku;
+            $product->save();
+        }
+        return redirect()->back()->with('message','Update thành công');
+    }
+
+    //Lấy giá gợi ý dựa trên n kỳ nhập gần đây ứng với mỗi sản phẩm
+    public function get_gia_goi_y($product_id){
+        $chi_tiet_phieu_nhaps = ChiTietPhieuNhap::where('product_id',$product_id)->orderBy('created_at','DESC')->limit(5)->get();
+        $tong_gia_ban = 0;
+        if($chi_tiet_phieu_nhaps->count()!=0){
+            foreach ($chi_tiet_phieu_nhaps as $item){
+                $tong_gia_ban +=$item->gia_nhap;
+            }
+            return ($tong_gia_ban/$chi_tiet_phieu_nhaps->count());
+        }
+        return 0;
+    }
+
+    public function format_currency($str): string
+    {
+        $str = trim($str,"đ");
+        for($i=0;$i<strlen($str);$i++){
+            if(strpos($str, ',') !== false)
+                $str = str_replace(",","",$str);
+        }
+        return $str;
     }
 }

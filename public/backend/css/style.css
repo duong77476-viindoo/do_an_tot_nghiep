@@ -41,3 +41,28 @@
 .dynamic-element{
     margin-bottom:0px;
 }
+.tooltip1 {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip1 .tooltiptext1 {
+    visibility: hidden;
+    width: 120px;
+    background-color: #8a9db3;
+    color: #1d1a99;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 105%;
+}
+
+.tooltip1:hover .tooltiptext1 {
+    visibility: visible;
+}
