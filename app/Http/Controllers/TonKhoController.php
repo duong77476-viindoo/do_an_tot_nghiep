@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\TonKhoExport;
 use App\Models\TonKho;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpKernel\EventListener\ValidateRequestListener;
 use Symfony\Component\VarDumper\VarDumper;
 
@@ -112,6 +113,12 @@ class TonKhoController extends Controller
 
     public function export_csv(Request $request){
         $data = $request->all();
+        $ton_kho = TonKho::where('trang_thai','Hoàn thành')->where('year',$data['year'])->where('month',$data['month'])->get();
+        if(($ton_kho)->count()==0){
+//            exit();
+            Session::put('message','<p class="text-danger">Không tồn tại báo cáo</p>');
+            return redirect()->to('ton-kho/all');
+        }
         $ton_kho_export =  new TonKhoExport();
         $ton_kho_export->setYear($data['year']);
         $ton_kho_export->setMonth($data['month']);

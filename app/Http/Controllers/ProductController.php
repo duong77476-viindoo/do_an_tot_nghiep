@@ -193,6 +193,17 @@ class ProductController extends Controller
         return redirect()->back()->with('message','Update thành công');
     }
 
+    public function delete_product_spec(Request $request){
+        $product = Product::find($request->product_id);
+        if($product){
+            $product->delete();
+            return response()->json(['success'=>'<span class="text-success">Xóa phiên bản sản phẩm thành công</span>']);
+        }
+        else{
+            return response()->json(['error'=>'Lỗi khi xóa phiên bản sản phẩm']);
+        }
+    }
+
     //Lấy giá gợi ý dựa trên n kỳ nhập gần đây ứng với mỗi sản phẩm
     public function get_gia_goi_y($product_id){
         $chi_tiet_phieu_nhaps = ChiTietPhieuNhap::where('product_id',$product_id)->orderBy('created_at','DESC')->limit(5)->get();

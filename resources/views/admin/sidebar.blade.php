@@ -65,6 +65,8 @@
                     </ul>
                 </li>
                 @endhasRole
+
+                @hasRole(['Admin','Quản lý bán hàng'])
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-choose">
                         <i class="nav-icon fas fa-th"></i>
@@ -140,8 +142,17 @@
                                 <p>Video</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{route('fee-ship')}}" class="nav-link">
+                                <i class="fa fa-money-bill-alt nav-icon"></i>
+                                <p>Phí vận chuyển</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
+                @endhasRole
+
+                @hasRole(['Admin','Quản lý bán hàng'])
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-choose">
                         <i class="nav-icon fas fa-shopping-cart"></i>
@@ -171,6 +182,9 @@
                         </li>
                     </ul>
                 </li>
+                @endhasRole
+
+                @hasRole(['Admin','Quản lý kho'])
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-choose">
                         <i class="nav-icon fa fa-barcode"></i>
@@ -200,6 +214,9 @@
                         </li>
                     </ul>
                 </li>
+                @endhasRole
+
+                @hasRole(['Admin','Quản lý công nợ'])
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-choose">
                         <i class="nav-icon fa fa-money-check"></i>
@@ -223,24 +240,9 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link nav-choose">
-                        <i class="nav-icon fa fa-truck"></i>
-                        <p>
-                            Quản lý vận chuyển
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('fee-ship')}}" class="nav-link">
-                                <i class="fa fa-money-bill-alt nav-icon"></i>
-                                <p>Phí vận chuyển</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                @endhasRole
 
+                @hasRole(['Admin','Báo cáo thống kê','Quản lý bán hàng','Quản lý công nợ','Quản lý kho'])
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-choose">
                         <i class="nav-icon fa fa-newspaper"></i>
@@ -264,7 +266,9 @@
                         </li>
                     </ul>
                 </li>
+                @endhasRole
 
+                @hasRole(['Admin','Quản lý marketing'])
                 <li class="nav-header">Marketing</li>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-choose">
@@ -298,7 +302,7 @@
                         </p>
                     </a>
                 </li>
-
+                @endhasRole
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

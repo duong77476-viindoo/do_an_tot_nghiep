@@ -170,12 +170,36 @@
                 });
             }
 
+            $(document).on('click','.delete-product',function (){
+                var product_id = $(this).data('product_id');
+                if(confirm('Bạn muốn xóa sản phẩm này không?')){
+                    $.ajax({
+                        url: "{{url('/delete-product-spec')}}",
+                        method: "POST",
+                        headers:{
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: {
+                            product_id:product_id
+                        },
+                        success:function (data){
+                            if($.isEmptyObject(data.error)){
+                                $("#form-product")[0].reset();
+                                $(".print-error-msg").css('display','none');
+                                load_product_spec();
+                                $('#notify').html(data.success);
+                            }else{
+                                printErrorMsg(data.error);
+                            }
+
+                        }
+                    });
+                }
+            });
         })
     </script>
-{{-- update phiên bản sản phẩm, hiển thị giá gợi ý khi update giá   --}}
+{{-- xóa phiên bản sản phẩm   --}}
     <script type="text/javascript">
-
-
 
     </script>
 @endsection

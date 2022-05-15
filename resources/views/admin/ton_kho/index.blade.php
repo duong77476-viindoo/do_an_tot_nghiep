@@ -12,29 +12,11 @@
                 \Illuminate\Support\Facades\Session::put('message',null);
             }
             ?>
-            <div class="row w3-res-tb">
-                <div class="col-sm-5 m-b-xs">
-                    <select class="input-sm form-control w-sm inline v-middle">
-                        <option value="0">Bulk action</option>
-                        <option value="1">Delete selected</option>
-                        <option value="2">Bulk edit</option>
-                        <option value="3">Export</option>
-                    </select>
-                    <button class="btn btn-sm btn-default">Apply</button>
+            <div style="display: block">
+                <div style="display:inline-block;">
+                    <button type="button" class="btn btn-primary chot_ton_kho">Chốt số lượng tồn</button>
                 </div>
-                <div class="col-sm-2">
-                    <a href="{{route('add-ton-kho')}}"><span class="btn btn-primary"><i class="fa fa-plus"></i>Thêm</span></a>
-                </div>
-                <div class="col-sm-2">
-                    @php
-                         $month = date("m");
-                         $year = date('Y');
-                    @endphp
-                    @if($ton_khos[0]->year!=$year || $ton_khos[0]->month!=$month)
-                        <button type="button" class="btn btn-primary chot_ton_kho">Chốt số lượng tồn</button>
-                    @endif
-                </div>
-                <div class="col-sm-2">
+                <div style="display:inline-block;">
                     <form action="{{route('ton-kho-export-csv')}}" method="POST">
                         @csrf
                         <label>
@@ -87,7 +69,7 @@
                         <tr>
                             <td>{{$ton_kho->product->name}}</td>
                             <td>{{$ton_kho->year}}</td>
-                            <td>{{$ton_kho->month}}</td>
+                            <td class="{{$ton_kho->trang_thai=='Chưa hoàn thành' ? 'ton_kho_month' : ''}}">{{$ton_kho->month}}</td>
                             <td>{{$ton_kho->ton_dau_thang}}</td>
                             <td>{{$ton_kho->nhap_trong_thang}}</td>
                             <td>{{$ton_kho->xuat_trong_thang}}</td>
@@ -136,43 +118,59 @@
     <script type="text/javascript">
         $(document).ready(function (){
             $('.chot_ton_kho').click(function(){
-                swal({
-                        title: "Chốt số lượng tồn kho",
-                        text: "Vui lòng check kỹ lại thông tin tồn kho",
+                var currentdate = new Date();
+                var currentmonth = String(currentdate.getMonth() + 1).padStart(2, '0');
+                var ton_kho_month = $('.ton_kho_month').text()[0] + $('.ton_kho_month').text()[1] ;
+                alert(ton_kho_month);
+                if(currentmonth==ton_kho_month || ton_kho_month==null || ton_kho_month===""){
+                    swal({
+                        title: "Không thể chốt số lượng tồn tháng này",
+                        text: "Do chưa đến thời hạn",
                         type: "warning",
-                        showCancelButton: true,
                         confirmButtonClass: "btn-danger",
-                        confirmButtonText: "Chốt",
-                        cancelButtonText: "Hủy bỏ!",
-                        closeOnConfirm: false,
+                        confirmButtonText: "Tiếp tục",
+                        closeOnConfirm: true,
                         closeOnCancel: false
-                    },
-                    function(isConfirm) {
-                        if (isConfirm) {
-                            $.ajax({
-                                url: '{{url('/ton-kho/chot-ton-kho')}}',
-                                method: 'POST',
-                                headers:{
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                },
-                                success:function()
-                                {
-                                    swal({
-                                            title: "Chốt số lượng thành công",
-                                            text: "",
-                                            confirmButtonClass: "btn-success",
-                                            confirmButtonText: "Tiếp tục",
-                                            closeOnConfirm: false
-                                        },
-                                        function() {
-                                            window.location.href = "{{url('/ton-kho/all')}}";
-                                        });
-                                }
-                            });
-                        } else {
-                            swal("Đã hủy chốt số lượng", "Tiếp tục theo dõi số lượng tồn", "error");
-                        }
                     });
+                }else{
+                    swal({
+                            title: "Chốt số lượng tồn kho",
+                            text: "Vui lòng check kỹ lại thông tin tồn kho",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "Chốt",
+                            cancelButtonText: "Hủy bỏ!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    url: '{{url('/ton-kho/chot-ton-kho')}}',
+                                    method: 'POST',
+                                    headers:{
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    success:function()
+                                    {
+                                        swal({
+                                                title: "Chốt số lượng thành công",
+                                                text: "",
+                                                confirmButtonClass: "btn-success",
+                                                confirmButtonText: "Tiếp tục",
+                                                closeOnConfirm: false
+                                            },
+                                            function() {
+                                                window.location.href = "{{url('/ton-kho/all')}}";
+                                            });
+                                    }
+                                });
+                            } else {
+                                swal("Đã hủy chốt số lượng", "Tiếp tục theo dõi số lượng tồn", "error");
+                            }
+                        });
+                }
             });
         })
     </script>
