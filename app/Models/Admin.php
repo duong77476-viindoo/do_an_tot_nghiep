@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Symfony\Component\VarDumper\VarDumper;
 
 class Admin extends Authenticatable
 {
@@ -30,7 +31,6 @@ class Admin extends Authenticatable
         return $this->password;
     }
     public function hasAnyRoles($roles){
-
         if(is_array($roles)){
             foreach($roles as $role){
                 if($this->hasRole($role)){

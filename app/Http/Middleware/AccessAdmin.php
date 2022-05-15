@@ -15,10 +15,10 @@ class AccessAdmin
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, ...$role)
     {
         //Trong middleware ko cho phép truy xuất trực tiếp đến model
-        if(Auth::user()->hasAnyRoles([$role]))
+        if(Auth::user()->hasAnyRoles($role))
             return $next($request);
         return redirect('dashboard');
     }

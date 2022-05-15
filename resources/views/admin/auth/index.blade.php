@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table id="myTable" class="table table-striped b-t b-light">
+                <table id="" class="table table-striped b-t b-light">
                     <thead>
                     <tr>
                         <th>Tên người dùng</th>
