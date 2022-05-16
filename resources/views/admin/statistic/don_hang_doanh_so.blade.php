@@ -1,14 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
-    <style type="text/css">
-        p.title_thongke{
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-        }
-    </style>
-
-    <p class="title_thongke">TỔNG QUAN</p>
+    <h1 class="text-center">TỔNG QUAN DOANH SỐ</h1>
     <form autocomplete="off">
         @csrf
         <div class="row">
@@ -109,11 +101,11 @@
                 xLabelAngle: 45,
 
                 // A list of names of data record attributes that contain y-values.
-                ykeys: ['order','sales','profit','quantity'],
+                ykeys: ['order','sales','quantity'],
                 behaveLikeLine: true,
                 // Labels for the ykeys -- will be displayed when you hover over the
                 // chart.
-                labels: ['Đơn hàng','Doanh số','Lợi nhuận','Số lượng']
+                labels: ['Đơn hàng bán','Doanh số','Số lượng bán']
             });
 
             function chart30daysorder(){

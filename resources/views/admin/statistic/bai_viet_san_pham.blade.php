@@ -8,7 +8,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <h2>fsdfdf</h2>
+            <h2>Lượt xem bài viết</h2>
             <ol>
                 @foreach($post_views as $post_view)
                     <li>

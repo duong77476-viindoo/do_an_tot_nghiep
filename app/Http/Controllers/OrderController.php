@@ -182,7 +182,6 @@ class OrderController extends Controller
                 $chi_phi = ($tong_tien_nhap / $so_luong_nhap) * $order_detail->so_luong;
 //                dd($chi_phi);
                 $sales = $product->gia_ban * $order_detail->so_luong;
-                $profit += $sales - $chi_phi;
             }
 //            dd($sales);
 
@@ -192,12 +191,10 @@ class OrderController extends Controller
                 $stat_order = new StatisticOrder();
                 $stat_order->order_date = $order_date;
                 $stat_order->sales = $order->tong_tien;
-                $stat_order->profit = $profit + $order->fee_ship;
                 $stat_order->quantity = $order->tong_so_luong;
                 $stat_order->total_order = 1;
             }else{
                 $stat_order->sales += $order->tong_tien;
-                $stat_order->profit += $profit + $order->fee_ship;
                 $stat_order->quantity += $order->tong_so_luong;
                 $stat_order->total_order += 1;
             }
