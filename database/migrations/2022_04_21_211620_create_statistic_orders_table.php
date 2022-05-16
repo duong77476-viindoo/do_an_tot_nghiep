@@ -17,7 +17,6 @@ class CreateStatisticOrdersTable extends Migration
             $table->id();
             $table->date('order_date');
             $table->decimal('sales',14,2);
-            $table->decimal('profit',14,2);
             $table->integer('quantity');
             $table->integer('total_order');
             $table->timestamps();
