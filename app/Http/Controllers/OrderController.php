@@ -157,7 +157,6 @@ class OrderController extends Controller
 
             //Tính lợi nhuận
             $order_details = OrderDetail::where('order_id',$data['order_id'])->get();
-            $profit = 0;
             $sales = 0;
             $chi_phi = 0;
 //            dd($order_details);

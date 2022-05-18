@@ -264,6 +264,12 @@
                                 <p>Thống kê sản phẩm, bài viết</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{route('statistic-xuat-nhap-ton')}}" class="nav-link">
+                                <i class="fa fa-book-reader nav-icon"></i>
+                                <p>Thống kê xuất nhập tồn</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @endhasRole

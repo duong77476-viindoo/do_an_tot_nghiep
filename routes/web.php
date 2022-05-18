@@ -27,6 +27,7 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\StatisticOrderController;
+use App\Http\Controllers\StatisticXuatNhapTon;
 use App\Http\Controllers\ThanhToanCongNoNccController;
 use App\Http\Controllers\TonKhoController;
 use App\Http\Controllers\VideoController;
@@ -180,6 +181,9 @@ Route::middleware('check_login_admin')->group(function (){
         Route::post('/dashboard-filter',[StatisticOrderController::class,'dashboard_filter'])->name('dashboard-filter');
         Route::post('/order-date',[StatisticOrderController::class,'order_date'])->name('order-date');
         Route::post('/days-order',[StatisticOrderController::class,'days_order'])->name('days-order');
+
+        //THống kê xuất nhập tồn
+        Route::get('/statistic-xuat-nhap-ton',[StatisticXuatNhapTon::class,'index'])->name('statistic-xuat-nhap-ton');
     });
 });
 
