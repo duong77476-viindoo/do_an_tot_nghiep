@@ -26,6 +26,7 @@ use App\Http\Controllers\ProductGroupController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\StatisticCongNo;
 use App\Http\Controllers\StatisticOrderController;
 use App\Http\Controllers\StatisticXuatNhapTon;
 use App\Http\Controllers\ThanhToanCongNoNccController;
@@ -184,6 +185,11 @@ Route::middleware('check_login_admin')->group(function (){
 
         //THống kê xuất nhập tồn
         Route::get('/statistic-xuat-nhap-ton',[StatisticXuatNhapTon::class,'index'])->name('statistic-xuat-nhap-ton');
+        Route::get('/statistic-cong-no',[StatisticCongNo::class,'index'])->name('statistic-cong-no');
+
+        Route::post('/cong-no-chart',[StatisticCongNo::class,'cong_no_chart'])->name('chart-cong-no');
+        Route::post('/xuat-nhap-ton-chart',[StatisticXuatNhapTon::class,'xuat_nhap_ton_chart'])->name('xuat-nhap-ton-chart');
+
     });
 });
 

@@ -47,7 +47,6 @@ class StatisticOrderController extends Controller
                 'period'=>$stat->order_date,
                 'order'=>$stat->total_order,
                 'sales'=>$stat->sales,
-                'profit'=>$stat->profit,
                 'quantity'=>$stat->quantity
             );
         }
@@ -80,7 +79,6 @@ class StatisticOrderController extends Controller
                     'period'=>$stat->order_date,
                     'order'=>$stat->total_order,
                     'sales'=>$stat->sales,
-                    'profit'=>$stat->profit,
                     'quantity'=>$stat->quantity
                 );
             }
@@ -96,7 +94,6 @@ class StatisticOrderController extends Controller
                 'period'=>$stat->order_date,
                 'order'=>$stat->total_order,
                 'sales'=>$stat->sales,
-                'profit'=>$stat->profit,
                 'quantity'=>$stat->quantity
             );
         }

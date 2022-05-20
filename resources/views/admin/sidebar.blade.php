@@ -170,14 +170,14 @@
                         </li>
                         <li class="nav-item">
                             <a href="" class="nav-link">
-                                <i class="fas fa-circle nav-icon"></i>
+                                <i class="fas fa-truck nav-icon"></i>
                                 <p>Quản lý vận chuyển</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="" class="nav-link">
-                                <i class="fas fa-circle nav-icon"></i>
-                                <p>Quản lý thanh toán đơn hàng</p>
+                                <i class="fas fa-donate nav-icon"></i>
+                                <p>Quản lý thanh toán</p>
                             </a>
                         </li>
                     </ul>
@@ -268,6 +268,12 @@
                             <a href="{{route('statistic-xuat-nhap-ton')}}" class="nav-link">
                                 <i class="fa fa-book-reader nav-icon"></i>
                                 <p>Thống kê xuất nhập tồn</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('statistic-cong-no')}}" class="nav-link">
+                                <i class="fa fa-money-bill-alt nav-icon"></i>
+                                <p>Thống kê công nợ</p>
                             </a>
                         </li>
                     </ul>
