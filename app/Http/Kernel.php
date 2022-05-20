@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\AccessAdmin;
+use App\Http\Middleware\AccessCheckout;
 use App\Http\Middleware\CheckLoginAdmin;
 use App\Http\Middleware\CheckLoginCustomer;
 use App\Http\Middleware\CheckResetPass;
@@ -73,6 +74,6 @@ class Kernel extends HttpKernel
         'revalidate' => RevalidateBackHistory::class,
         'check_login_customer' => CheckLoginCustomer::class,
         'check_reset_pass' => CheckResetPass::class,
-
+        'access_checkout'=> AccessCheckout::class,
     ];
 }
