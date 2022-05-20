@@ -109,18 +109,20 @@ Route::middleware('revalidate')->group(function() {
 
 
 //Thanh toán
-    Route::get('/login-checkout',[CheckoutController::class,'login_checkout'])->name('login-checkout');
-    Route::get('/checkout',[CheckoutController::class,'checkout'])->name('checkout');
-    Route::post('/save-checkout',[CheckoutController::class,'save_checkout'])->name('save-checkout');
-    Route::get('/payment',[CheckoutController::class,'payment'])->name('payment');
-    Route::post('/customer-order',[CheckoutController::class,'customer_order'])->name('customer-order');
+    Route::middleware('access_checkout')->group(function (){
+        Route::get('/login-checkout',[CheckoutController::class,'login_checkout'])->name('login-checkout');
+        Route::get('/checkout',[CheckoutController::class,'checkout'])->name('checkout');
+        Route::post('/save-checkout',[CheckoutController::class,'save_checkout'])->name('save-checkout');
+        Route::get('/payment',[CheckoutController::class,'payment'])->name('payment');
+        Route::post('/customer-order',[CheckoutController::class,'customer_order'])->name('customer-order');
 
-    Route::post('/confirm-order',[CheckoutController::class,'confirm_order'])->name('confirm-order');
+        Route::post('/confirm-order',[CheckoutController::class,'confirm_order'])->name('confirm-order');
 
 //Tính phí vận chuyển khi cbi thanh toán
-    Route::post('/select-province-ward-frontend',[CheckoutController::class,'select_province_ward_home'])->name('select-province-ward-frontend');
-    Route::post('/calculate-fee-ship',[CheckoutController::class,'calculate_fee_ship'])->name('calculate-fee-ship');
-    Route::get('/delete-fee',[CheckoutController::class,'delete_fee'])->name('delete-fee');
+        Route::post('/select-province-ward-frontend',[CheckoutController::class,'select_province_ward_home'])->name('select-province-ward-frontend');
+        Route::post('/calculate-fee-ship',[CheckoutController::class,'calculate_fee_ship'])->name('calculate-fee-ship');
+        Route::get('/delete-fee',[CheckoutController::class,'delete_fee'])->name('delete-fee');
+    });
 
 //Xem video
     Route::post('/watch-video',[SiteController::class,'watch_video'])->name('watch-video');
