@@ -318,7 +318,7 @@
                                    <div class="single-products">
                                        <div class="productinfo text-center">
                                            <img src="{{url('public/uploads/products/'.$san_pham->anh_dai_dien)}}" alt="" />
-                                           <h2>{{number_format($san_pham->gia_ban,0,'','.')}} đ</h2>
+                                           <h2>{{number_format($san_pham->products[0]->gia_ban,0,'','.')}} đ</h2>
                                            <p>{{$san_pham->name}}</p>
                                            <button type="button" class="btn btn-default "><i class="fa fa-shopping-cart"></i>Xem chi tiết</button>
                                        </div>

@@ -163,10 +163,8 @@ class ProductGroupController extends Controller
             $product_group->moi_ve = 0;
         $product_group->trang_thai = $data['trang_thai'];
         $product_group->an_hien = $data['an_hien'];
-//        $product_group->gia_ban = $data['gia_ban'];
-//        $product_group->gia_canh_tranh = $data['gia_canh_tranh'];
+
         $product_group->video_id = $data['video_id'];
-        //$product->product_slug = API_V1::createCode( $data['product_name']);
         $product_group->created_at = now();
         $product_group->updated_at = now();
 

@@ -134,6 +134,7 @@ class OrderController extends Controller
             $phieu_xuat->name = "Phiếu xuất bán hàng";
             $phieu_xuat->content = "Phiếu xuất cho đơn hàng mã".$data['order_id'];
             $phieu_xuat->order_id = $data['order_id'];
+            $phieu_xuat->nguoi_lap_id = Auth::id();
             $phieu_xuat->created_at = now();
             $phieu_xuat->updated_at = now();
             $phieu_xuat->save();
