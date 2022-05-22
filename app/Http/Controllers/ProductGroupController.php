@@ -237,7 +237,7 @@ class ProductGroupController extends Controller
         $videos = Video::all();
         $category_products = CategoryProduct::all();
         $product_group = ProductGroup::find($id);
-        $category_products_id = CategoryProductProduct::where('product_id',$id)->get();
+        $category_products_id = CategoryProductProduct::where('product_group_id',$id)->get();
 
 //        VarDumper::dump($category_products_id);
 //        exit();
@@ -313,8 +313,6 @@ class ProductGroupController extends Controller
             $product->moi_ve = 1;
         }else
             $product->moi_ve = 0;
-        $product->gia_ban = $data['gia_ban'];
-        $product->gia_canh_tranh = $data['gia_canh_tranh'];
         $product->video_id = $data['video_id'];
         //$product->product_slug = API_V1::createCode( $data['product_name']);
         $product->updated_at = now();
@@ -336,7 +334,7 @@ class ProductGroupController extends Controller
 
         $product->save();
         //sau khi update thì sẽ xóa hết từ khóa sản phẩm
-        TagProduct::where('product_id',$product->id)->delete();
+        TagProduct::where('product_group_id',$product->id)->delete();
         if($data['tag_id']!=''){
             $tags = $data['tag_id'];
             foreach ($tags as $tag){
@@ -351,7 +349,7 @@ class ProductGroupController extends Controller
                 }
                 $tukhoa_sp = new TagProduct();
                 $tukhoa_sp->tag_id = $id_tukhoa;
-                $tukhoa_sp->product_id = $product->id;
+                $tukhoa_sp->product_group_id = $product->id;
                 $tukhoa_sp->save();
             }
         }
@@ -359,7 +357,7 @@ class ProductGroupController extends Controller
         //Đã tạo event AfterSave trong model product rồi
         foreach ($data['category_product_id'] as $category_product_id){
             $phan_loai_san_pham = new CategoryProductProduct();
-            $phan_loai_san_pham->product_id=$product->id;
+            $phan_loai_san_pham->product_group_id=$product->id;
             $phan_loai_san_pham->category_product_id = $category_product_id;
             $phan_loai_san_pham->save();
         }

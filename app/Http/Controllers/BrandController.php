@@ -20,13 +20,8 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
-        Paginator::useBootstrap();
-        //Paginator::useTailwind();
+
         $brands = Brand::paginate(5);
-//        VarDumper::dump($brands);
-//        exit();
-        //$ds_brands = view('admin.brand.all_brand')->with('brands',$brands);
         return view('admin.brand.all_brand')->with('brands',$brands);
     }
 
@@ -51,7 +46,7 @@ class BrandController extends Controller
     {
         //
         $validated = $request->validate([
-            'brand_name' => 'required|min:6|max:50',
+            'brand_name' => 'required|min:1|max:50',
             'brand_desc' => 'required',
             'brand_status' => 'required',
         ]);

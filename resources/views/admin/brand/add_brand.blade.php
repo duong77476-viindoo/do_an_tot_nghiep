@@ -19,7 +19,7 @@
                         {{csrf_field()}}
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tên thương hiệu</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" name="brand_name" placeholder="Nhập phân loại">
+                            <input type="text" class="form-control" id="exampleInputEmail1" name="brand_name" placeholder="Nhập tên thương hiệu">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mô tả</label>
@@ -28,13 +28,13 @@
                        <div class="form-group">
                            <div class="radio">
                                <label>
-                                   <input type="radio" name="brand_status" id="optionsRadios1" value="0" checked="">
+                                   <input type="radio" name="brand_status" id="optionsRadios1" value="0" >
                                   Ẩn
                                </label>
                            </div>
                            <div class="radio">
                                <label>
-                                   <input type="radio" name="brand_status" id="optionsRadios2" value="1">
+                                   <input type="radio" name="brand_status" id="optionsRadios2" value="1" checked="">
                                    Hiện
                                </label>
                            </div>

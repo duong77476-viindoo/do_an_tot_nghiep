@@ -304,58 +304,58 @@
 <div class="recommended_items"><!--recommended_items-->
     <h2 class="title text-center">Sản phẩm liên quan</h2>
 
-    <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+    <div id="recommended-item-carousel">
         <div class="carousel-inner">
             <ul id="related_product">
                 @foreach($san_phams_lien_quan as $key=>$san_pham)
-               <li>
-                   @foreach($san_pham->products as $product)
-                       <a href="{{route('product',['code'=>$product->code])}}">
-                           @break
-                           @endforeach
-                           <div class="col-sm-8">
-                               <div class="product-image-wrapper">
-                                   <div class="single-products">
-                                       <div class="productinfo text-center">
-                                           <img src="{{url('public/uploads/products/'.$san_pham->anh_dai_dien)}}" alt="" />
-                                           <h2>{{number_format($san_pham->products[0]->gia_ban,0,'','.')}} đ</h2>
-                                           <p>{{$san_pham->name}}</p>
-                                           <button type="button" class="btn btn-default "><i class="fa fa-shopping-cart"></i>Xem chi tiết</button>
+                    <li>
+                        @foreach($san_pham->products as $product)
+                            <a href="{{route('product',['code'=>$product->code])}}">
+                               @break
+                               @endforeach
+                                <div class="col-sm-8">
+                                   <div class="product-image-wrapper">
+                                       <div class="single-products">
+                                           <div class="productinfo text-center">
+                                               <img src="{{url('public/uploads/products/'.$san_pham->anh_dai_dien)}}" alt="" />
+                                               <h2>{{number_format($san_pham->products[0]->gia_ban,0,'','.')}} đ</h2>
+                                               <p>{{$san_pham->name}}</p>
+                                               <button type="button" class="btn btn-default "><i class="fa fa-shopping-cart"></i>Xem chi tiết</button>
+                                           </div>
                                        </div>
                                    </div>
-                               </div>
-                           </div>
-                       </a>
-            </li>
-            @endforeach
+                                </div>
+                            </a>
+                     </li>
+                @endforeach
             </ul>
     </div>
     <!-- Modal xem video-->
-        <div class="modal fade" id="video_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                 <div class="modal-header">
-                       <h5 class="modal-title" id="video_title">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                           <span aria-hidden="true">&times;</span>
-                       </button>
-                  </div>
-                  <div class="modal-body">
-                     <div id="video_desc">
+    </div>
+</div><!--/recommended_items-->
+    <div class="modal fade" id="video_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="video_title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="video_desc">
 
-                      </div>
-                        <div id="video_link">
-
-                      </div>
-                  </div>
-                   <div class="modal-footer">
-                       <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Đóng</button>
                     </div>
-              </div>
+                    <div id="video_link">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
     </div>
-</div><!--/recommended_items-->
 @endsection
 
 @section('pagescript')
@@ -414,6 +414,8 @@
                 loop:true,
                 speed: 400, //ms'
                 auto: true,
+                enableDrag:false,
+                pager:false,
                 item:3,
             });
         });

@@ -8,6 +8,7 @@ use App\Models\CategoryProduct;
 use App\Models\CategoryProductProduct;
 use App\Models\Comment;
 use App\Models\Gallery;
+use App\Models\NganhHang;
 use App\Models\Post;
 use App\Models\PostType;
 use App\Models\Product;
@@ -196,6 +197,42 @@ class SiteController extends Controller
             ->with('meta_title',$meta_title)
             ->with('url_canonical',$url_canonical);
     }
+
+    public function category_by_nganh_hang($code_nganh_hang, Request $request){
+        $nganh_hang = NganhHang::where('code',$code_nganh_hang)->first();
+        #region seo
+        $meta_desc = "Chuyên smartphone"; //meta desc là phần mô tả bên dưới khi search gg
+        $meta_keywords = "BC Phone";
+        $meta_title = "BC Phone|SmartPhone blabla";
+        $url_canonical = $request->url();
+        #end region
+        //Danh mục bài viết
+        $post_types = PostType::where('status',1)->get();
+
+        //Danh mục cha
+        $categories = Category::where('status',1)->where('nganh_hang_id',$nganh_hang->id)->get();
+
+
+        if($code_nganh_hang=="dien-thoai")
+            $brands = Brand::where('brand_status',1)->get();
+        else
+            $brands = null;
+
+        $sliders = Slider::where('an_hien',1)->get();
+
+        $san_pham_mois = ProductGroup::where('an_hien',1)->where('nganh_hang_id',$nganh_hang->id)->get();
+        return view('frontend.pages.home')
+            ->with('post_types',$post_types)
+            ->with('categories',$categories)
+            ->with('brands',$brands)
+            ->with('san_pham_mois',$san_pham_mois)
+            ->with('sliders',$sliders)
+            ->with('meta_desc',$meta_desc)
+            ->with('meta_keywords',$meta_keywords)
+            ->with('meta_title',$meta_title)
+            ->with('url_canonical',$url_canonical);
+    }
+
 
     public function danh_muc_bai_viet($code, Request $request){
         $post_types = PostType::where('status',1)->get();

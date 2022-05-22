@@ -16,11 +16,19 @@
                 <div class="panel-body">
                     @foreach($category as $key=>$item)
                     <div class="position-center">
-                        <form role="form" action="{{\Illuminate\Support\Facades\URL::to('/update-category/'.$item->id)}}" method="post">
+                        <form role="form" action="{{route('update-category',['id'=>$item->id])}}" method="post">
                             {{csrf_field()}}
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Tên loại phân loại</label>
                                 <input type="text" value="{{$item->name}}" class="form-control" id="exampleInputEmail1" name="category_name" placeholder="Nhập phân loại">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Danh mục ngành hàng</label>
+                                <select class="form-control" name="nganh_hang_id">
+                                    @foreach($nganh_hangs as $key=>$nganh_hang)
+                                        <option {{$nganh_hang->id==$item->nganh_hang_id ? 'selected' : ''}} value="{{$nganh_hang->id}}">{{$nganh_hang->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Mô tả</label>

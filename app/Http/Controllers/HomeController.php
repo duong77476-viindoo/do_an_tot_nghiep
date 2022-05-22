@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CategoryProduct;
+use App\Models\NganhHang;
 use App\Models\PostType;
 use App\Models\ProductGroup;
 use App\Models\Slider;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     //
+
     public function index(Request $request){
         #region seo
         $meta_desc = "Chuyên smartphone"; //meta desc là phần mô tả bên dưới khi search gg
@@ -19,23 +21,27 @@ class HomeController extends Controller
         $meta_title = "BC Phone|SmartPhone blabla";
         $url_canonical = $request->url();
         #end region
+        $nganh_hang =  NganhHang::where('code','dien-thoai')->first();
+
         //Danh mục bài viết
         $post_types = PostType::where('status',1)->get();
         //Phân loại sản phẩm
         $category_products = CategoryProduct::where('category_product_status',1)->get();
         //Danh mục cha
-        $categories = Category::where('status',1)->get();
+        $categories = Category::where('status',1)->where('nganh_hang_id',$nganh_hang->id)->get();
 
         $brands = Brand::where('brand_status',1)->get();
         $sliders = Slider::where('an_hien',1)->get();
 
-        $san_pham_mois = ProductGroup::where('an_hien',1)->get();
+        $san_pham_mois = ProductGroup::where('an_hien',1)->where('nganh_hang_id',$nganh_hang->id)->get();
+        $san_phams_carousel = ProductGroup::where('an_hien',1)->where('nganh_hang_id',$nganh_hang->id)->get();
         return view('frontend.pages.home')
             ->with('post_types',$post_types)
             ->with('categories',$categories)
             ->with('category_products',$category_products)
             ->with('brands',$brands)
             ->with('san_pham_mois',$san_pham_mois)
+            ->with('san_phams_carousel',$san_phams_carousel)
             ->with('sliders',$sliders)
             ->with('meta_desc',$meta_desc)
             ->with('meta_keywords',$meta_keywords)

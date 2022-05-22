@@ -16,18 +16,13 @@ class Category extends Model
     protected static function boot() {
         parent::boot();
 
-//        static::creating(function ($param) {
-//            $param->slug = Str::slug($param->name);
-//        });
-
         static::saving(function ($cate){
-            $cate->code = Str::slug($cate->name);
+            $cate->code = Str::slug($cate->nganh_hang->name.'-'.$cate->name);
         });
 
+    }
 
-
-//        static::deleting(function ($brand){
-//
-//        });
+    public function nganh_hang(){
+        return $this->belongsTo(NganhHang::class);
     }
 }

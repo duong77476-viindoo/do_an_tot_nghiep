@@ -15,6 +15,11 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('nganh_hang_id')->unsigned();
+            $table->foreign('nganh_hang_id')
+                ->references('id')
+                ->on('nganh_hangs')
+                ->onDelete('cascade');
             $table->string('name')->comment('Tên loại danh mục');
             $table->string('code');
             $table->text('desc');
