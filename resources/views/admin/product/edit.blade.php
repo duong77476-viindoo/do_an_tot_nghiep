@@ -17,7 +17,7 @@
                     <div class="position-center">
                         <div class="row">
                             <div class="col-md-12">
-                                <form role="form" action="{{\Illuminate\Support\Facades\URL::to('/update-product-group/'.$product_group->id)}}" method="post" enctype="multipart/form-data">
+                                <form role="form" action="{{\Illuminate\Support\Facades\URL::to('/update-product/'.$product_group->id)}}" method="post" enctype="multipart/form-data">
                                     {{csrf_field()}}
                                     <div class="card card-danger">
                                         <div class="card-header">
@@ -32,8 +32,15 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                                     </div>
-                                                    <select disabled name="brand_id" id="brand_id" class="form-control brand choose">
-                                                            <option value="{{$brand_product_group}}">{{$brand_product_group}}</option>
+                                                    <select name="brand_id" id="brand_id" class="form-control brand choose">
+                                                        {{--                                                    <option value="">---Chọn---</option>--}}
+                                                        @foreach($brands as $key=>$brand)
+                                                            @if($product_group->brand_id == $brand->id)
+                                                                <option selected value="{{$brand->id}}">{{$brand->brand_name}}</option>
+                                                            @else
+                                                                <option value="{{$brand->id}}">{{$brand->brand_name}}</option>
+                                                            @endif
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <!-- /.input group -->
@@ -43,14 +50,20 @@
 
                                             <!-- phone mask -->
                                             <div class="form-group">
-                                                <label>Dòng sản phẩm:</label>
+                                                <label>Ngành hàng:</label>
 
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                                     </div>
-                                                    <select disabled name="product_group_line" id="product_group_line" class="form-control product_group_line">
-                                                        <option value="">{{$product_group->product_group_line->name}}</option>
+                                                    <select name="nganh_hang_id" id="nganh_hang" class="form-control">
+                                                        @foreach($nganh_hangs as $key=>$nganh_hang)
+                                                            @if($product_group->nganh_hang_id == $nganh_hang->id)
+                                                                <option selected value="{{$nganh_hang->id}}">{{$nganh_hang->name}}</option>
+                                                            @else
+                                                                <option value="{{$nganh_hang->id}}">{{$nganh_hang->name}}</option>
+                                                            @endif
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <!-- /.input group -->
@@ -67,8 +80,8 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Tên sản phẩm</label>
-                                                <input value="{{$product_group->name}}" type="text" class="form-control" id="exampleInputEmail1" name="name" placeholder="Nhập sản phẩm">
+                                                <label for="exampleInputEmail1">Tên nhóm sản phẩm</label>
+                                                <input value="{{$product_group->name}}" type="text" class="form-control" id="exampleInputEmail1" name="name" placeholder="Nhập tên nhóm sản phẩm">
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Mô tả ngắn gọn</label>
@@ -83,13 +96,9 @@
                                                 <input value="{{$product_group->gia_ban}}" type="number" class="form-control" id="exampleInputEmail1" name="gia_ban" placeholder="Nhập giá bán">
                                             </div>
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Giá cạnh tranh</label>
-                                                <input value="{{$product_group->gia_canh_tranh}}" type="number" class="form-control" id="exampleInputEmail1" name="gia_canh_tranh" placeholder="Nhập giá cạnh tranh">
-                                            </div>
-                                            <div class="form-group">
                                                 <label for="exampleInputEmail1">Ảnh đại diện</label>
                                                 <input type="file" class="form-control" id="exampleInputEmail1" name="anh_dai_dien" >
-                                                <img src="{{\Illuminate\Support\Facades\URL::to('public/uploads/product_groups/'.$product_group->anh_dai_dien)}}" height="100" width="100">
+                                                <img src="{{\Illuminate\Support\Facades\URL::to('public/uploads/products/'.$product_group->anh_dai_dien)}}" height="100" width="100">
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputPassword1">Bán chạy</label>
@@ -115,13 +124,13 @@
 
                                             <div class="form-group">
                                                 <label for="phan_loai_san_pham">Phân loại sản phẩm</label>
-                                                @foreach($category_product_groups as $category_product_group)
-                                                    {{$category_product_group->category_product_group_name}}
+                                                @foreach($category_products as $category_product)
+                                                    {{$category_product->category_product_name}}
                                                     <input id="phan_loai_san_pham" class="" type="checkbox"
-                                                           value="{{$category_product_group->id}}"
-                                                           name="category_product_group_id[]"
-                                                           @foreach($category_product_groups_id as $item)
-                                                           @if($category_product_group->id == $item->category_product_group_id)
+                                                           value="{{$category_product->id}}"
+                                                           name="category_product_id[]"
+                                                           @foreach($product_group->category_products as $item)
+                                                           @if($category_product->id == $item->id)
                                                            checked
                                                         @endif
                                                         @endforeach
@@ -157,6 +166,7 @@
                                                 </select>
                                             </div>
                                             <button type="submit" name="add_product_group" class="btn btn-info">Cập nhật</button>
+                                    </div>
                                     </div>
                                 </form>
                             </div>

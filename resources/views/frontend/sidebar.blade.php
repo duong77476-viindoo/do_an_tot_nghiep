@@ -24,6 +24,7 @@
         @endforeach
     </div><!--/category-products-->
 
+    @if(!is_null($brands))
     <div class="brands_products"><!--brands_products-->
         <h2>Thương hiệu</h2>
         <div class="brands-name">
@@ -34,6 +35,7 @@
             </ul>
         </div>
     </div><!--/brands_products-->
+    @endif
 
     <div class="price-range"><!--price-range-->
         <h2>Price Range</h2>

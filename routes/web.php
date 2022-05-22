@@ -78,7 +78,8 @@ Route::middleware('revalidate')->group(function() {
 //Xem nhanh sản phẩm
     Route::post('/quickview',[SiteController::class,'quick_view'])->name('quick-view');
 
-
+//Ngành hàng
+    Route::get('/nganh_hang_{code_nganh_hang}',[SiteController::class,'category_by_nganh_hang'])->name('category-by-nganh-hang');
 
 //Danh mục bài viết và bài viết
     Route::get('/danh-muc-bai-viet/{code}',[SiteController::class,'danh_muc_bai_viet'])->name('danh-muc-bai-viet');

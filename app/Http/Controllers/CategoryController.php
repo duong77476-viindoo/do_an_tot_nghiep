@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\CategoryExport;
 use App\Imports\CategoryImport;
 use App\Models\Category;
+use App\Models\NganhHang;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -38,8 +39,9 @@ class CategoryController extends Controller
     public function create()
     {
         //
-
-        return view('admin.category.add_category');
+        $nganh_hangs = NganhHang::all();
+        return view('admin.category.add_category')
+            ->with('nganh_hangs',$nganh_hangs);
     }
 
     /**
@@ -52,6 +54,7 @@ class CategoryController extends Controller
     {
         //
         $validated = $request->validate([
+            'nganh_hang_id'=>'required',
             'category_name' => 'required|min:6|max:50',
             'category_desc' => 'required|max:50',
             'category_status' => 'required',
@@ -59,6 +62,7 @@ class CategoryController extends Controller
         ]);
         $category = new Category();
         $data = $request->all();
+        $category->nganh_hang_id = $data['nganh_hang_id'];
         $category->name = $data['category_name'];
         $category->desc = $data['category_desc'];
         $category->status = $data['category_status'];
@@ -107,21 +111,21 @@ class CategoryController extends Controller
     {
         //
         $validated = $request->validate([
-            'category_name' => 'required|min:6|max:50',
+            'nganh_hang_id'=>'required',
+            'category_name' => 'required|min:1|max:50',
             'category_desc' => 'required|max:50',
-            'category_status' => 'required',
             'meta_keywords' => 'required',
         ]);
         $data = $request->all();
 
-        Category::where('id', $id)
-            ->update
-            ([
-                'name'=> $data['category_name'],
-                'desc'=> $data['category_desc'],
-                'meta_keywords' => $data['meta_keywords'],
-                'updated_at' => now()
-            ]);
+        $category = Category::find($id);
+        $category->nganh_hang_id = $data['nganh_hang_id'];
+        $category->name = $data['category_name'];
+        $category->desc = $data['category_desc'];
+        $category->meta_keywords = $data['meta_keywords'];
+        $category->updated_at = now();
+        $category->save();
+
         Session::put('message','<p class="text-success" ">Sửa loại phân loại thành công</p>');
         return Redirect::to('all-category');
     }
