@@ -1,9 +1,10 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view-post',$post) }}
     <div class="row">
         <div class="col-lg-12">
             <section class="panel">
-                @foreach($posts as $post)
+
                 <header class="panel-heading">
                    {{$post->name}}
                 </header>
@@ -50,7 +51,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                        @endforeach
+
                     </div>
                 </div>
             </section>

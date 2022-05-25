@@ -1,9 +1,10 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view_nganh_hang',$nganh_hang) }}
     <div class="row">
         <div class="col-lg-12">
             <section class="panel">
-                @foreach($nganh_hangs as $nganh_hang)
+
                     <header class="panel-heading">
                         {{$nganh_hang->name}}
                     </header>
@@ -25,7 +26,7 @@
                                 <input disabled value="{{$nganh_hang->code}}" type="text" class="form-control" id="exampleInputEmail1" name="code">
                             </div>
 
-                            @endforeach
+
                         </div>
                     </div>
             </section>

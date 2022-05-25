@@ -9,6 +9,7 @@
             </ul>
         </div>
     @endif
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view_user',$admin) }}
     <div class="row">
         <div class="col-lg-12">
             <section class="panel">

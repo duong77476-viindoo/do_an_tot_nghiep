@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('edit_provider',$nha_cung_caps[0]) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

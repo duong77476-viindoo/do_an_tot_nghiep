@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('edit-post',$post) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -24,7 +25,6 @@
                 ?>
                 <div class="panel-body">
                     <div class="position-center">
-                        @foreach($posts as $post)
                         <form role="form" action="{{\Illuminate\Support\Facades\URL::to('/update-post/'.$post->id)}}" method="post" enctype="multipart/form-data">
                             {{csrf_field()}}
                             <div class="form-group">
@@ -63,7 +63,6 @@
                             </div>
                             <button type="submit" name="add_post" class="btn btn-info">Cập nhật</button>
                         </form>
-                        @endforeach
                     </div>
 
                 </div>

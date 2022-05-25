@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view-thanh-toan-cong-no',$thanh_toan_cong_no->id) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

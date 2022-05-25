@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('edit-thanh-toan-cong-no',$thanh_toan_cong_no->id) }}
     <div class="row">
         <div class="col-lg-12">
             <section class="panel">

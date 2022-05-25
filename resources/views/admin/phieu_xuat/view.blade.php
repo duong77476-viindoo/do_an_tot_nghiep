@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view-phieu-xuat',$phieu_xuat) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

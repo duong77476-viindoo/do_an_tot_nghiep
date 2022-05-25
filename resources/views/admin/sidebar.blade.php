@@ -165,19 +165,7 @@
                         <li class="nav-item">
                             <a href="{{route('all-customer-order')}}" class="nav-link">
                                 <i class="fas fa-receipt nav-icon"></i>
-                                <p>Hóa đơn bán hàng</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="fas fa-circle nav-icon"></i>
-                                <p>Quản lý vận chuyển</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="fas fa-circle nav-icon"></i>
-                                <p>Quản lý thanh toán đơn hàng</p>
+                                <p>Đơn hàng</p>
                             </a>
                         </li>
                     </ul>

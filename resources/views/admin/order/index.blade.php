@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('customer-order') }}
     <div class="table-agile-info">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -66,9 +67,6 @@
                             <td>{{$order->created_at}}</td>
                             <td><span class="text-ellipsis">{{$order->updated_at}}</span></td>
                             <td>
-                                <a href="{{route('edit-customer-order',['id'=>$order->id])}}" class="active" ui-toggle-class="">
-                                    <i class="fa fa-pen text-success text-active"></i>
-                                </a>
                                 <a href="{{route('delete-customer-order',['id'=>$order->id])}}"
                                    onclick="return confirm('Bạn có chắc muốn xóa?')"
                                    class="active" ui-toggle-class=""><i class="fa fa-trash text-danger text"></i></a>

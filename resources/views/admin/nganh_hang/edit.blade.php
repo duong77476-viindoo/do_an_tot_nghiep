@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('edit_nganh_hang',$nganh_hangs[0]) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -24,7 +25,6 @@
                 ?>
                 <div class="panel-body">
                     <div class="position-center">
-                        @foreach($nganh_hangs as $nganh_hang)
                             <form role="form" action="{{\Illuminate\Support\Facades\URL::to('/update-nganh-hang/'.$nganh_hang->id)}}" method="post" enctype="multipart/form-data">
                                 {{csrf_field()}}
                                 <div class="form-group">
@@ -37,7 +37,6 @@
                                 </div>
                                 <button type="submit" name="add_nganh_hang" class="btn btn-info">Cập nhật</button>
                             </form>
-                        @endforeach
                     </div>
 
                 </div>
