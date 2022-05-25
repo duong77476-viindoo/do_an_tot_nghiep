@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('edit-phieu-nhap',$phieu_nhap) }}
     <div class="row">
         <div class="col-lg-12">
             <section class="panel">

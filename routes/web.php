@@ -648,7 +648,7 @@ Route::middleware('check_login_admin')->group(function (){
 
         Route::get('/all-customer-order', [OrderController::class, 'index'])->name('all-customer-order');
 
-        Route::get('/edit-customer-order/{id}', [OrderController::class, 'edit'])->name('edit-customer-order');
+//        Route::get('/edit-customer-order/{id}', [OrderController::class, 'edit'])->name('edit-customer-order');
         Route::get('/delete-customer-order/{id}', [OrderController::class, 'destroy'])->name('delete-customer-order');
         Route::post('/update-customer-order/{id}', [OrderController::class, 'update'])->name('update-customer-order');
         Route::get('/view-customer-order/{id}', [OrderController::class, 'show'])->name('view-customer-order');

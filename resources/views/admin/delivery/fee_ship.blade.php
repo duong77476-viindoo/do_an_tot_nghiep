@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('fee-ship') }}
     <div class="row">
         <div class="alert alert-danger print-error-msg" style="display:none">
             <ul></ul>

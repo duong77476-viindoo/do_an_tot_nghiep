@@ -105,12 +105,12 @@ class PostController extends Controller
     {
         //
         $post_types = PostType::all();
-        $posts = post::where('id', $id)->get();
+        $post = Post::find($id);
 
 //        VarDumper::dump($category_posts_id);
 //        exit();
         return view('admin.post.view')
-            ->with('posts',$posts)
+            ->with('post',$post)
             ->with('post_types',$post_types);
     }
 
@@ -125,13 +125,13 @@ class PostController extends Controller
     {
         //
 
-        $posts = Post::where('id', $id)->get();
+        $post = Post::find($id);
         $post_types = PostType::all();
 
 //        VarDumper::dump($category_posts_id);
 //        exit();
         return view('admin.post.edit')
-            ->with('posts',$posts)
+            ->with('post',$post)
             ->with('post_types',$post_types);
     }
 

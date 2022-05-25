@@ -74,12 +74,12 @@ class NganhHangController extends Controller
     public function show($id)
     {
         //
-        $nganh_hangs = NganhHang::where('id', $id)->get();
+        $nganh_hang = NganhHang::find($id);
 
 //        VarDumper::dump($category_nganh_hangs_id);
 //        exit();
         return view('admin.nganh_hang.view')
-            ->with('nganh_hangs',$nganh_hangs);
+            ->with('nganh_hang',$nganh_hang);
     }
 
 
@@ -93,12 +93,12 @@ class NganhHangController extends Controller
     {
         //
 
-        $nganh_hangs = NganhHang::where('id', $id)->get();
+        $nganh_hang = NganhHang::find($id);
 
 //        VarDumper::dump($category_nganh_hangs_id);
 //        exit();
         return view('admin.nganh_hang.edit')
-            ->with('nganh_hangs',$nganh_hangs);
+            ->with('nganh_hang',$nganh_hang);
     }
 
     /**
