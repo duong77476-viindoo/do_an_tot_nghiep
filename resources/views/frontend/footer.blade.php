@@ -618,7 +618,7 @@
                                         closeOnConfirm: false
                                     },
                                     function() {
-                                        window.location.href = "{{url('/trang-chu')}}";
+                                        window.location.href = "{{url('/purchase-history')}}";
                                     });
                             }
                         });

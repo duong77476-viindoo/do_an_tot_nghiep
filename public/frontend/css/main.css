@@ -2620,4 +2620,70 @@ img.profile-photo-sm {
     margin: 0;
 }
 
+.progressbar {
+    counter-reset: step;
+    padding: 0;
+
+    /* for demo */
+    margin: 100px auto 0;
+    max-width: 800px;
+}
+
+.progressbar li {
+    float: left;
+    list-style: none;
+    position: relative;
+    text-align: center;
+    width: calc(100% / 3);
+}
+
+.progressbar li:before {
+    background: #fff;
+    border: 2px solid #bebebe;
+    border-radius: 50%;
+    color: #bebebe;
+    content: counter(step);
+    counter-increment: step;
+    display: block;
+    font-weight: 700;
+    height: 30px;
+    line-height: 27px;
+    margin: 0 auto 10px;
+    text-align: center;
+    width: 30px;
+}
+
+.progressbar li:after {
+    background: #979797;
+    content: '';
+    height: 3px;
+    left: -50%;
+    position: absolute;
+    top: 15px;
+    width: 100%;
+    z-index: -1;
+}
+
+.progressbar li:first-child:after {
+    content: none;
+}
+
+.progressbar li.active:after,
+.progressbar li.complete:after {
+    background: #ef4136;
+}
+
+.progressbar li.active:before,
+.progressbar li.complete:before {
+    background: #ef4136;
+    border-color: #ef4136;
+    color: #fff;
+}
+
+.progressbar li.active {
+    color: #ef4136;
+    font-weight: 700;
+}
+
+
 

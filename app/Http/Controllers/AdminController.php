@@ -153,8 +153,7 @@ class AdminController extends Controller
     }
 
     public function view_admin_users(){
-        Paginator::useBootstrap();
-        $admins = Admin::paginate(5);
+        $admins = Admin::all();
         $roles = Role::all();
         return view('admin.auth.index')->with(compact('admins','roles'));
     }
