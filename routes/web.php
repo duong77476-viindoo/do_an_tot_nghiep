@@ -114,7 +114,7 @@ Route::middleware('revalidate')->group(function() {
         Route::get('/login-checkout',[CheckoutController::class,'login_checkout'])->name('login-checkout');
         Route::get('/checkout',[CheckoutController::class,'checkout'])->name('checkout');
         Route::post('/save-checkout',[CheckoutController::class,'save_checkout'])->name('save-checkout');
-        Route::get('/payment',[CheckoutController::class,'payment'])->name('payment');
+        Route::post('/confirmation',[CheckoutController::class,'confirmation'])->name('confirmation');
         Route::post('/customer-order',[CheckoutController::class,'customer_order'])->name('customer-order');
 
         Route::post('/confirm-order',[CheckoutController::class,'confirm_order'])->name('confirm-order');

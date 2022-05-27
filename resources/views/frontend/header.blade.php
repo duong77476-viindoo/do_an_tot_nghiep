@@ -45,7 +45,7 @@
 
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                            Tiền tề
+                            VND
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">

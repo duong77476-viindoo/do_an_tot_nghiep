@@ -7,6 +7,7 @@ use App\Listeners\SendNewOrderNotification;
 use App\Models\Brand;
 use App\Models\CategoryProduct;
 use App\Models\City;
+use App\Models\Coupon;
 use App\Models\fee_ship;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -75,19 +76,43 @@ class CheckoutController extends Controller
         Session::put('shipping_id',$shipping->id);
         return Redirect::to('/payment');
     }
-    public function payment(){
+    public function confirmation(Request $request){
+        $data = $request->all();
         $meta_desc = 'Payment';
         $meta_keywords = 'Payment';
         $meta_title = 'Payment';
         $url_canonical = '';
+        $cities = City::orderby('id','ASC')->get();
         $post_types = PostType::where('status',1)->get();
 
-        return view('frontend.checkout.payment')
+
+
+        $name = $data['name'];
+        $email = $data['email'];
+        $phone = $data['phone'];
+        $address = $data['address'];
+        $ghi_chu = $data['ghi_chu'];
+        $fee_ship = $data['fee_ship'];
+        $coupon = $data['coupon'];
+        $payment_type = $data['payment_type'];
+        $city = City::where('id',$data['city'])->first()->name;
+        $province = Province::where('id',$data['province'])->first()->name;
+        $ward = Ward::where('id',$data['ward'])->first()->name;
+
+        //TÍnh toán phí vận chuyển
+        $this->calculate_fee_ship($data['city'],$data['province'],$data['ward']);
+
+        //Tính mã giảm giá nếu có
+        $this->check_coupon($coupon);
+
+        return view('frontend.checkout.confirmation')
             ->with('post_types',$post_types)
             ->with('meta_desc',$meta_desc)
             ->with('meta_keywords',$meta_keywords)
             ->with('meta_title',$meta_title)
-            ->with('url_canonical',$url_canonical);
+            ->with('url_canonical',$url_canonical)
+            ->with('cities',$cities)
+            ->with(compact('name','email','phone','address','ghi_chu','fee_ship','coupon','payment_type','city','province','ward'));
     }
 
     public function customer_order(Request $request){
@@ -165,12 +190,11 @@ class CheckoutController extends Controller
         echo $output;
     }
 
-    public function calculate_fee_ship(Request $request){
-        $data = $request->all();
-        if($data['city']){
-            $fee_ship = fee_ship::where('city_id',$data['city'])
-                ->where('province_id',$data['province'])
-                ->where('ward_id',$data['ward'])->get();
+    public function calculate_fee_ship($city,$province,$ward){
+        if($city){
+            $fee_ship = fee_ship::where('city_id',$city)
+                ->where('province_id',$province)
+                ->where('ward_id',$ward)->get();
             if($fee_ship->count()>0){
                 foreach ($fee_ship as $key=>$fee){
                     Session::put('fee',$fee->fee_ship);
@@ -181,7 +205,6 @@ class CheckoutController extends Controller
                 Session::put('fee',$fee_default);
                 Session::save();
             }
-
         }
     }
 
@@ -263,6 +286,37 @@ class CheckoutController extends Controller
         Session::forget('fee');
         Session::forget('cart');
         Session::save();
+    }
+
+    public function check_coupon($coupon){
+        $coupon = Coupon::where('code',$coupon)->first();
+        if($coupon){
+            $count_coupon = $coupon->count();
+            if($count_coupon>0){
+                $coupon_session = Session::get('coupon');
+                if($coupon_session==true){
+                    $ton_tai = 0;
+                    if($ton_tai==0){
+                        $cou[] = array(
+                            'code'=>$coupon->code,
+                            'tinh_nang'=>$coupon->tinh_nang,
+                            'tien_giam'=>$coupon->tien_giam
+                        );
+                        Session::put('coupon',$cou);
+                    }
+                }else{
+                    $cou[] = array(
+                        'code'=>$coupon->code,
+                        'tinh_nang'=>$coupon->tinh_nang,
+                        'tien_giam'=>$coupon->tien_giam
+                    );
+                    Session::put('coupon',$cou);
+                }
+                Session::save();
+            }
+        }else{
+            Session::put('message','Lỗi mã giảm giá không hợp lệ');
+        }
     }
 
     public function send_mail_confirm_order($order_id){

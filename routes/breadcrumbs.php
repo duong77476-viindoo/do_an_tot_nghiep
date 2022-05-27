@@ -13,6 +13,11 @@ Breadcrumbs::register('user', function ($breadcrumbs) {
     $breadcrumbs->push('Người dùng',route('view-admin-users'));
 });
 
+Breadcrumbs::register('add-user', function ($breadcrumbs) {
+    $breadcrumbs->parent('user');
+    $breadcrumbs->push('Thêm Người dùng',route('register-admin'));
+});
+
 Breadcrumbs::register('view_user', function ($breadcrumbs, $user) {
     $breadcrumbs->parent('user');
     $breadcrumbs->push($user->name,route('view-admin',['id'=>$user->id]));

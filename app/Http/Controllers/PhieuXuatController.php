@@ -91,12 +91,12 @@ class PhieuXuatController extends Controller
                 $ton_kho_by_product->year = $year;
                 $ton_kho_by_product->month = $month;
                 $ton_kho_by_product->ton_dau_thang = 0;
-                $ton_kho_by_product->xuat_trong_thang = 0;
+                $ton_kho_by_product->nhap_trong_thang = 0;
                 $ton_kho_by_product->xuat_trong_thang = $data['so_luong_thuc_xuat'][$key];
                 $ton_kho_by_product->ton = 0;
                 $ton_kho_by_product->product_id = $val;
             }else{
-                $ton_kho_by_product->xuat_trong_thang -= $data['so_luong_thuc_xuat'][$key];
+                $ton_kho_by_product->xuat_trong_thang += $data['so_luong_thuc_xuat'][$key];
             }
             $ton_kho_by_product->save();
 
