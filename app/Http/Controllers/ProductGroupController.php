@@ -32,11 +32,7 @@ class ProductGroupController extends Controller
      */
     public function index()
     {
-        //
-        //
-        Paginator::useBootstrap();
         $product_groups = ProductGroup::all();
-
         return view('admin.product.index')->with('product_groups',$product_groups);
     }
 
@@ -61,18 +57,6 @@ class ProductGroupController extends Controller
             ->with('category_products',$category_products);
     }
 
-    //Chọn product line để tự động khi chọn thương hiệu thì hiển thị ra
-//    public function select_product_line(Request $request){
-//        $data = $request->all();
-//        if($data['action']){
-//            $output='';
-//                $product_lines = ProductLine::where('brand_id',$data['id'])->orderby('id','ASC')->get();
-//                foreach ($product_lines as $key=>$product_line){
-//                    $output .= '<option value="'.$product_line->name.'">'.$product_line->name.'</option>';
-//                }
-//        }
-//        echo $output;
-//    }
 
     /**
      * Store a newly created resource in storage.
@@ -87,7 +71,7 @@ class ProductGroupController extends Controller
 //        VarDumper::dump($tu_khoa);
 //        exit();
         $validated = $request->validate([
-            'name' => 'required|min:6|max:100',
+            'name' => 'required|min:1|max:100',
             'mo_ta_ngan_gon' => 'required|max:100',
             'mo_ta_chi_tiet' => 'required',
             'anh_dai_dien' => 'required',
@@ -98,52 +82,6 @@ class ProductGroupController extends Controller
         ]);
         $product_group = new ProductGroup();
         $data = $request->all();
-
-        //Lưu dòng sản phẩm (product line) nếu như là thêm mới (còn nếu select thì chắc ko cần)
-//        if($data['product_line']!=''){
-////            $product_line = $data['product_line'];
-//            $old_product_line = ProductLine::where('name',trim($data['product_line']))->first();
-//                if(is_null($old_product_line)){
-//                    $product_line = new ProductLine();
-//                    $product_line->name = $data['product_line'];
-//                    $product_line->brand_id = $data['brand_id'];
-//                    $product_line->save();
-//                }else{
-//                    $product_line = $old_product_line;
-//                }
-//        }
-
-        //Kiểm tra đã tồn tại sản phẩm ví dụ Iphone 11 bản 8GB-128GB-Red nếu đã có thì ko được thêm
-//        $check_old_product_code = array();
-//        foreach ($fields as $field){
-//           $check_old_product_code[] = $data[$field->name];
-//        }
-//        $check_old_product = ProductGroup::where('product_line_id',$product_line->id)->where('product_code',implode('-',$check_old_product_code))->first();
-//        if(!is_null($check_old_product)){
-//            Session::put('message','<p class="text-warning">Đã tồn tại phiên bản sản phẩm '.$data['product_line'].' '.implode('-',$check_old_product_code).'</p>');
-//            return Redirect::to('add-product');
-//        }
-
-
-
-        //Lưu những biến thể sản phẩm : 4GB-64GB-Red
-//        $product_code = array();
-//        foreach ($fields as $field){
-//            $product_variation = new ProductVariation();
-//            $product_variation->product_line_id = $product_line->id;
-//            $product_variation->name = $field->name;
-//            $product_variation->save();
-//
-//            $product_variation_value = new ProductVariationValue();
-//            $product_variation_value->product_variation_id = $product_variation->id;
-//            $product_variation_value->name = $data[$field->name];
-//            $product_variation_value->save();
-//
-//            $product_code[] = $data[$field->name];
-//        }
-
-
-
         $product_group->name = $data['name'];
         $product_group->nganh_hang_id = $data['nganh_hang_id'];
         $product_group->brand_id = $data['brand_id'];
@@ -163,10 +101,8 @@ class ProductGroupController extends Controller
             $product_group->moi_ve = 0;
         $product_group->trang_thai = $data['trang_thai'];
         $product_group->an_hien = $data['an_hien'];
-//        $product_group->gia_ban = $data['gia_ban'];
-//        $product_group->gia_canh_tranh = $data['gia_canh_tranh'];
+
         $product_group->video_id = $data['video_id'];
-        //$product->product_slug = API_V1::createCode( $data['product_name']);
         $product_group->created_at = now();
         $product_group->updated_at = now();
 
@@ -222,7 +158,7 @@ class ProductGroupController extends Controller
             $phan_loai_san_pham->save();
         }
         Session::put('message','<p class="text-success">Thêm sản phẩm thành công</p>');
-        return Redirect::to('add-product');
+        return \redirect()->route('view-product',['id'=>$product_group->id]);
     }
 
     /**
@@ -239,7 +175,7 @@ class ProductGroupController extends Controller
         $videos = Video::all();
         $category_products = CategoryProduct::all();
         $product_group = ProductGroup::find($id);
-        $category_products_id = CategoryProductProduct::where('product_id',$id)->get();
+        $category_products_id = CategoryProductProduct::where('product_group_id',$id)->get();
 
 //        VarDumper::dump($category_products_id);
 //        exit();
@@ -291,7 +227,7 @@ class ProductGroupController extends Controller
     {
         //
         $validated = $request->validate([
-            'name' => 'required|min:6|max:50',
+            'name' => 'required|min:1|max:50',
             'mo_ta_ngan_gon' => 'required|max:50',
             'mo_ta_chi_tiet' => 'required',
             'category_product_id'=>'required',
@@ -315,8 +251,6 @@ class ProductGroupController extends Controller
             $product->moi_ve = 1;
         }else
             $product->moi_ve = 0;
-        $product->gia_ban = $data['gia_ban'];
-        $product->gia_canh_tranh = $data['gia_canh_tranh'];
         $product->video_id = $data['video_id'];
         //$product->product_slug = API_V1::createCode( $data['product_name']);
         $product->updated_at = now();
@@ -338,7 +272,7 @@ class ProductGroupController extends Controller
 
         $product->save();
         //sau khi update thì sẽ xóa hết từ khóa sản phẩm
-        TagProduct::where('product_id',$product->id)->delete();
+        TagProduct::where('product_group_id',$product->id)->delete();
         if($data['tag_id']!=''){
             $tags = $data['tag_id'];
             foreach ($tags as $tag){
@@ -353,7 +287,7 @@ class ProductGroupController extends Controller
                 }
                 $tukhoa_sp = new TagProduct();
                 $tukhoa_sp->tag_id = $id_tukhoa;
-                $tukhoa_sp->product_id = $product->id;
+                $tukhoa_sp->product_group_id = $product->id;
                 $tukhoa_sp->save();
             }
         }
@@ -361,13 +295,13 @@ class ProductGroupController extends Controller
         //Đã tạo event AfterSave trong model product rồi
         foreach ($data['category_product_id'] as $category_product_id){
             $phan_loai_san_pham = new CategoryProductProduct();
-            $phan_loai_san_pham->product_id=$product->id;
+            $phan_loai_san_pham->product_group_id=$product->id;
             $phan_loai_san_pham->category_product_id = $category_product_id;
             $phan_loai_san_pham->save();
         }
 
         Session::put('message','<p class="text-success">Sửa sản phẩm thành công</p>');
-        return Redirect::to('all-product');
+        return \redirect()->route('view-product',['id'=>$id]);
     }
 
     /**

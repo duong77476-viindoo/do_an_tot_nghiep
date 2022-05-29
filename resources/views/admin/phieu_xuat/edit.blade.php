@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('edit-phieu-xuat',$phieu_xuat) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -13,7 +14,7 @@
         <div class="col-lg-12">
             <section class="panel">
                 <header class="panel-heading">
-                    Phiếu xuất #{{$phieu_xuat->id}}
+                    Phiếu xuất #{{$phieu_xuat->id}} (Đơn hàng# <a href="{{route('view-customer-order',['id'=>$phieu_xuat->order_id])}}">{{$phieu_xuat->order_id}}</a>)
                 </header>
                 <?php
                 $message = \Illuminate\Support\Facades\Session::get('message');
@@ -72,6 +73,18 @@
                                             </div>
                                             <!-- /.input group -->
                                         </div>
+                                        <div class="form-group">
+                                            <label>Trạng thái:</label>
+
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-square"></i></span>
+                                                </div>
+                                                <input readonly class="form-control"  type="text" value="{{$phieu_xuat->trang_thai}}" name="trang_thai">
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+
                                         <!-- /.form group -->
                                     </div>
                                     <!-- /.card-body -->
@@ -123,7 +136,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                <input type="submit" value="Lưu" class="btn btn-primary form-control">
+                                <input type="submit" value="Xác nhận và Lưu" class="btn btn-primary form-control">
                                 </form>
                             </div>
                         </div>

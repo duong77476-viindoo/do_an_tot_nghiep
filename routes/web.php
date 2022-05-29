@@ -79,7 +79,8 @@ Route::middleware('revalidate')->group(function() {
 //Xem nhanh sản phẩm
     Route::post('/quickview',[SiteController::class,'quick_view'])->name('quick-view');
 
-
+//Ngành hàng
+    Route::get('/nganh_hang_{code_nganh_hang}',[SiteController::class,'category_by_nganh_hang'])->name('category-by-nganh-hang');
 
 //Danh mục bài viết và bài viết
     Route::get('/danh-muc-bai-viet/{code}',[SiteController::class,'danh_muc_bai_viet'])->name('danh-muc-bai-viet');
@@ -110,18 +111,20 @@ Route::middleware('revalidate')->group(function() {
 
 
 //Thanh toán
-    Route::get('/login-checkout',[CheckoutController::class,'login_checkout'])->name('login-checkout');
-    Route::get('/checkout',[CheckoutController::class,'checkout'])->name('checkout');
-    Route::post('/save-checkout',[CheckoutController::class,'save_checkout'])->name('save-checkout');
-    Route::get('/payment',[CheckoutController::class,'payment'])->name('payment');
-    Route::post('/customer-order',[CheckoutController::class,'customer_order'])->name('customer-order');
+    Route::middleware('access_checkout')->group(function (){
+        Route::get('/login-checkout',[CheckoutController::class,'login_checkout'])->name('login-checkout');
+        Route::get('/checkout',[CheckoutController::class,'checkout'])->name('checkout');
+        Route::post('/save-checkout',[CheckoutController::class,'save_checkout'])->name('save-checkout');
+        Route::post('/confirmation',[CheckoutController::class,'confirmation'])->name('confirmation');
+        Route::post('/customer-order',[CheckoutController::class,'customer_order'])->name('customer-order');
 
-    Route::post('/confirm-order',[CheckoutController::class,'confirm_order'])->name('confirm-order');
+        Route::post('/confirm-order',[CheckoutController::class,'confirm_order'])->name('confirm-order');
 
 //Tính phí vận chuyển khi cbi thanh toán
-    Route::post('/select-province-ward-frontend',[CheckoutController::class,'select_province_ward_home'])->name('select-province-ward-frontend');
-    Route::post('/calculate-fee-ship',[CheckoutController::class,'calculate_fee_ship'])->name('calculate-fee-ship');
-    Route::get('/delete-fee',[CheckoutController::class,'delete_fee'])->name('delete-fee');
+        Route::post('/select-province-ward-frontend',[CheckoutController::class,'select_province_ward_home'])->name('select-province-ward-frontend');
+        Route::post('/calculate-fee-ship',[CheckoutController::class,'calculate_fee_ship'])->name('calculate-fee-ship');
+        Route::get('/delete-fee',[CheckoutController::class,'delete_fee'])->name('delete-fee');
+    });
 
 //Xem video
     Route::post('/watch-video',[SiteController::class,'watch_video'])->name('watch-video');
@@ -569,16 +572,6 @@ Route::middleware('check_login_admin')->group(function (){
         Route::post('/update-gallery-name', [GalleryController::class, 'update_gallery_name'])->name('update-gallery-name');
         Route::post('/delete-gallery', [GalleryController::class, 'delete_gallery'])->name('delete-gallery');
         Route::post('/update-gallery', [GalleryController::class, 'update_gallery'])->name('/update-gallery');
-
-        //    Route::get('/edit-gallery/{id}',[GalleryController::class,'edit'])->name('edit-gallery');
-        //    Route::get('/delete-gallery/{id}',[GalleryController::class,'destroy'])->name('delete-gallery');
-        //    Route::post('/update-gallery/{id}',[GalleryController::class,'update'])->name('update-gallery');
-        //    Route::get('/view-gallery/{id}',[GalleryController::class,'show'])->name('view-gallery');
-        //
-        //    Route::post('/save-gallery',[GalleryController::class,'store'])->name('save-gallery');
-        //
-        //    Route::get('/active-gallery/{id}',[GalleryController::class,'active_gallery'])->name('active-gallery');
-        //    Route::get('/unactive-gallery/{id}',[GalleryController::class,'unactive_gallery'])->name('unactive-gallery');
     });
 
 });
@@ -651,7 +644,7 @@ Route::middleware('check_login_admin')->group(function (){
 
         Route::get('/all-customer-order', [OrderController::class, 'index'])->name('all-customer-order');
 
-        Route::get('/edit-customer-order/{id}', [OrderController::class, 'edit'])->name('edit-customer-order');
+//        Route::get('/edit-customer-order/{id}', [OrderController::class, 'edit'])->name('edit-customer-order');
         Route::get('/delete-customer-order/{id}', [OrderController::class, 'destroy'])->name('delete-customer-order');
         Route::post('/update-customer-order/{id}', [OrderController::class, 'update'])->name('update-customer-order');
         Route::get('/view-customer-order/{id}', [OrderController::class, 'show'])->name('view-customer-order');

@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('edit-post',$post) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -24,7 +25,6 @@
                 ?>
                 <div class="panel-body">
                     <div class="position-center">
-                        @foreach($posts as $post)
                         <form role="form" action="{{\Illuminate\Support\Facades\URL::to('/update-post/'.$post->id)}}" method="post" enctype="multipart/form-data">
                             {{csrf_field()}}
                             <div class="form-group">
@@ -37,7 +37,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Nội dung</label>
-                                <textarea id="mo_ta_chi_tiet" style="resize: none" class="form-control" id="exampleInputPassword1" name="content" placeholder="Nhập nội dung">{{$post->content}}"</textarea>
+                                <textarea id="mo_ta_chi_tiet" style="resize: none" class="form-control" id="exampleInputPassword1" name="content" placeholder="Nhập nội dung">{{$post->content}}</textarea>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Meta keywords</label>
@@ -63,7 +63,6 @@
                             </div>
                             <button type="submit" name="add_post" class="btn btn-info">Cập nhật</button>
                         </form>
-                        @endforeach
                     </div>
 
                 </div>

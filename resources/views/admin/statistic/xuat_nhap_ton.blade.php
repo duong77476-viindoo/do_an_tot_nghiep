@@ -1,16 +1,10 @@
 @extends('admin.admin_layout')
 @section('admin_content')
-
-    <div class="row">
-        <div class="col-md-12">
-            <div id="xuat_nhap_ton_chart" style="height: 400px"></div>
-        </div>
-    </div>
-
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('statistic-xuat-nhap-ton') }}
     <div class="table-agile-info">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Bảng thống kê xuất nhập tồn
+                Thống kê xuất nhập tồn
             </div>
             <div class="table-responsive">
                 <table id="myTable" class="table table-striped b-t b-light">
@@ -60,57 +54,26 @@
                     </tbody>
                 </table>
             </div>
+            <footer class="panel-footer">
+                <div class="row">
 
+                    {{--                    <div class="col-sm-5 text-center">--}}
+                    {{--                        <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>--}}
+                    {{--                    </div>--}}
+                    <div class="col-sm-7 text-right text-center-xs">
+                        <ul class="pagination pagination-sm m-t-none m-b-none">
+                            {{--                            {{ $phieu_xuats->links() }}--}}
+                            {{--                            <li><a href=""><i class="fa fa-chevron-left"></i></a></li>--}}
+                            {{--                            <li><a href="">1</a></li>--}}
+                            {{--                            <li><a href="">2</a></li>--}}
+                            {{--                            <li><a href="">3</a></li>--}}
+                            {{--                            <li><a href="">4</a></li>--}}
+                            {{--                            <li><a href=""><i class="fa fa-chevron-right"></i></a></li>--}}
+                        </ul>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
-@endsection
-
-@section('pagescript')
-    <script type="text/javascript">
-        $(document).ready(function (){
-            xuat_nhap_ton_chart();
-
-            var chart = new Morris.Line({
-                // ID of the element in which to draw the chart.
-                element: 'xuat_nhap_ton_chart',
-                lineColors: ['#819C79','#FC8710','#FF6541'],
-                pointFillColors: ['#ffffff'],
-                pointStrokeColors: ['black'],
-                fillOpacity: 0.6,
-                hideHover:'auto',
-                parseTime:false,
-
-                // The name of the data record attribute that contains x-values.
-
-                padding: 80,
-                xkey: 'product_name',
-                xLabelFormat: function (x){
-                    return '231' + x.src.product_id;
-                },
-                xLabelAngle: 0,
-
-                // A list of names of data record attributes that contain y-values.
-                ykeys: ['tong_nhap','tong_xuat','tong_ton'],
-                behaveLikeLine: true,
-                // Labels for the ykeys -- will be displayed when you hover over the
-                // chart.
-                labels: ['Tổng nhập','Tổng xuất','Tổng tồn']
-            });
-
-            function xuat_nhap_ton_chart(){
-                $.ajax({
-                    url:"{{url('/xuat-nhap-ton-chart')}}",
-                    method:"POST",
-                    dataType:"JSON",
-                    headers:{
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success:function (data){
-                        chart.setData(data)
-                    }
-                })
-            }
-        })
-    </script>
 @endsection
 

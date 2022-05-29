@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('add-thanh-toan-cong-no') }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -71,6 +72,20 @@
                                                     <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                 </div>
                                                 <input class="form-control money" id="so_tien" type="text" name="so_tien" placeholder="Nhập số tiền">
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Trạng thái:</label>
+
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-square"></i></span>
+                                                </div>
+                                                <select class="form-control" name="trang_thai">
+                                                    <option value="Chưa xác nhận" selected>Chưa xác nhận</option>
+                                                    <option value="Xác nhận">Xác nhận</option>
+                                                </select>
                                             </div>
                                             <!-- /.input group -->
                                         </div>

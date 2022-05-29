@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('phieu-xuat') }}
     <div class="table-agile-info">
         <div class="panel panel-default">
             <div class="panel-heading">

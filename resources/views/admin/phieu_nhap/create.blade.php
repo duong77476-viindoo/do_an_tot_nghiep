@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('add-phieu-nhap') }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -78,6 +79,20 @@
                                             <!-- /.input group -->
                                         </div>
                                         <!-- /.form group -->
+                                        <div class="form-group">
+                                            <label>Trạng thái:</label>
+
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-square"></i></span>
+                                                </div>
+                                                <select class="form-control" name="trang_thai" >
+                                                    <option value="Chưa xác nhận" selected>Chưa xác nhận</option>
+                                                    <option value="Xác nhận">Xác nhận</option>
+                                                </select>
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -138,38 +153,6 @@
 @endsection
 
 @section('pagescript')
-
-
-{{--    Scripte tự động khi chọn thương hiệu thì hiển thị những dòng sản phẩm tương ứng--}}
-    <script type="text/javascript">
-        $(document).ready(function (){
-            $('.choose').on('change',function (){
-                var action = $(this).attr('id');//
-                var id = $(this).val();
-                var _token = $('input[name="_token"]').val();
-                if(action!=''){
-                    var result = 'product_line';
-                }
-                $('#'+result).selectize()[0].selectize.destroy();
-                $.ajax({
-                    url: '{{url('/select-product-line')}}',
-                    method: 'POST',
-                    data: {
-                        action:action,
-                        id:id,
-                        _token:_token
-                    },
-                    success: function (data,event){
-                        $('#'+result).html(data);
-                        $('#'+result).selectize({
-                            create: true,
-                            sortField: "text",
-                        });
-                    }
-                });
-            });
-        })
-    </script>
     <script type="text/javascript">
     $(document).ready(function (){
         var i = 1;

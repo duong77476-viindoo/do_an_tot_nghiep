@@ -56,7 +56,7 @@ class CouponController extends Controller
         $coupon->updated_at = now();
         $coupon->save();
         Session::put('message','<p class="text-success">Thêm mã giảm giá thành công</p>');
-        return Redirect::to('add-coupon');
+        return \redirect()->route('view-coupon',['id'=>$coupon->id]);
     }
 
     /**
@@ -105,7 +105,7 @@ class CouponController extends Controller
         $coupon->updated_at = now();
         $coupon->save();
         Session::put('message','<p class="text-success">Sửa mã giảm giá thành công</p>');
-        return Redirect::to('all-coupon');
+        return \redirect()->route('view-coupon',['id'=>$coupon->id]);
     }
 
     /**

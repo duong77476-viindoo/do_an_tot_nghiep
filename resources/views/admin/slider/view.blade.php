@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view-slider',$sliders[0]) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -42,7 +43,12 @@
                                     <input disabled type="file" class="form-control" id="exampleInputEmail1" name="image" >
                                     <img src="{{\Illuminate\Support\Facades\URL::to('public/uploads/sliders/'.$slider->image)}}" height="100" width="100">
                                 </div>
-
+                        <a href="{{route('edit-slider',['id'=>$slider->id])}}" class="active" ui-toggle-class="">
+                            <span class="btn btn-primary">Sửa</span>
+                        </a>
+                        <a href="{{route('delete-slider',['id'=>$slider->id])}}"
+                           onclick="return confirm('Bạn có chắc muốn xóa?')"
+                           class="active" ui-toggle-class=""><span class="btn btn-danger">Xóa</span></a>
                         @endforeach
                     </div>
 

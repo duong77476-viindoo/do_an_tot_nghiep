@@ -1,10 +1,11 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view-product',$product_group) }}
     <div class="row">
         <div class="col-lg-12">
             <section class="panel">
                 <h1 class="text-primary">
-                    Sản phẩm {{$product->name}}  {{$product->product_code}}
+                    Sản phẩm {{$product_group->name}}  {{$product_group->code}}
                 </h1>
                 <?php
                 $message = \Illuminate\Support\Facades\Session::get('message');
@@ -31,8 +32,14 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                                     </div>
-                                                    <select disabled name="brand_id" id="brand_id" class="form-control brand choose">
-                                                        <option value="{{$brand_product}}">{{$brand_product}}</option>
+                                                    <select disabled name="nganh_hang_id" id="nganh_hang" class="form-control">
+                                                        @foreach($nganh_hangs as $key=>$nganh_hang)
+                                                            @if($product_group->nganh_hang_id == $nganh_hang->id)
+                                                                <option selected value="{{$nganh_hang->id}}">{{$nganh_hang->name}}</option>
+                                                            @else
+                                                                <option value="{{$nganh_hang->id}}">{{$nganh_hang->name}}</option>
+                                                            @endif
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <!-- /.input group -->
@@ -40,16 +47,21 @@
                                             <!-- /.form group -->
 
 
-                                            <!-- phone mask -->
                                             <div class="form-group">
-                                                <label>Dòng sản phẩm:</label>
+                                                <label>Ngành hàng:</label>
 
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                                     </div>
-                                                    <select disabled name="product_line" id="product_line" class="form-control product_line">
-                                                        <option value="">{{$product->product_line->name}}</option>
+                                                    <select disabled name="nganh_hang_id" id="nganh_hang" class="form-control">
+                                                        @foreach($nganh_hangs as $key=>$nganh_hang)
+                                                            @if($product_group->nganh_hang_id == $nganh_hang->id)
+                                                                <option selected value="{{$nganh_hang->id}}">{{$nganh_hang->name}}</option>
+                                                            @else
+                                                                <option value="{{$nganh_hang->id}}">{{$nganh_hang->name}}</option>
+                                                            @endif
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <!-- /.input group -->
@@ -67,45 +79,37 @@
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Tên sản phẩm</label>
-                                                <input disabled value="{{$product->name}}" type="text" class="form-control" id="exampleInputEmail1" name="name" placeholder="Nhập sản phẩm">
+                                                <input disabled value="{{$product_group->name}}" type="text" class="form-control" id="exampleInputEmail1" name="name" placeholder="Nhập sản phẩm">
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Mô tả ngắn gọn</label>
-                                                <input disabled value="{{$product->mo_ta_ngan_gon}}" type="text" class="form-control" id="exampleInputEmail1" name="mo_ta_ngan_gon" placeholder="Nhập mô tả ngắn gọn">
+                                                <input disabled value="{{$product_group->mo_ta_ngan_gon}}" type="text" class="form-control" id="exampleInputEmail1" name="mo_ta_ngan_gon" placeholder="Nhập mô tả ngắn gọn">
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputPassword1">Mô tả chi tiết</label>
-                                                <textarea disabled id="mo_ta_chi_tiet" style="resize: none" class="form-control" id="exampleInputPassword1" name="mo_ta_chi_tiet" placeholder="Nhập mô tả chi tiết">{{$product->mo_ta_chi_tiet}}</textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">Giá bán</label>
-                                                <input disabled value="{{$product->gia_ban}}" type="number" class="form-control" id="exampleInputEmail1" name="gia_ban" placeholder="Nhập giá bán">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">Giá cạnh tranh</label>
-                                                <input disabled value="{{$product->gia_canh_tranh}}" type="number" class="form-control" id="exampleInputEmail1" name="gia_canh_tranh" placeholder="Nhập giá cạnh tranh">
+                                                <textarea disabled id="mo_ta_chi_tiet" style="resize: none" class="form-control" id="exampleInputPassword1" name="mo_ta_chi_tiet" placeholder="Nhập mô tả chi tiết">{{$product_group->mo_ta_chi_tiet}}</textarea>
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Ảnh đại diện</label>
                                                 <input disabled type="file" class="form-control" id="exampleInputEmail1" name="anh_dai_dien" >
-                                                <img src="{{\Illuminate\Support\Facades\URL::to('public/uploads/products/'.$product->anh_dai_dien)}}" height="100" width="100">
+                                                <img src="{{\Illuminate\Support\Facades\URL::to('public/uploads/products/'.$product_group->anh_dai_dien)}}" height="100" width="100">
                                             </div>
                                             <div class="form-group">
                                                 <label for="exampleInputPassword1">Bán chạy</label>
-                                                @if($product->ban_chay==1)
+                                                @if($product_group->ban_chay==1)
                                                     <input disabled checked type="checkbox" name="ban_chay">
                                                 @else
                                                     <input disabled type="checkbox" name="ban_chay">
                                                 @endif
 
                                                 <label for="exampleInputPassword1">Nổi bật</label>
-                                                @if($product->noi_bat==1)
+                                                @if($product_group->noi_bat==1)
                                                     <input disabled checked type="checkbox" name="noi_bat">
                                                 @else
                                                     <input disabled type="checkbox" name="noi_bat">
                                                 @endif
                                                 <label for="exampleInputPassword1">Mới về</label>
-                                                @if($product->moi_ve==1)
+                                                @if($product_group->moi_ve==1)
                                                     <input disabled checked type="checkbox" name="moi_ve">
                                                 @else
                                                     <input disabled type="checkbox" name="moi_ve">
@@ -119,8 +123,8 @@
                                                     <input disabled id="phan_loai_san_pham" class="" type="checkbox"
                                                            value="{{$category_product->id}}"
                                                            name="category_product_id[]"
-                                                           @foreach($category_products_id as $item)
-                                                           @if($category_product->id == $item->category_product_id)
+                                                           @foreach($product_group->category_products as $item)
+                                                           @if($category_product->id == $item->id)
                                                            checked
                                                         @endif
                                                         @endforeach
@@ -133,7 +137,7 @@
                                                     @foreach($tags as $key=>$tag)
                                                         <option
                                                             multiple="true"
-                                                            @foreach($product->tags as $product_tag)
+                                                            @foreach($product_group->tags as $product_tag)
                                                             @if($product_tag->id == $tag->id)
                                                             selected
                                                             @endif
@@ -147,7 +151,7 @@
                                                 <label>Video giới thiệu</label>
                                                 <select disabled name="video_id" class="form-control">
                                                     @foreach($videos as $key=>$video)
-                                                        @if($product->video_id == $video->id)
+                                                        @if($product_group->video_id == $video->id)
                                                             <option selected value="{{$video->id}}">{{$video->title}}</option>
                                                         @else
                                                             <option value="{{$video->id}}">{{$video->title}}</option>
@@ -159,9 +163,14 @@
                             </div>
 
                         </div>
-
+                        </div>
                     </div>
-
+                    <a href="{{route('edit-product',['id'=>$product_group->id])}}" class="active" ui-toggle-class="">
+                        <span class="btn btn-primary">Sửa</span>
+                    </a>
+                    <a href="{{route('delete-product',['id'=>$product_group->id])}}"
+                       onclick="return confirm('Bạn có chắc muốn xóa?')"
+                       class="active" ui-toggle-class=""><span class="btn btn-danger">Xóa</span></a>
                 </div>
             </section>
 

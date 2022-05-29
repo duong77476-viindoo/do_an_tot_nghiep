@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('statistic-product-post') }}
     <div class="row">
         <div class="col-md-12">
             <h2>Thống kê sản phẩm, bài viết</h2>

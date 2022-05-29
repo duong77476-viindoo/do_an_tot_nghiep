@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\NganhHang;
 use App\Models\Product;
 use Illuminate\Support\ServiceProvider;
 use Sendportal\Base\Facades\Sendportal;
@@ -42,7 +43,10 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('*',function ($view){
             $min_price = Product::min('gia_ban');
             $max_price = Product::max('gia_ban') +1000;
-            $view->with('min_price',$min_price)->with('max_price',$max_price);
+            $nganh_hangs = NganhHang::all();
+            $view->with('min_price',$min_price)
+                ->with('max_price',$max_price)
+                ->with('nganh_hangs',$nganh_hangs);
         });
     }
 }

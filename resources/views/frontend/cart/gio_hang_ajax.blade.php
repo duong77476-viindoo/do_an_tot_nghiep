@@ -19,6 +19,13 @@
                 <li class="active">Giỏ hàng của bạn</li>
             </ol>
         </div>
+        <div>
+            <ul class="progressbar">
+                <li class="active">Giỏ hàng</li>
+                <li class="">Điền thông tin</li>
+                <li class="">Xác nhận</li>
+            </ul>
+        </div>
         @if(session()->has('message'))
             <div class="alert alert-success">
                 {!! session()->get('message') !!}
@@ -28,6 +35,7 @@
                 {!! session()->get('error') !!}
             </div>
         @endif
+        <div class="clearfix"></div>
         <div class="table-responsive cart_info">
             <form action="{{url('/update-cart-ajax')}}" method="post">
                 @csrf
@@ -115,146 +123,11 @@
             </form>
         </div>
     </div>
-</section> <!--/#cart_items-->
-{{--@if(\Illuminate\Support\Facades\Session::get('cart')==true)--}}
-{{--<section id="do_action">--}}
-{{--    <div class="container">--}}
-{{--        <div class="heading">--}}
-{{--            <h3>What would you like to do next?</h3>--}}
-{{--            <p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>--}}
-{{--        </div>--}}
-{{--        <div class="row">--}}
-{{--            <div class="col-sm-6">--}}
-{{--                <div class="chose_area">--}}
-{{--                    <ul class="user_option">--}}
-{{--                        <li>--}}
-{{--                            <input type="checkbox">--}}
-{{--                            <label>Use Coupon Code</label>--}}
-{{--                        </li>--}}
-{{--                        <li>--}}
-{{--                            <input type="checkbox">--}}
-{{--                            <label>Use Gift Voucher</label>--}}
-{{--                        </li>--}}
-{{--                        <li>--}}
-{{--                            <input type="checkbox">--}}
-{{--                            <label>Estimate Shipping & Taxes</label>--}}
-{{--                        </li>--}}
-{{--                    </ul>--}}
-{{--                    <ul class="user_info">--}}
-{{--                        <li class="single_field">--}}
-{{--                            <label>Country:</label>--}}
-{{--                            <select>--}}
-{{--                                <option>United States</option>--}}
-{{--                                <option>Bangladesh</option>--}}
-{{--                                <option>UK</option>--}}
-{{--                                <option>India</option>--}}
-{{--                                <option>Pakistan</option>--}}
-{{--                                <option>Ucrane</option>--}}
-{{--                                <option>Canada</option>--}}
-{{--                                <option>Dubai</option>--}}
-{{--                            </select>--}}
-
-{{--                        </li>--}}
-{{--                        <li class="single_field">--}}
-{{--                            <label>Region / State:</label>--}}
-{{--                            <select>--}}
-{{--                                <option>Select</option>--}}
-{{--                                <option>Dhaka</option>--}}
-{{--                                <option>London</option>--}}
-{{--                                <option>Dillih</option>--}}
-{{--                                <option>Lahore</option>--}}
-{{--                                <option>Alaska</option>--}}
-{{--                                <option>Canada</option>--}}
-{{--                                <option>Dubai</option>--}}
-{{--                            </select>--}}
-
-{{--                        </li>--}}
-{{--                        <li class="single_field zip-field">--}}
-{{--                            <label>Zip Code:</label>--}}
-{{--                            <input type="text">--}}
-{{--                        </li>--}}
-{{--                    </ul>--}}
-{{--                    <a class="btn btn-default update" href="">Get Quotes</a>--}}
-{{--                    <a class="btn btn-default check_out" href="">Continue</a>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--            <div class="col-sm-6">--}}
-{{--                <div class="total_area">--}}
-{{--                    @php--}}
-{{--                        $total_coupon = 0;--}}
-{{--                    @endphp--}}
-{{--                    <ul>--}}
-{{--                        <li>Tổng tiền<span> {{number_format($total,0,'','.')}} đ</span></li>--}}
-{{--                        @if(\Illuminate\Support\Facades\Session::get('coupon'))--}}
-{{--                        <li>--}}
-{{--                                @foreach(\Illuminate\Support\Facades\Session::get('coupon') as $key=>$coupon)--}}
-{{--                                    @if($coupon['tinh_nang']==1)--}}
-{{--                                        Mã giảm giá: {{$coupon['code']}}--}}
-{{--                                    <br>--}}
-{{--                                        Phần trăm giảm : {{$coupon['tien_giam']}} %--}}
-{{--                                    <br>--}}
-{{--                                        <p>--}}
-{{--                                            @php--}}
-{{--                                            $total_coupon = ($total*$coupon['tien_giam'])/100;--}}
-{{--                                            echo "<p>Được giảm giá: " .number_format($total_coupon,0,'','.').' đ</p>'--}}
-{{--                                            @endphp--}}
-{{--                                        </p>--}}
-{{--                                    @else--}}
-{{--                                        Mã giảm giá: {{$coupon['code']}}--}}
-{{--                                    <br>--}}
-{{--                                        Số tiền giảm : {{number_format($coupon['tien_giam'],0,'','.')}} đ--}}
-{{--                                    <br>--}}
-{{--                                        <p>--}}
-{{--                                            @php--}}
-{{--                                                $total_coupon = $coupon['tien_giam'];--}}
-{{--                                                echo "<p>Được giảm giá: " .number_format($total_coupon,0,'','.').' đ</p>'--}}
-{{--                                            @endphp--}}
-{{--                                        </p>--}}
-{{--                                    @endif--}}
-{{--                                @endforeach--}}
-{{--                        </li>--}}
-{{--                        @endif--}}
-{{--                        <li>Thuế <span></span></li>--}}
-{{--                        <li>Phí vận chuyển <span>Miễn phí</span></li>--}}
-{{--                        @if($total-$total_coupon<0)--}}
-{{--                            <li>Tiền sau giảm giá <span>{{0}} đ</span></li>--}}
-{{--                        @else--}}
-{{--                            <li>Tiền sau giảm giá <span>{{number_format($total-$total_coupon,0,'','.')}} đ</span></li>--}}
-
-{{--                        @endif--}}
-{{--                    </ul>--}}
-{{--                    --}}{{--                    <a class="btn btn-default update" href="">Update</a>--}}
-
-{{--                        @if($customer_id!=null && $shipping_id==null)--}}
-{{--                            <a class="btn btn-default check_out" href="{{route('checkout')}}"> Thanh toán</a>--}}
-{{--                        @elseif($customer_id!=null && $shipping_id=!null)--}}
-{{--                            <a class="btn btn-default check_out" href="{{route('payment')}}"> Thanh toán</a>--}}
-{{--                        @else--}}
-{{--                            <a class="btn btn-default check_out"href="{{route('login-checkout')}}"> Thanh toán</a>--}}
-{{--                        @endif--}}
-{{--                        @if(\Illuminate\Support\Facades\Session::get('cart'))--}}
-{{--                        <form method="post" action="{{url('/check-coupon')}}">--}}
-{{--                            @csrf--}}
-{{--                            <input type="text" name="coupon" class="form-control" placeholder="Nhập mã giảm giá"><br>--}}
-{{--                            <input type="submit" class="btn btn-default check_coupon" name="check_coupon" value="Tính mã giảm giá">--}}
-
-{{--                        </form>--}}
-{{--                        @endif--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</section><!--/#do_action-->--}}
-{{--@endif--}}
+</section>
 <footer id="footer"><!--Footer-->
     @include('frontend.footer')
 </footer><!--/Footer-->
 
 
 
-<script src="{{url('public/frontend/js/jquery.js')}}js/jquery.js"></script>
-<script src="{{url('public/frontend/js/bootstrap.min.js')}}"></script>
-<script src="{{url('public/frontend/js/jquery.scrollUp.min.js')}}"></script>
-<script src="{{url('public/frontend/js/jquery.prettyPhoto.js')}}"></script>
-<script src="{{url('public/frontend/js/main.js')}}"></script>
 </body>

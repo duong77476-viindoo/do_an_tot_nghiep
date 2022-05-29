@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('statistic-order') }}
     <h1 class="text-center">TỔNG QUAN DOANH SỐ</h1>
     <form autocomplete="off">
         @csrf

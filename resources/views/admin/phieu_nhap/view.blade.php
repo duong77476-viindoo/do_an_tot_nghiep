@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view-phieu-nhap',$phieu_nhap) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -70,6 +71,18 @@
                                                 </div>
                                                 <!-- /.input group -->
                                             </div>
+                                            <div class="form-group">
+                                                <label>Trạng thái:</label>
+
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fas fa-square"></i></span>
+                                                    </div>
+                                                    <input disabled class="form-control"  type="text" value="{{$phieu_nhap->trang_thai}}" name="trang_thai">
+                                                </div>
+                                                <!-- /.input group -->
+                                            </div>
+
                                             <!-- /.form group -->
                                         </div>
                                         <!-- /.card-body -->
@@ -113,11 +126,23 @@
                                                 @endforeach
                                                 </tbody>
                                             </table>
-                                            <a href="{{route('print-phieu-nhap',['id'=>$phieu_nhap->id])}}" target="_blank" class="btn btn-primary btn-lg">Xuất phiếu nhập</a>
+                                            <a href="{{route('print-phieu-nhap',['id'=>$phieu_nhap->id])}}"
+                                               target="_blank"
+                                               class="btn btn-primary btn-lg"
+                                               onclick="return confirm('Việc xuất phiếu sẽ đặt trạng thái về xác nhận, điều đó có nghĩa bạn sẽ không thể sửa phiếu nhập nữa, bạn có muốn tiếp tục?')">Xuất phiếu nhập
+                                            </a>
                                         </div>
                                     </div>
                             </div>
                         </div>
+                        @if($phieu_nhap->trang_thai=="Chưa xác nhận")
+                        <a href="{{route('edit-phieu-nhap',['id'=>$phieu_nhap->id])}}" class="active" ui-toggle-class="">
+                            <span class="btn btn-primary">Sửa</span>
+                        </a>
+                        <a href="{{route('delete-phieu-nhap',['id'=>$phieu_nhap->id])}}"
+                           onclick="return confirm('Bạn có chắc muốn xóa?')"
+                           class="active" ui-toggle-class=""><span class="btn btn-danger">Xóa</span></a>
+                        @endif
                     </div>
                 </div>
             </section>

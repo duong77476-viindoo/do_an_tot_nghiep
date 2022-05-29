@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view_provider',$nha_cung_caps[0]) }}
     <div class="row">
         <div class="col-lg-12">
             <section class="panel">
@@ -32,7 +33,12 @@
                                 <label for="exampleInputEmail1">Số tài khoản</label>
                                 <input disabled value="{{$nha_cung_cap->so_tai_khoan}}" type="text" class="form-control" id="exampleInputEmail1" name="so_tai_khoan" placeholder="Nhập code">
                             </div>
-
+                            <a href="{{route('edit-nha-cung-cap',['id'=>$nha_cung_cap->id])}}" class="active" ui-toggle-class="">
+                                <span class="btn btn-primary">Sửa</span>
+                            </a>
+                            <a href="{{route('delete-nha-cung-cap',['id'=>$nha_cung_cap->id])}}"
+                               onclick="return confirm('Bạn có chắc muốn xóa?')"
+                               class="active" ui-toggle-class=""><span class="btn btn-danger">Xóa</span></a>
                             @endforeach
                         </div>
                     </div>

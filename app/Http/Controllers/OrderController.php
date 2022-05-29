@@ -10,6 +10,7 @@ use App\Models\PhieuXuat;
 use App\Models\Product;
 use App\Models\ProductGroup;
 use App\Models\StatisticOrder;
+use App\Models\TonKho;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -31,7 +32,6 @@ class OrderController extends Controller
     public function index()
     {
         //
-        Paginator::useBootstrap();
         $orders = Order::orderby('created_at','DESC')->get();
         return view('admin.order.index')->with('orders',$orders);
     }
@@ -124,16 +124,17 @@ class OrderController extends Controller
         //Cập nhật trạng thái đơn hàng
         $data = $request->all();
         $order = Order::find($data['order_id']);
-        $order->trang_thai = $data['order_status'];
-        $order->save();
+
 //        if($data['pre_order_status']=="Đang xử lý" || $data['pre_order_status']=="Đang giao hàng" || $data['pre_order_status']=="Đã giao hàng" ){
 //
 //        }
         if($data['order_status']=="Đang xử lý"){
             $phieu_xuat = new PhieuXuat();
             $phieu_xuat->name = "Phiếu xuất bán hàng";
-            $phieu_xuat->content = "Phiếu xuất cho đơn hàng mã".$data['order_id'];
+            $phieu_xuat->content = "Phiếu xuất cho đơn hàng mã ".$data['order_id'];
             $phieu_xuat->order_id = $data['order_id'];
+            $phieu_xuat->nguoi_lap_id = Auth::id();
+            $phieu_xuat->tong_tien = $order->tong_tien;
             $phieu_xuat->created_at = now();
             $phieu_xuat->updated_at = now();
             $phieu_xuat->save();
@@ -149,9 +150,16 @@ class OrderController extends Controller
             $title = "Đơn hàng "."#".$order->id." đang được xử lý";
             $this->send_mail_customer($order->id,$title);
         }else if($data['order_status']=="Đang giao hàng"){
-            $title = "Đơn hàng "."#".$order->id." đang được giao hàng";
+            $phieu_xuat = PhieuXuat::where('order_id',$order->id)->first();
+            if($phieu_xuat->trang_thai=="Chưa xác nhận")
+                return response()->json(['error'=>'Không thể thay đổi trạng thái khi mà phiếu xuất chưa được xác nhận']);
+            $title = "Đơn hàng "."#".$order->id." đang được giao";
             $this->send_mail_customer($order->id,$title);
         }else if($data['order_status']=="Đã giao hàng"){
+            $phieu_xuat = PhieuXuat::where('order_id',$order->id)->first();
+            if($phieu_xuat->trang_thai=="Chưa xác nhận")
+                return response()->json(['error'=>'Không thể thay đổi trạng thái khi mà phiếu xuất chưa được xác nhận']);
+
             //Đã giao hàng xong thì update vào bảng statistic order
             //Cập nhật số lượng mua, số, tổng số đơn hàng, doanh thu, lợi nhuận
 
@@ -159,30 +167,40 @@ class OrderController extends Controller
             $order_details = OrderDetail::where('order_id',$data['order_id'])->get();
             $sales = 0;
             $chi_phi = 0;
-//            dd($order_details);
+
             foreach ($order_details as $order_detail){
                 $now = Carbon::now();
                 $product = Product::find($order_detail->product_id);
                 $chi_tiet_phieu_nhaps = ChiTietPhieuNhap::where('product_id',$product->id)->whereDate('created_at','<=',$now->toDate())->whereDate('created_at','>=',$now->firstOfMonth()->toDate())->get();
-//                var_dump($chi_tiet_phieu_nhaps);
-//                var_dump($chi_tiet_phieu_nhaps);
+
                 $so_luong_nhap = 0;
                 $tong_tien_nhap = 0;
                 foreach ($chi_tiet_phieu_nhaps as $chi_tiet_phieu_nhap){
                     $so_luong_nhap += $chi_tiet_phieu_nhap->so_luong_thuc_nhap;
                     $tong_tien_nhap += $chi_tiet_phieu_nhap->thanh_tien;
-
                 }
-//                var_dump($so_luong_nhap);
-//                if($so_luong_nhap==0){
-//                    $so_luong_nhap = 1;
-//                }
+                //Trù đi số lượng tồn
+                $product->so_luong -= $order_detail->so_luong;
+                $product->save();
 
-                $chi_phi = ($tong_tien_nhap / $so_luong_nhap) * $order_detail->so_luong;
-//                dd($chi_phi);
-                $sales = $product->gia_ban * $order_detail->so_luong;
+                //Cộng thêm vào cột xuất trong tháng ở bảng tồn kho
+                $month = \date("m");
+                $year = \date('Y');
+                $ton_kho_by_product = TonKho::where('product_id',$product->id)->where('year',$year)->where('month',$month)->first();
+                if(is_null($ton_kho_by_product)){
+                    $ton_kho_by_product = new TonKho();
+                    $ton_kho_by_product->year = $year;
+                    $ton_kho_by_product->month = $month;
+                    $ton_kho_by_product->ton_dau_thang = 0;
+                    $ton_kho_by_product->nhap_trong_thang = 0;
+                    $ton_kho_by_product->xuat_trong_thang = $order_detail->so_luong;
+                    $ton_kho_by_product->ton = 0;
+                    $ton_kho_by_product->product_id = $product->id;
+                }else{
+                    $ton_kho_by_product->xuat_trong_thang += $order_detail->so_luong;
+                }
+                $ton_kho_by_product->save();
             }
-//            dd($sales);
 
             $order_date = $order->order_date;
             $stat_order = StatisticOrder::where('order_date',$order_date)->first();
@@ -205,6 +223,8 @@ class OrderController extends Controller
             $title = "Đơn hàng "."#".$order->id." đã hủy";
             $this->send_mail_customer($order->id,$title);
         }
+        $order->trang_thai = $data['order_status'];
+        $order->save();
     }
 
     public function send_mail_customer($order_id,$title){

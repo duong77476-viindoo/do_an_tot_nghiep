@@ -66,3 +66,9 @@
 .tooltip1:hover .tooltiptext1 {
     visibility: visible;
 }
+
+.panel-heading{
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+}

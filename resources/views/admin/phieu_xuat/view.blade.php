@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view-phieu-xuat',$phieu_xuat) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -13,7 +14,7 @@
         <div class="col-lg-12">
             <section class="panel">
                 <header class="panel-heading">
-                    Phiếu xuất #{{$phieu_xuat->id}}
+                    Phiếu xuất #{{$phieu_xuat->id}} (Đơn hàng# <a href="{{route('view-customer-order',['id'=>$phieu_xuat->order_id])}}">{{$phieu_xuat->order_id}}</a>)
                 </header>
                 <?php
                 $message = \Illuminate\Support\Facades\Session::get('message');
@@ -67,6 +68,18 @@
                                                         <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                     </div>
                                                     <input disabled class="form-control" id="noi_dung" type="text" value="{{$phieu_xuat->content}}" name="noi_dung" placeholder="Nhập nội dung">
+                                                </div>
+                                                <!-- /.input group -->
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Trạng thái:</label>
+
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fas fa-square"></i></span>
+                                                    </div>
+                                                    <input disabled class="form-control"  type="text" value="{{$phieu_xuat->trang_thai}}" name="trang_thai">
                                                 </div>
                                                 <!-- /.input group -->
                                             </div>

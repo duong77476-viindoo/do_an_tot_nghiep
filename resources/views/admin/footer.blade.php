@@ -585,8 +585,13 @@
                  _token:_token,
              },
              success: function (data){
-                 alert("Cập nhật trạng thái thành công");
-                 location.reload();
+                 if($.isEmptyObject(data.error)){
+                     alert("Cập nhật trạng thái thành công");
+                     location.reload();
+                 }else{
+                     alert(data.error);
+                     location.reload();
+                 }
              }
          });
      }
@@ -606,8 +611,13 @@
                          _token:_token,
                      },
                      success: function (data){
-                         alert("Cập nhật trạng thái thành công");
-                         location.reload();
+                         if($.isEmptyObject(data.error)){
+                             alert("Cập nhật trạng thái thành công");
+                             location.reload();
+                         }else{
+                             alert(data.error);
+                             location.reload();
+                         }
                      }
                  });
              }else{
@@ -627,8 +637,13 @@
                      _token:_token,
                  },
                  success: function (data){
-                     alert("Cập nhật trạng thái thành công");
-                     location.reload();
+                     if($.isEmptyObject(data.error)){
+                         alert("Cập nhật trạng thái thành công");
+                         location.reload();
+                     }else{
+                         alert(data.error);
+                         location.reload();
+                     }
                  }
              });
          }

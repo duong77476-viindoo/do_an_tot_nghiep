@@ -77,7 +77,7 @@ class AdminController extends Controller
             $admin->password = md5($data['password']);
             $admin->save();
             Session::put('message','<p class="text-success">Tạo mời người dùng thành công</p>');
-            return \redirect('register-admin');
+            return \redirect()->route('view-admin',['id'=>$admin->id]);
         }
     }
 
@@ -118,7 +118,7 @@ class AdminController extends Controller
             $admin->updated_at = now();
             $admin->save();
             Session::put('message','<p class="text-success">Cập nhật người dùng thành công</p>');
-            return \redirect('view-admin-users');
+            return \redirect()->route('view-admin',['id'=>$admin->id]);
         }else{
             $existed_email = Admin::where('email',$data['email'])->first();
             if($existed_email){
@@ -153,8 +153,7 @@ class AdminController extends Controller
     }
 
     public function view_admin_users(){
-        Paginator::useBootstrap();
-        $admins = Admin::paginate(5);
+        $admins = Admin::all();
         $roles = Role::all();
         return view('admin.auth.index')->with(compact('admins','roles'));
     }

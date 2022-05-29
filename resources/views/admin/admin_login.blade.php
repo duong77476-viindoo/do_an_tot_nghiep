@@ -22,7 +22,7 @@
     <!-- /.login-logo -->
     <div class="card">
         <div class="card-body login-card-body">
-            <p class="login-box-msg">Đăng nhập để quản lý</p>
+            <p class="login-box-msg">BC PHONE</p>
             <?php
             $message = \Illuminate\Support\Facades\Session::get('message');
             if($message){
@@ -67,7 +67,7 @@
                     </div>
                     <!-- /.col -->
                     <div class="col-4">
-                        <button type="submit" name="login" class="btn btn-primary btn-block">Đăng nhập</button>
+                        <button type="submit" name="login" class="btn btn-primary btn-block">Login</button>
                     </div>
 
                     <!-- /.col -->
@@ -81,23 +81,23 @@
 {{--                @endif--}}
             </form>
 
-            <div class="social-auth-links text-center mb-3">
-                <p>- OR -</p>
-                <a href="{{route('login-facebook')}}" class="btn btn-block btn-primary">
-                    <i class="fab fa-facebook mr-2"></i> Đăng nhập bằng Facebook
-                </a>
-                <a href="{{route('login-google')}}" class="btn btn-block btn-danger">
-                    <i class="fab fa-google-plus mr-2"></i> Đăng nhập bằng Google+
-                </a>
-            </div>
-            <!-- /.social-auth-links -->
+{{--            <div class="social-auth-links text-center mb-3">--}}
+{{--                <p>- OR -</p>--}}
+{{--                <a href="{{route('login-facebook')}}" class="btn btn-block btn-primary">--}}
+{{--                    <i class="fab fa-facebook mr-2"></i> Đăng nhập bằng Facebook--}}
+{{--                </a>--}}
+{{--                <a href="{{route('login-google')}}" class="btn btn-block btn-danger">--}}
+{{--                    <i class="fab fa-google-plus mr-2"></i> Đăng nhập bằng Google+--}}
+{{--                </a>--}}
+{{--            </div>--}}
+{{--            <!-- /.social-auth-links -->--}}
 
-            <p class="mb-1">
-                <a href="forgot-password.html">I forgot my password</a>
-            </p>
-            <p class="mb-0">
-                <a href="register.html" class="text-center">Register a new membership</a>
-            </p>
+{{--            <p class="mb-1">--}}
+{{--                <a href="forgot-password.html">I forgot my password</a>--}}
+{{--            </p>--}}
+{{--            <p class="mb-0">--}}
+{{--                <a href="register.html" class="text-center">Register a new membership</a>--}}
+{{--            </p>--}}
         </div>
         <!-- /.login-card-body -->
     </div>

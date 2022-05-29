@@ -4,8 +4,8 @@
             <div class="col-sm-6">
                 <div class="contactinfo">
                     <ul class="nav nav-pills">
-                        <li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-                        <li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
+                        <li><a href="#"><i class="fa fa-phone"></i> +84 0336724296</a></li>
+                        <li><a href="#"><i class="fa fa-envelope"></i> duong77476@st.vimaru.edu.vn</a></li>
                     </ul>
                 </div>
             </div>
@@ -34,23 +34,23 @@
                 <div class="btn-group pull-right">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                            USA
+                            VN
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Canada</a></li>
-                            <li><a href="#">UK</a></li>
+                            <li><a href="#">VN</a></li>
+                            <li><a href="#">EN</a></li>
                         </ul>
                     </div>
 
                     <div class="btn-group">
                         <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                            DOLLAR
+                            VND
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Canadian Dollar</a></li>
-                            <li><a href="#">Pound</a></li>
+                            <li><a href="#">VND</a></li>
+                            <li><a href="#">Dollar</a></li>
                         </ul>
                     </div>
                 </div>
@@ -130,11 +130,9 @@
                         <li><a href="{{\Illuminate\Support\Facades\URL::to('/trang-chu')}}" class="active">Trang chủ</a></li>
                         <li class="dropdown"><a href="#">Cửa hàng<i class="fa fa-angle-down"></i></a>
                             <ul role="menu" class="sub-menu">
-                                <li><a href="shop.html">Products</a></li>
-                                <li><a href="product-details.html">Product Details</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
-                                <li><a href="cart.html">Cart</a></li>
-                                <li><a href="login.html">Login</a></li>
+                                @foreach($nganh_hangs as $nganh_hang)
+                                    <li><a href="{{route('category-by-nganh-hang',['code_nganh_hang'=>$nganh_hang->code])}}">{{$nganh_hang->name}}</a></li>
+                                @endforeach
                             </ul>
                         </li>
                         <li class="dropdown"><a href="#">Tin tức<i class="fa fa-angle-down"></i></a>

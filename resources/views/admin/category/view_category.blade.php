@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view_category',$category[0]) }}
     <div class="row">
         <div class="col-lg-12">
             <section class="panel">

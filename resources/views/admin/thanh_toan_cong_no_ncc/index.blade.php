@@ -1,5 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('thanh-toan-cong-no') }}
     <div class="table-agile-info">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -25,14 +26,7 @@
                 <div class="col-sm-4">
                     <a href="{{route('add-thanh-toan-cong-no')}}"><span class="btn btn-primary fa fa-plus">Thêm thanh toán công nợ</span></a>
                 </div>
-{{--                <div class="col-sm-3">--}}
-{{--                    <div class="input-group">--}}
-{{--                        <input type="text" class="input-sm form-control" placeholder="Search">--}}
-{{--                        <span class="input-group-btn">--}}
-{{--            <button class="btn btn-sm btn-default" type="button">Go!</button>--}}
-{{--          </span>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+
             </div>
             <div class="table-responsive">
                 <table id="myTable" class="table table-striped b-t b-light">
@@ -59,13 +53,7 @@
                                 $nguoi_lap = \App\Models\Admin::find($thanh_toan_cong_no->nguoi_lap_id);
                             @endphp
                             <td>{{$nguoi_lap->name}}</td>
-                            <td>
-                                @if($thanh_toan_cong_no->da_thanh_toan==0)
-                                    Chờ xác nhận
-                                @else
-                                    Đã thanh toán
-                                @endif
-                            </td>
+                            <td>{{$thanh_toan_cong_no->trang_thai}}</td>
                             <td>{{$thanh_toan_cong_no->updated_at}}</td>
                             <td>
                                 <a href="{{route('edit-thanh-toan-cong-no',['id'=>$thanh_toan_cong_no->id])}}" class="active" ui-toggle-class="">
