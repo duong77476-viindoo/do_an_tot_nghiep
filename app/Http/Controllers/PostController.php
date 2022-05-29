@@ -21,11 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
-        //
-        Paginator::useBootstrap();
-        $posts = Post::paginate(5);
-
+        $posts = Post::all();
         return view('admin.post.index')->with('posts',$posts);
     }
 
@@ -52,7 +48,7 @@ class PostController extends Controller
     {
         //
         $validated = $request->validate([
-            'title' => 'required|min:6',
+            'title' => 'required|min:1',
             'desc' => 'required|max:50',
             'content' => 'required',
             'post_type_id'=>'required',
@@ -92,7 +88,7 @@ class PostController extends Controller
         $post->save();
 
         Session::put('message','<p class="text-success">Thêm bài viết thành công</p>');
-        return Redirect::to('add-post');
+        return \redirect()->route('view-post',['id'=>$post->id]);
     }
 
     /**
@@ -146,7 +142,7 @@ class PostController extends Controller
     {
         //
         $validated = $request->validate([
-            'title' => 'required|min:6',
+            'title' => 'required|min:1',
             'desc' => 'required|max:50',
             'content' => 'required',
             'post_type_id'=>'required',
@@ -184,7 +180,7 @@ class PostController extends Controller
         $post->save();
 
         Session::put('message','<p class="text-success">Sửa bài viết thành công</p>');
-        return Redirect::to('all-post');
+        return \redirect()->route('view-post',['id'=>$post->id]);
     }
 
     /**

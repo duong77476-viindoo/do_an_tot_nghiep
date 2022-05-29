@@ -37,7 +37,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Nội dung</label>
-                                <textarea id="mo_ta_chi_tiet" style="resize: none" class="form-control" id="exampleInputPassword1" name="content" placeholder="Nhập nội dung">{{$post->content}}"</textarea>
+                                <textarea id="mo_ta_chi_tiet" style="resize: none" class="form-control" id="exampleInputPassword1" name="content" placeholder="Nhập nội dung">{{$post->content}}</textarea>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Meta keywords</label>

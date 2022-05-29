@@ -32,7 +32,6 @@ class OrderController extends Controller
     public function index()
     {
         //
-        Paginator::useBootstrap();
         $orders = Order::orderby('created_at','DESC')->get();
         return view('admin.order.index')->with('orders',$orders);
     }
@@ -125,17 +124,17 @@ class OrderController extends Controller
         //Cập nhật trạng thái đơn hàng
         $data = $request->all();
         $order = Order::find($data['order_id']);
-        $order->trang_thai = $data['order_status'];
-        $order->save();
+
 //        if($data['pre_order_status']=="Đang xử lý" || $data['pre_order_status']=="Đang giao hàng" || $data['pre_order_status']=="Đã giao hàng" ){
 //
 //        }
         if($data['order_status']=="Đang xử lý"){
             $phieu_xuat = new PhieuXuat();
             $phieu_xuat->name = "Phiếu xuất bán hàng";
-            $phieu_xuat->content = "Phiếu xuất cho đơn hàng mã".$data['order_id'];
+            $phieu_xuat->content = "Phiếu xuất cho đơn hàng mã ".$data['order_id'];
             $phieu_xuat->order_id = $data['order_id'];
             $phieu_xuat->nguoi_lap_id = Auth::id();
+            $phieu_xuat->tong_tien = $order->tong_tien;
             $phieu_xuat->created_at = now();
             $phieu_xuat->updated_at = now();
             $phieu_xuat->save();
@@ -151,9 +150,16 @@ class OrderController extends Controller
             $title = "Đơn hàng "."#".$order->id." đang được xử lý";
             $this->send_mail_customer($order->id,$title);
         }else if($data['order_status']=="Đang giao hàng"){
+            $phieu_xuat = PhieuXuat::where('order_id',$order->id)->first();
+            if($phieu_xuat->trang_thai=="Chưa xác nhận")
+                return response()->json(['error'=>'Không thể thay đổi trạng thái khi mà phiếu xuất chưa được xác nhận']);
             $title = "Đơn hàng "."#".$order->id." đang được giao";
             $this->send_mail_customer($order->id,$title);
         }else if($data['order_status']=="Đã giao hàng"){
+            $phieu_xuat = PhieuXuat::where('order_id',$order->id)->first();
+            if($phieu_xuat->trang_thai=="Chưa xác nhận")
+                return response()->json(['error'=>'Không thể thay đổi trạng thái khi mà phiếu xuất chưa được xác nhận']);
+
             //Đã giao hàng xong thì update vào bảng statistic order
             //Cập nhật số lượng mua, số, tổng số đơn hàng, doanh thu, lợi nhuận
 
@@ -217,6 +223,8 @@ class OrderController extends Controller
             $title = "Đơn hàng "."#".$order->id." đã hủy";
             $this->send_mail_customer($order->id,$title);
         }
+        $order->trang_thai = $data['order_status'];
+        $order->save();
     }
 
     public function send_mail_customer($order_id,$title){

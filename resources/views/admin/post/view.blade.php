@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Nội dung</label>
-                                    <textarea disabled id="mo_ta_chi_tiet" style="resize: none" class="form-control" id="exampleInputPassword1" name="content" placeholder="Nhập nội dung">{{$post->content}}"</textarea>
+                                    <textarea disabled id="mo_ta_chi_tiet" style="resize: none" class="form-control" id="exampleInputPassword1" name="content" placeholder="Nhập nội dung">{{$post->content}}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Meta keywords</label>
@@ -51,7 +51,12 @@
                                         @endforeach
                                     </select>
                                 </div>
-
+                        <a href="{{route('edit-post',['id'=>$post->id])}}" class="active" ui-toggle-class="">
+                            <span class="btn btn-primary">Sửa</span>
+                        </a>
+                        <a href="{{route('delete-post',['id'=>$post->id])}}"
+                           onclick="return confirm('Bạn có chắc muốn xóa?')"
+                           class="active" ui-toggle-class=""><span class="btn btn-danger">Xóa</span></a>
                     </div>
                 </div>
             </section>

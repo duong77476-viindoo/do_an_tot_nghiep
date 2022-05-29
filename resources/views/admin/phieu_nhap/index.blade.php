@@ -44,6 +44,7 @@
                         <th>Nội dung</th>
                         <th>Tổng tiền</th>
                         <th>Người lập</th>
+                        <th>Trạng thái</th>
                         <th>Ngày cập nhật</th>
                         <th>Hành động</th>
                     </tr>
@@ -59,6 +60,7 @@
                                 $nguoi_lap = \App\Models\Admin::find($phieu_nhap->nguoi_lap_id);
                             @endphp
                             <td>{{$nguoi_lap->name}}</td>
+                            <td>{{$phieu_nhap->trang_thai}}</td>
                             <td>{{$phieu_nhap->updated_at}}</td>
                             <td>
                                 <a href="{{route('edit-phieu-nhap',['id'=>$phieu_nhap->id])}}" class="active" ui-toggle-class="">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CongNoNcc;
 use App\Models\NhaCungCap;
 use App\Models\ThanhToanCongNoNcc;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,16 +57,16 @@ class ThanhToanCongNoNccController extends Controller
         $thanh_toan_cong_no_ncc = new ThanhToanCongNoNcc();
         $thanh_toan_cong_no_ncc->noi_dung = $data['noi_dung'];
         $thanh_toan_cong_no_ncc->so_tien = $so_tien_thanh_toan;
-        $thanh_toan_cong_no_ncc->da_thanh_toan = 0;
         $thanh_toan_cong_no_ncc->nguoi_lap_id =  Auth::id();
         $thanh_toan_cong_no_ncc->nha_cung_cap_id = $data['nha_cung_cap_id'];
+        $thanh_toan_cong_no_ncc->trang_thai = $data['trang_thai'];
         $thanh_toan_cong_no_ncc->save();
 
         //Trừ đi công nợ theo tháng, năm tương ứng với nhà cung cấp
         //Công nợ cũ - công nợ đã trả + công nợ mới
-//        $nha_cung_cap = NhaCungCap::find($data['nha_cung_cap_id']);
-//        $nha_cung_cap->so_tien_no -= $data['so_tien'];
-//        $nha_cung_cap->save();
+        $nha_cung_cap = NhaCungCap::find($data['nha_cung_cap_id']);
+        $nha_cung_cap->so_tien_no -= $so_tien_thanh_toan;
+        $nha_cung_cap->save();
 
         //Cập nhật bảng công nợ ncc
         $month = \date("m");
@@ -85,7 +86,7 @@ class ThanhToanCongNoNccController extends Controller
             $cong_no_ncc->cong_no_da_thanh_toan += $so_tien_thanh_toan;
         }
         $cong_no_ncc->save();
-        return redirect()->to('thanh-toan-cong-no-ncc/all');
+        return redirect()->route('view-thanh-toan-cong-no',['id'=>$thanh_toan_cong_no_ncc->id]);
 
     }
 
@@ -95,9 +96,15 @@ class ThanhToanCongNoNccController extends Controller
      * @param  \App\Models\ThanhToanCongNoNcc  $thanhToanCongNoNcc
      * @return \Illuminate\Http\Response
      */
-    public function show(ThanhToanCongNoNcc $thanhToanCongNoNcc)
+    public function show($id)
     {
         //
+        $thanh_toan_cong_no = ThanhToanCongNoNcc::find($id);
+        $nha_cung_caps = NhaCungCap::all();
+
+        return view('admin.thanh_toan_cong_no_ncc.view')
+            ->with('nha_cung_caps',$nha_cung_caps)
+            ->with('thanh_toan_cong_no',$thanh_toan_cong_no);
     }
 
     /**
@@ -106,9 +113,15 @@ class ThanhToanCongNoNccController extends Controller
      * @param  \App\Models\ThanhToanCongNoNcc  $thanhToanCongNoNcc
      * @return \Illuminate\Http\Response
      */
-    public function edit(ThanhToanCongNoNcc $thanhToanCongNoNcc)
+    public function edit($id)
     {
         //
+        $thanh_toan_cong_no = ThanhToanCongNoNcc::find($id);
+        $nha_cung_caps = NhaCungCap::all();
+
+        return view('admin.thanh_toan_cong_no_ncc.edit')
+            ->with('thanh_toan_cong_no',$thanh_toan_cong_no)
+            ->with('nha_cung_caps',$nha_cung_caps);
     }
 
     /**
@@ -118,9 +131,45 @@ class ThanhToanCongNoNccController extends Controller
      * @param  \App\Models\ThanhToanCongNoNcc  $thanhToanCongNoNcc
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ThanhToanCongNoNcc $thanhToanCongNoNcc)
+    public function update(Request $request, $id)
     {
         //
+        $validated = $request->validate([
+            'nha_cung_cap_id' => 'required',
+            'noi_dung' => 'required',
+            'so_tien'=>'required',
+        ]);
+        $data = $request->all();
+        $so_tien_thanh_toan = floatval($this->format_currency($data['so_tien']));
+        $thanh_toan_cong_no_ncc = ThanhToanCongNoNcc::find($id);
+        if($thanh_toan_cong_no_ncc->trang_thai=="Xác nhận")
+            return redirect()->back()->with('message','<p class="text-danger">Bạn không thể sửa thanh toán đã được xác nhận</p>');
+
+        $thanh_toan_cong_no_ncc->noi_dung = $data['noi_dung'];
+
+        //Cập nhật bảng công nợ ncc trước tiên cần trừ đi số tiền vì đây là update chứ ko thêm mới
+        $month = \date("m");
+        $year = \date('Y');
+        $cong_no_ncc = CongNoNcc::where('nha_cung_cap_id',$data['nha_cung_cap_id'])
+            ->where('year',$year)->where('month',$month)->first();
+        $cong_no_ncc->cong_no_da_thanh_toan -= $thanh_toan_cong_no_ncc->so_tien;
+        $nha_cung_cap = NhaCungCap::find($data['nha_cung_cap_id']);
+        $nha_cung_cap->so_tien_no -= $thanh_toan_cong_no_ncc->so_tien;
+
+        $thanh_toan_cong_no_ncc->so_tien = $so_tien_thanh_toan;
+        $thanh_toan_cong_no_ncc->trang_thai = "Xác nhận";
+        $thanh_toan_cong_no_ncc->nguoi_lap_id =  Auth::id();
+        $thanh_toan_cong_no_ncc->nha_cung_cap_id = $data['nha_cung_cap_id'];
+        $thanh_toan_cong_no_ncc->save();
+
+
+        $nha_cung_cap->so_tien_no += $so_tien_thanh_toan;
+        $nha_cung_cap->save();
+        $cong_no_ncc->cong_no_da_thanh_toan += $so_tien_thanh_toan;
+
+        $cong_no_ncc->save();
+        return redirect()->route('view-thanh-toan-cong-no',['id'=>$thanh_toan_cong_no_ncc->id]);
+
     }
 
     /**

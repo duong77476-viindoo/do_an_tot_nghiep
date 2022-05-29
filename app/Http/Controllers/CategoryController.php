@@ -21,13 +21,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
-        Paginator::useBootstrap();
-        //Paginator::useTailwind();
-        $categoríes = Category::paginate(5);
-//        VarDumper::dump($categorys);
-//        exit();
-        //$ds_categorys = view('admin.category.all_category')->with('categorys',$categorys);
+
+
+        $categoríes = Category::all();
         return view('admin.category.all_category')->with('categories',$categoríes);
     }
 
@@ -55,7 +51,7 @@ class CategoryController extends Controller
         //
         $validated = $request->validate([
             'nganh_hang_id'=>'required',
-            'category_name' => 'required|min:6|max:50',
+            'category_name' => 'required|min:1|max:50',
             'category_desc' => 'required|max:50',
             'category_status' => 'required',
             'meta_keywords' => 'required',
@@ -71,7 +67,7 @@ class CategoryController extends Controller
         $category->updated_at = now();
         $category->save();
         Session::put('message','<p class="text-success">Thêm loại phân loại thành công</p>');
-        return Redirect::to('add-category');
+        return \redirect()->route('view-category',['id'=>$category->id]);
     }
 
     /**
@@ -127,7 +123,7 @@ class CategoryController extends Controller
         $category->save();
 
         Session::put('message','<p class="text-success" ">Sửa loại phân loại thành công</p>');
-        return Redirect::to('all-category');
+        return \redirect()->route('view-category',['id'=>$category->id]);
     }
 
     /**

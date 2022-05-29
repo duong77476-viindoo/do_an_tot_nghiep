@@ -52,6 +52,12 @@
                         </div>
 
                 </div>
+                    <a href="{{route('edit-coupon',['id'=>$item->id])}}" class="active" ui-toggle-class="">
+                        <span class="btn btn-primary">Sửa</span>
+                    </a>
+                    <a href="{{route('delete-coupon',['id'=>$item->id])}}"
+                       onclick="return confirm('Bạn có chắc muốn xóa?')"
+                       class="active" ui-toggle-class=""><span class="btn btn-danger">Xóa</span></a>
                 @endforeach
             </section>
 

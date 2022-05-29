@@ -25,9 +25,13 @@
                                 <label for="exampleInputEmail1">Code ngành hàng</label>
                                 <input disabled value="{{$nganh_hang->code}}" type="text" class="form-control" id="exampleInputEmail1" name="code">
                             </div>
-
-
                         </div>
+                        <a href="{{route('edit-nganh-hang',['id'=>$nganh_hang->id])}}" class="active" ui-toggle-class="">
+                            <span class="btn btn-primary">Sửa</span>
+                        </a>
+                        <a href="{{route('delete-nganh-hang',['id'=>$nganh_hang->id])}}"
+                           onclick="return confirm('Bạn có chắc muốn xóa?')"
+                           class="active" ui-toggle-class=""><span class="btn btn-danger">Xóa</span></a>
                     </div>
             </section>
 

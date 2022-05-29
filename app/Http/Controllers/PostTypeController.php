@@ -19,9 +19,8 @@ class PostTypeController extends Controller
      */
     public function index()
     {
-        Paginator::useBootstrap();
 
-        $post_types = PostType::paginate(5);
+        $post_types = PostType::all();
         return view('admin.post_type.all_post_type')->with('post_types',$post_types);
     }
 
@@ -47,7 +46,7 @@ class PostTypeController extends Controller
     {
         //
         $validated = $request->validate([
-            'name' => 'required|min:6|max:50',
+            'name' => 'required|min:1|max:50',
             'status' => 'required',
             'meta_keywords' => 'required',
         ]);
@@ -61,7 +60,7 @@ class PostTypeController extends Controller
         $post_type->updated_at = now();
         $post_type->save();
         Session::put('message','<p class="text-success">Thêm danh mục bài viết thành công</p>');
-        return Redirect::to('add-post-type');
+        return \redirect()->route('view-post-type',['id'=>$post_type->id]);
     }
 
     /**
@@ -100,7 +99,7 @@ class PostTypeController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|min:6|max:50',
+            'name' => 'required|min:1|max:50',
             'status' => 'required',
             'meta_keywords' => 'required',
         ]);
@@ -114,7 +113,7 @@ class PostTypeController extends Controller
                 'updated_at' => now()
             ]);
         Session::put('message','<p class="text-success" ">Sửa loại danh mục bài viết thành công</p>');
-        return Redirect::to('all-post-type');
+        return \redirect()->route('view-post-type',['id'=>$id]);
     }
 
     /**

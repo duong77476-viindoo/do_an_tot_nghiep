@@ -163,9 +163,14 @@
                             </div>
 
                         </div>
-
+                        </div>
                     </div>
-
+                    <a href="{{route('edit-product',['id'=>$product_group->id])}}" class="active" ui-toggle-class="">
+                        <span class="btn btn-primary">Sửa</span>
+                    </a>
+                    <a href="{{route('delete-product',['id'=>$product_group->id])}}"
+                       onclick="return confirm('Bạn có chắc muốn xóa?')"
+                       class="active" ui-toggle-class=""><span class="btn btn-danger">Xóa</span></a>
                 </div>
             </section>
 

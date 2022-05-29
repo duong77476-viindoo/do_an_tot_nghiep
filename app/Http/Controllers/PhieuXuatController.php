@@ -116,7 +116,7 @@ class PhieuXuatController extends Controller
         $phieu_xuat->save();
 
 
-        return redirect()->to('phieu-xuat/all');
+        return redirect()->route('view-phieu-xuat',['id'=>$phieu_xuat->id]);
     }
 
     /**
@@ -170,6 +170,8 @@ class PhieuXuatController extends Controller
 
         $data = $request->all();
         $phieu_xuat = PhieuXuat::find($id);
+        if($data['trang_thai']=="Xác nhận")
+            return redirect()->back()->with('message','<p class="text-danger">Bạn không thể sửa một phiếu xuất đã được xác nhận</p>');
         $phieu_xuat->name = $data['name'];
         $phieu_xuat->content = $data['noi_dung'];
         $phieu_xuat->order_id = $data['order_id'];
@@ -227,7 +229,7 @@ class PhieuXuatController extends Controller
         $phieu_xuat->save();
 
 
-        return redirect()->to('phieu-xuat/all');
+        return redirect()->route('view-phieu-xuat',['id'=>$phieu_xuat->id]);
     }
 
     /**
