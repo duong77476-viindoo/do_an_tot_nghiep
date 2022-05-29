@@ -18,11 +18,7 @@ class NhaCungCapController extends Controller
      */
     public function index()
     {
-        //
-        //
-        Paginator::useBootstrap();
-        $nha_cung_caps = NhaCungCap::paginate(5);
-
+        $nha_cung_caps = NhaCungCap::all();
         return view('admin.nha_cung_cap.index')->with('nha_cung_caps',$nha_cung_caps);
     }
 
@@ -48,7 +44,7 @@ class NhaCungCapController extends Controller
     {
         //
         $validated = $request->validate([
-            'name' => 'required|min:5',
+            'name' => 'required|min:1',
             'phone'=>'required',
             'address'=>'required',
             'so_tai_khoan'=>'required'
@@ -65,7 +61,7 @@ class NhaCungCapController extends Controller
         $nha_cung_cap->save();
 
         Session::put('message','<p class="text-success">Thêm nhà cung cấp thành công</p>');
-        return Redirect::to('add-nha-cung-cap');
+        return \redirect()->route('view-nha-cung-cap',['id'=>$nha_cung_cap->id]);
     }
 
     /**
@@ -115,7 +111,7 @@ class NhaCungCapController extends Controller
     {
         //
         $validated = $request->validate([
-            'name' => 'required|min:5',
+            'name' => 'required|min:1',
             'phone'=>'required',
             'address'=>'required',
             'so_tai_khoan'=>'required'
@@ -133,7 +129,7 @@ class NhaCungCapController extends Controller
         $nha_cung_cap->save();
 
         Session::put('message','<p class="text-success">Sửa nhà cung cấp thành công</p>');
-        return Redirect::to('all-nha-cung-cap');
+        return \redirect()->route('view-nha-cung-cap',['id'=>$nha_cung_cap->id]);
     }
 
     /**

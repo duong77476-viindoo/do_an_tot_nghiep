@@ -21,7 +21,7 @@ class BrandController extends Controller
     public function index()
     {
 
-        $brands = Brand::paginate(5);
+        $brands = Brand::all();
         return view('admin.brand.all_brand')->with('brands',$brands);
     }
 
@@ -60,7 +60,7 @@ class BrandController extends Controller
         $brand->updated_at = now();
         $brand->save();
         Session::put('message','<p class="text-success">Thêm thương hiệu thành công</p>');
-        return Redirect::to('add-brand');
+        return \redirect()->route('view-brand',['id'=>$brand->id]);
     }
 
     /**
@@ -112,7 +112,7 @@ class BrandController extends Controller
         $brand->updated_at = now();
         $brand->save();
         Session::put('message','<p class="text-success">Sửa thương hiệu thành công</p>');
-        return Redirect::to('all-brand');
+        return \redirect()->route('view-brand',['id'=>$brand->id]);
     }
 
     /**

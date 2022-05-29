@@ -19,9 +19,7 @@ class SliderController extends Controller
      */
     public function index()
     {
-        //
-        Paginator::useBootstrap();
-        $sliders = Slider::paginate(5);
+        $sliders = Slider::all();
         return view('admin.slider.index')->with(compact('sliders'));
     }
 
@@ -46,7 +44,7 @@ class SliderController extends Controller
     {
         //
         $validated = $request->validate([
-            'name' => 'required|min:6|max:50',
+            'name' => 'required|min:1|max:50',
             'desc' => 'required|max:50',
             'link' => 'required',
             'image' => 'required',
@@ -78,7 +76,7 @@ class SliderController extends Controller
 //        exit();
         $slider->save();
         Session::put('message','<p class="text-success">Thêm slider thành công</p>');
-        return Redirect::to('add-slider');
+        return \redirect()->route('view-slider',['id'=>$slider->id]);
     }
 
     /**
@@ -127,7 +125,7 @@ class SliderController extends Controller
     {
         //
         $validated = $request->validate([
-            'name' => 'required|min:6|max:50',
+            'name' => 'required|min:1|max:50',
             'desc' => 'required|max:50',
             'link' => 'required',
             'image' => 'required',
@@ -160,7 +158,7 @@ class SliderController extends Controller
 //        exit();
         $slider->save();
         Session::put('message','<p class="text-success">Cập nhật slider thành công</p>');
-        return Redirect::to('all-slider');
+        return \redirect()->route('view-slider',['id'=>$slider->id]);
     }
 
     /**

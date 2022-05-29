@@ -28,13 +28,7 @@ class CategoryProductController extends Controller
      */
     public function index()
     {
-        //
-        Paginator::useBootstrap();
-        //Paginator::useTailwind();
-        $category_products = CategoryProduct::paginate(5);
-//        VarDumper::dump($category_products);
-//        exit();
-        //$ds_category_products = view('admin.category_product.all_category_product')->with('category_products',$category_products);
+        $category_products = CategoryProduct::all();
         return view('admin.category_product.all_category_product')->with('category_products',$category_products);
     }
 
@@ -60,7 +54,7 @@ class CategoryProductController extends Controller
     {
         //
         $validated = $request->validate([
-            'category_product_name' => 'required|min:6|max:50',
+            'category_product_name' => 'required|min:1|max:50',
             'category_product_desc' => 'required',
             'category_product_status' => 'required',
             'meta_keywords'=>'required',
@@ -77,7 +71,7 @@ class CategoryProductController extends Controller
         $category_product->updated_at = now();
         $category_product->save();
         Session::put('message','<p class="text-success">Thêm phân loại sản phẩm thành công</p>');
-        return Redirect::to('add-category-product');
+        return \redirect()->route('view-category-product',['id'=>$category_product->id]);
     }
 
     /**
@@ -141,7 +135,7 @@ class CategoryProductController extends Controller
                 'updated_at' => now()
             ]);
         Session::put('message','<p class="text-success" ">Sửa phân loại sản phẩm thành công</p>');
-        return Redirect::to('all-category-product');
+        return \redirect()->route('view-category-product',['id'=>$id]);
     }
 
     /**

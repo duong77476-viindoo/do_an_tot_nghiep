@@ -76,6 +76,7 @@ class PhieuNhapController extends Controller
         $phieu_nhap->created_at = now();
         $phieu_nhap->updated_at = now();
         $phieu_nhap->nguoi_lap_id = Auth::id();
+        $phieu_nhap->trang_thai = $data['trang_thai'];
         $phieu_nhap->save();
 
 
@@ -158,7 +159,7 @@ class PhieuNhapController extends Controller
         $nha_cung_cap->save();
 
 
-        return redirect()->to('phieu-nhap/all');
+        return redirect()->route('view-phieu-nhap',['id'=>$phieu_nhap->id]);
     }
 
     /**
@@ -183,9 +184,18 @@ class PhieuNhapController extends Controller
      * @param  \App\Models\PhieuNhap  $phieuNhap
      * @return \Illuminate\Http\Response
      */
-    public function edit(PhieuNhap $phieuNhap)
+    public function edit($id)
     {
         //
+        $phieu_nhap = PhieuNhap::find($id);
+        $chi_tiet_phieu_nhap = ChiTietPhieuNhap::where('phieu_nhap_id',$id)->get();
+        $products = Product::all();
+        $nha_cung_caps =NhaCungCap::all();
+        return view('admin.phieu_nhap.edit')
+            ->with('phieu_nhap',$phieu_nhap)
+            ->with('chi_tiet_phieu_nhap',$chi_tiet_phieu_nhap)
+            ->with('products',$products)
+            ->with('nha_cung_caps',$nha_cung_caps);
     }
 
     /**
@@ -195,9 +205,84 @@ class PhieuNhapController extends Controller
      * @param  \App\Models\PhieuNhap  $phieuNhap
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PhieuNhap $phieuNhap)
+    public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'nha_cung_cap_id' => 'required',
+            'name' => 'required|max:50',
+            'noi_dung' => 'required',
+            'san_pham'=>'required',
+        ]);
+
+
+        $data = $request->all();
+        $phieu_nhap = PhieuNhap::find($id);
+        $phieu_nhap->name = $data['name'];
+        $phieu_nhap->content = $data['noi_dung'];
+        $phieu_nhap->nha_cung_cap_id = $data['nha_cung_cap_id'];
+        $phieu_nhap->created_at = now();
+        $phieu_nhap->updated_at = now();
+        $phieu_nhap->nguoi_lap_id = Auth::id();
+        $phieu_nhap->trang_thai = $data['trang_thai'];
+        $phieu_nhap->save();
+
+
+
+        $tong_tien = 0;
+        foreach ($data['san_pham'] as $key=>$val){
+
+            //Xóa số lượng ở lần nhập trước ở bảng sản phẩm, bảng tồn kho
+            $old_chi_tiet_phieu_nhap = ChiTietPhieuNhap::where('phieu_nhap_id',$id)->where('product_id',$val)->first();
+            $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
+            $tong_tien+=floatval($thanh_tien_format);
+
+            //Cập nhật số lượng của mỗi sản phẩm trong tbl product
+            $product = Product::find($val);
+            $product->so_luong -= $old_chi_tiet_phieu_nhap->so_luong_thuc_nhap;
+            $product->so_luong += $data['so_luong_thuc_nhap'][$key];
+            $product->save();
+
+
+            //Cộng dồn số lượng nhập của sản phẩm tương ứng vào bảng tồn kho
+            //Check tồn tài tồn của sản phẩm
+            $month = \date("m");
+            $year = \date('Y');
+            $ton_kho_by_product = TonKho::where('product_id',$val)->where('year',$year)->where('month',$month)->first();
+            $ton_kho_by_product->nhap_trong_thang -= $old_chi_tiet_phieu_nhap->so_luong_thuc_nhap;
+            $ton_kho_by_product->nhap_trong_thang += $data['so_luong_thuc_nhap'][$key];
+
+            $ton_kho_by_product->save();
+            $old_chi_tiet_phieu_nhap->delete();
+
+            $chi_tiet_phieu_nhap = new ChiTietPhieuNhap();
+            $chi_tiet_phieu_nhap->phieu_nhap_id = $phieu_nhap->id;
+            $chi_tiet_phieu_nhap->product_id = $val;
+            $chi_tiet_phieu_nhap->gia_nhap = floatval($data['gia_nhap'][$key]);
+            $chi_tiet_phieu_nhap->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
+            $chi_tiet_phieu_nhap->so_luong_thuc_nhap = $data['so_luong_thuc_nhap'][$key];
+            $chi_tiet_phieu_nhap->thanh_tien = floatval($thanh_tien_format);
+            $chi_tiet_phieu_nhap->save();
+        }
+        //Cập nhật bảng công nợ ncc, trước tiên cần trừ đi số tiền của phiếu nhập lúc chưa cập nhật cho bảng công nợ và nhà cung cấp
+        $month = \date("m");
+        $year = \date('Y');
+        $cong_no_ncc = CongNoNcc::where('nha_cung_cap_id',$data['nha_cung_cap_id'])
+            ->where('year',$year)->where('month',$month)->first();
+
+        $cong_no_ncc->cong_no_cuoi_thang -= $phieu_nhap->tong_tien;
+        $nha_cung_cap = NhaCungCap::find($data['nha_cung_cap_id']);
+        $nha_cung_cap->so_tien_no -= $phieu_nhap->tong_tien;
+
+        $phieu_nhap->tong_tien = $tong_tien;
+        $cong_no_ncc->cong_no_cuoi_thang += $tong_tien;
+        $nha_cung_cap->so_tien_no += $tong_tien;
+        $nha_cung_cap->save();
+
+
+        $phieu_nhap->save();
+        $cong_no_ncc->save();
+
+        return redirect()->route('view-phieu-nhap',['id'=>$phieu_nhap->id]);
     }
 
     /**
@@ -214,6 +299,7 @@ class PhieuNhapController extends Controller
     public function print_order($id){
         //$pdf = App::make('dompdf.wrapper');
         $phieu_nhap = PhieuNhap::find($id);
+        $phieu_nhap->trang_thai = "Xác nhận";
         $chi_tiet_phieu_nhap = ChiTietPhieuNhap::where('phieu_nhap_id',$id)->get();
         $pdf= \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.phieu_nhap.print_order',['phieu_nhap'=>$phieu_nhap,'chi_tiet_phieu_nhap'=>$chi_tiet_phieu_nhap])
             ->setPaper('a4','landscape');

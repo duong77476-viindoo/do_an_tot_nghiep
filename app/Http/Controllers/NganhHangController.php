@@ -21,10 +21,7 @@ class NganhHangController extends Controller
      */
     public function index()
     {
-        //
-        //
-        Paginator::useBootstrap();
-        $nganh_hangs = NganhHang::paginate(5);
+        $nganh_hangs = NganhHang::all();
 
         return view('admin.nganh_hang.index')->with('nganh_hangs',$nganh_hangs);
     }
@@ -37,7 +34,6 @@ class NganhHangController extends Controller
     public function create()
     {
         //
-
         return view('admin.nganh_hang.create');
     }
 
@@ -51,7 +47,7 @@ class NganhHangController extends Controller
     {
         //
         $validated = $request->validate([
-            'name' => 'required|min:5'
+            'name' => 'required|min:1'
         ]);
 
         $nganh_hang = new NganhHang();
@@ -62,7 +58,7 @@ class NganhHangController extends Controller
         $nganh_hang->save();
 
         Session::put('message','<p class="text-success">Thêm ngành hàng thành công</p>');
-        return Redirect::to('add-nganh-hang');
+        return \redirect()->route('view-nganh-hang',['id'=>$nganh_hang->id]);
     }
 
     /**
@@ -112,7 +108,7 @@ class NganhHangController extends Controller
     {
         //
         $validated = $request->validate([
-            'name' => 'required|min:5',
+            'name' => 'required|min:1',
         ]);
 
         $nganh_hang = NganhHang::find($id);
@@ -124,7 +120,7 @@ class NganhHangController extends Controller
         $nganh_hang->save();
 
         Session::put('message','<p class="text-success">Sửa ngành hàng thành công</p>');
-        return Redirect::to('all-nganh-hang');
+        return \redirect()->route('view-nganh-hang',['id'=>$nganh_hang->id]);
     }
 
     /**

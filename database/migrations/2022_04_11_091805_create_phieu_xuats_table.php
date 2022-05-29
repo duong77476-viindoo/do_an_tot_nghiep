@@ -24,6 +24,7 @@ class CreatePhieuXuatsTable extends Migration
             $table->string('name')->comment('Tên phiếu xuất');
             $table->text('content')->comment('Nội dung phiếu xuất');
             $table->decimal('tong_tien',14,2)->default(0);
+            $table->enum('trang_thai',['Chưa xác nhận','Xác nhận']);
             $table->bigInteger('nguoi_lap_id')->default(null)->unsigned();
             $table->foreign('nguoi_lap_id')
                 ->references('id')

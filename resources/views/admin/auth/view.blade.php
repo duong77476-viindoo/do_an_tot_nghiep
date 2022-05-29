@@ -1,6 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
-    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view-user',$admin) }}
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view_user',$admin) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -10,7 +10,6 @@
             </ul>
         </div>
     @endif
-    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('view_user',$admin) }}
     <div class="row">
         <div class="col-lg-12">
             <section class="panel">
@@ -38,6 +37,12 @@
                                 <label for="exampleInputEmail1">Điện thoại</label>
                                 <input disabled value="{{$admin->phone}}" type="text" class="form-control" id="exampleInputEmail1" name="phone" placeholder="Nhập điện thoại">
                             </div>
+                        <a href="{{route('delete-admin',['id'=>$admin->id])}}"
+                           onclick="return confirm('Bạn có chắc muốn xóa?')"
+                           class="active" ui-toggle-class=""><span class="btn btn-danger">Xóa</span></a>
+                        <a href="{{route('edit-admin',['id'=>$admin->id])}}" class="active" ui-toggle-class="">
+                            <span class="btn btn-primary">Sửa</span>
+                        </a>
                     </div>
 
                 </div>

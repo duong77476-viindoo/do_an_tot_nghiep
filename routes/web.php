@@ -566,16 +566,6 @@ Route::middleware('check_login_admin')->group(function (){
         Route::post('/update-gallery-name', [GalleryController::class, 'update_gallery_name'])->name('update-gallery-name');
         Route::post('/delete-gallery', [GalleryController::class, 'delete_gallery'])->name('delete-gallery');
         Route::post('/update-gallery', [GalleryController::class, 'update_gallery'])->name('/update-gallery');
-
-        //    Route::get('/edit-gallery/{id}',[GalleryController::class,'edit'])->name('edit-gallery');
-        //    Route::get('/delete-gallery/{id}',[GalleryController::class,'destroy'])->name('delete-gallery');
-        //    Route::post('/update-gallery/{id}',[GalleryController::class,'update'])->name('update-gallery');
-        //    Route::get('/view-gallery/{id}',[GalleryController::class,'show'])->name('view-gallery');
-        //
-        //    Route::post('/save-gallery',[GalleryController::class,'store'])->name('save-gallery');
-        //
-        //    Route::get('/active-gallery/{id}',[GalleryController::class,'active_gallery'])->name('active-gallery');
-        //    Route::get('/unactive-gallery/{id}',[GalleryController::class,'unactive_gallery'])->name('unactive-gallery');
     });
 
 });

@@ -1,6 +1,6 @@
 @extends('admin.admin_layout')
 @section('admin_content')
-    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('edit-user',$admin) }}
+    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('edit_user',$admin) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -10,7 +10,6 @@
             </ul>
         </div>
     @endif
-    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('edit_user',$admin) }}
     <div class="row">
         <div class="col-lg-12">
             <section class="panel">
