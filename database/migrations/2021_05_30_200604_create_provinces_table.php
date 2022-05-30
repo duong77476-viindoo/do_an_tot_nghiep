@@ -22,7 +22,6 @@ class CreateProvincesTable extends Migration
                 ->references('id')
                 ->on('cities')
                 ->onDelete('cascade');
-
         });
     }
 

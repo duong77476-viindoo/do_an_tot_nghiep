@@ -173,6 +173,7 @@ class ProductGroupController extends Controller
 
         $tags = Tag::all();
         $videos = Video::all();
+        $brands = Brand::all();
         $category_products = CategoryProduct::all();
         $product_group = ProductGroup::find($id);
         $category_products_id = CategoryProductProduct::where('product_group_id',$id)->get();
@@ -182,6 +183,7 @@ class ProductGroupController extends Controller
         return view('admin.product.view')
             ->with('tags',$tags)
             ->with('videos',$videos)
+            ->with('brands',$brands)
             ->with('product_group',$product_group)
             ->with('category_products',$category_products)
             ->with('category_products_id',$category_products_id);

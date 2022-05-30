@@ -23,7 +23,7 @@ class CreatePhieuNhapsTable extends Migration
             $table->string('name')->comment('Tên phiếu nhập');
             $table->text('content')->comment('Nội dung phiếu nhập');
             $table->decimal('tong_tien',14,2)->default(0);
-            $table->enum('trang_thai',['Chưa xác nhận','Xác nhận']);
+            $table->enum('trang_thai',['Chưa xác nhận','Xác nhận'])->default('Chưa xác nhận');
             $table->bigInteger('nguoi_lap_id')->unsigned();
             $table->foreign('nguoi_lap_id')
                 ->references('id')

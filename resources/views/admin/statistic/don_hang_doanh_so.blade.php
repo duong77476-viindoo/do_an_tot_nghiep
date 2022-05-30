@@ -5,8 +5,6 @@
     <form autocomplete="off">
         @csrf
         <div class="row">
-
-
             <div class="col-md-2">
                 <p>Từ ngày: <input type="text" id="datepicker" class="form-control"></p>
                 <p><input type="button" id="btn-dashboard-filter" class="btn btn-primary" value="Lọc kết quả"></p>

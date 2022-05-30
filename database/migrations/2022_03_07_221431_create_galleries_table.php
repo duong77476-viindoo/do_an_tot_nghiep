@@ -17,10 +17,10 @@ class CreateGalleriesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('image');
-            $table->bigInteger('product_id')->unsigned();
-            $table->foreign('product_id')
+            $table->bigInteger('product_group_id')->unsigned();
+            $table->foreign('product_group_id')
                 ->references('id')
-                ->on('products')
+                ->on('product_groups')
                 ->onDelete('cascade');
             $table->timestamps();
         });

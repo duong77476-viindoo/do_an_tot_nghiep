@@ -17,11 +17,11 @@ class CreateCustomersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('password');
             $table->string('phone');
             $table->string('avatar');
-            $table->string('token',32);
+            $table->string('token',32)->nullable();
             $table->timestamps();
         });
     }

@@ -26,9 +26,9 @@ class CreateChiTietPhieuNhapsTable extends Migration
                 ->on('products')
                 ->onDelete('cascade');
             $table->decimal('gia_nhap',14,2);
-            $table->integer('so_luong_yeu_cau');
-            $table->integer('so_luong_thuc_nhap');
-            $table->decimal('thanh_tien',14,2);
+            $table->integer('so_luong_yeu_cau')->default(0);
+            $table->integer('so_luong_thuc_nhap')->default(0);
+            $table->decimal('thanh_tien',14,2)->default(0);
             $table->timestamps();
         });
     }
