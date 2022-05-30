@@ -33,11 +33,11 @@
                                                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                                     </div>
                                                     <select disabled name="nganh_hang_id" id="nganh_hang" class="form-control">
-                                                        @foreach($nganh_hangs as $key=>$nganh_hang)
-                                                            @if($product_group->nganh_hang_id == $nganh_hang->id)
-                                                                <option selected value="{{$nganh_hang->id}}">{{$nganh_hang->name}}</option>
+                                                        @foreach($brands as $key=>$brand)
+                                                            @if($product_group->brand_id == $brand->id)
+                                                                <option selected value="{{$brand->id}}">{{$brand->brand_name}}</option>
                                                             @else
-                                                                <option value="{{$nganh_hang->id}}">{{$nganh_hang->name}}</option>
+                                                                <option value="{{$brand->id}}">{{$brand->brand_name}}</option>
                                                             @endif
                                                         @endforeach
                                                     </select>

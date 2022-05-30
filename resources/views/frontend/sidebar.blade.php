@@ -30,7 +30,7 @@
         <div class="brands-name">
             <ul class="nav nav-pills nav-stacked">
                 @foreach($brands as $brand)
-                <li><a href="{{route('thuong-hieu',['code'=>$brand->brand_slug])}}"> <span class="pull-right">(50)</span>{{$brand->brand_name}}</a></li>
+                <li><a href="{{route('thuong-hieu',['code'=>$brand->brand_slug])}}"> <span class="pull-right">{{$brand->product_groups->count()}}</span>{{$brand->brand_name}}</a></li>
                 @endforeach
             </ul>
         </div>

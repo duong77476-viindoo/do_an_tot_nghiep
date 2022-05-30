@@ -54,7 +54,7 @@
             <div class="row">
                 @foreach($nhom_san_pham->products as $product)
                     <div class="col-md-4 btn btn-default text-white box-version {{$product->code==$phien_ban_san_pham->code ? 'box-active':''}}">
-                        <a href="{{route('product',['code'=>$product->code])}}">{{$product->name}}</a>
+                        <a href="{{route('product',['code'=>$product->code])}}">{{$product->sku}}</a>
                     </div>
                 @endforeach
             </div>

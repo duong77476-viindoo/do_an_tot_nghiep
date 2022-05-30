@@ -13,17 +13,17 @@ class CreateCategoryProductProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_product_product', function (Blueprint $table) {
+        Schema::create('category_product_product_group', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('category_product_id')->unsigned();
-            $table->bigInteger('product_id')->unsigned();
+            $table->bigInteger('product_group_id')->unsigned();
             $table->foreign('category_product_id')
                 ->references('id')
                 ->on('category_products')
                 ->onDelete('cascade');
-            $table->foreign('product_id')
+            $table->foreign('product_group_id')
                 ->references('id')
-                ->on('products')
+                ->on('product_groups')
                 ->onDelete('cascade');
             $table->timestamps();
         });
@@ -36,6 +36,6 @@ class CreateCategoryProductProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_product_product');
+        Schema::dropIfExists('category_product_product_group');
     }
 }

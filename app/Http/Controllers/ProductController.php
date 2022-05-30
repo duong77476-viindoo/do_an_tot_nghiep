@@ -58,8 +58,8 @@ class ProductController extends Controller
                }
            }
            $product->code=$product_group->code.$sku;
-           $product->sku=$product_group->code.$sku;
-           $product->name = $product_group->name.$sku;
+           $product->sku=$sku;
+           $product->name = $sku;
            $gia_ban_format = $this->format_currency($data['gia_ban'][$i]);
            $product->gia_ban = floatval($gia_ban_format);
            $product->save();

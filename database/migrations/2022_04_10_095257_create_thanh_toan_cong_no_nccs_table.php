@@ -17,7 +17,7 @@ class CreateThanhToanCongNoNccsTable extends Migration
             $table->id();
             $table->text('noi_dung');
             $table->decimal('so_tien',14,2);
-            $table->boolean('da_thanh_toan');
+            $table->enum('trang_thai',['Chưa xác nhận','Xác nhận'])->default('Chưa xác nhận');
             $table->bigInteger('nguoi_lap_id')->unsigned();
             $table->foreign('nguoi_lap_id')
                 ->references('id')

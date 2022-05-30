@@ -16,11 +16,12 @@ class CreateSocialsTable extends Migration
         Schema::create('socials', function (Blueprint $table) {
             $table->id();
             $table->string('provider_id');
+            $table->string('provider_email');
             $table->string('provider');
-            $table->bigInteger('customer_id')->unsigned();//khóa ngoại với bảng admin
+            $table->bigInteger('customer_id')->unsigned();//khóa ngoại với bảng customer
             $table->foreign('customer_id')
                 ->references('id')
-                ->on('customer')
+                ->on('customers')
                 ->onDelete('cascade');
             $table->timestamps();
         });
