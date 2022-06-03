@@ -22,7 +22,6 @@
                 <table id="myTable" class="table table-striped b-t b-light">
                     <thead>
                     <tr>
-
                         <th>Tên loại phân loại</th>
                         <th>Ngành hàng</th>
                         <th>Code</th>

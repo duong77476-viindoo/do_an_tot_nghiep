@@ -22,11 +22,6 @@
                 <table id="myTable" class="table table-striped b-t b-light">
                     <thead>
                     <tr>
-                        <th style="width:20px;">
-                            <label class="i-checks m-b-none">
-                                <input type="checkbox"><i></i>
-                            </label>
-                        </th>
                         <th>Tên danh mục bài viết</th>
                         <th>Code</th>
                         <th>Từ khóa danh mục</th>
@@ -38,7 +33,6 @@
                     <tbody>
                     @foreach($post_types as $key => $post_type)
                     <tr>
-                        <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
                         <td>{{$post_type->name}}</td>
                         <td>{{$post_type->code}}</td>
                         <td>{{$post_type->meta_keywords}}</td>
