@@ -178,7 +178,7 @@ Route::middleware('revalidate')->group(function (){ //Middleware fix lỗi khi l
 
 //Báo cáo thống kê
 Route::middleware('check_login_admin')->group(function (){
-    Route::group(['middleware'=>'admin:Báo cáo thống kê'],function (){
+    Route::group(['middleware'=>'admin:Admin,Báo cáo thống kê'],function (){
         Route::get('/statistic-order',[StatisticOrderController::class,'statistic_order'])->name('statistic-order');
         Route::get('/statistic-product-post',[StatisticOrderController::class,'statistic_product_post'])->name('statistic-product-post');
         Route::post('/filter-by-date',[StatisticOrderController::class,'filter_by_date'])->name('filter-by-date');
@@ -367,7 +367,7 @@ Route::middleware('check_login_admin')->group(function () {
     });
 });
 Route::prefix('/cong-no-ncc')->group(function () {
-    Route::group(['middleware' => 'admin:Quản lý công nợ'], function () {
+    Route::group(['middleware' => 'admin:Admin,Quản lý công nợ'], function () {
         Route::get('/export-csv/{id}', [CongNoNccController::class, 'export_csv'])->name('export-bang-cong-no');
         Route::get('/export-xac-nhan-cong-no/{id}', [CongNoNccController::class, 'export_xac_nhan_cong_no'])->name('export-xac-nhan-cong-no');
         Route::get('/export-doi-chieu-cong-no/{id}', [CongNoNccController::class, 'export_doi_chieu_cong_no'])->name('export-doi-chieu-cong-no');
@@ -396,7 +396,20 @@ Route::middleware('check_login_admin')->group(function (){
 
 });
 
-
+//Quản lý khách hàng
+Route::middleware('check_login_admin')->group(function (){
+    Route::group(['middleware'=>'admin:Admin'],function () {
+        Route::prefix('customer')->group(function (){
+            Route::get('/all',[CustomerController::class,'show_all_customers'])->name('all-customer');
+            Route::get('/add',[CustomerController::class,'create'])->name('add-customer');
+            Route::get('/edit/{id}',[CustomerController::class,'edit'])->name('edit-customer');
+            Route::post('/save',[CustomerController::class,'save'])->name('save-customer');
+            Route::post('/update/{id}',[CustomerController::class,'update'])->name('update-customer');
+            Route::get('/delete/{id}',[CustomerController::class,'destroy'])->name('delete-customer');
+            Route::get('/view/{id}',[CustomerController::class,'show'])->name('view-customer');
+        });
+    });
+});
 
 //Loại phân loại (danh mục cha)
 Route::middleware('check_login_admin')->group(function (){

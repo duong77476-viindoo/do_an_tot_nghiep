@@ -76,12 +76,20 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-header">Kho vận</li>
                         <li class="nav-item">
                             <a href="{{route('all-nha-cung-cap')}}" class="nav-link">
                                 <i class="fa fa-address-book nav-icon"></i>
                                 <p>Nhà cung cấp</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{route('fee-ship')}}" class="nav-link">
+                                <i class="fa fa-money-bill-alt nav-icon"></i>
+                                <p>Phí vận chuyển</p>
+                            </a>
+                        </li>
+                        <li class="nav-header">Sản phẩm</li>
                         <li class="nav-item">
                             <a href="{{route('all-nganh-hang')}}" class="nav-link">
                                 <i class="fa fa-tag nav-icon"></i>
@@ -107,15 +115,35 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{route('all-product')}}" class="nav-link">
+                                <i class="fas fa-mobile-alt nav-icon"></i>
+                                <p>Sản phẩm</p>
+                            </a>
+                        </li>
+                        <li class="nav-header">Asset</li>
+                        <li class="nav-item">
                             <a href="{{route('all-slider')}}" class="nav-link">
                                 <i class="fas fa-image nav-icon"></i>
                                 <p>Slider-Banner</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('all-product')}}" class="nav-link">
-                                <i class="fas fa-mobile-alt nav-icon"></i>
-                                <p>Sản phẩm</p>
+                            <a href="{{route('all-video')}}" class="nav-link">
+                                <i class="fas fa-video nav-icon"></i>
+                                <p>Video</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('all-coupon')}}" class="nav-link">
+                                <i class="fas fa-gift nav-icon"></i>
+                                <p>Mã giảm giá</p>
+                            </a>
+                        </li>
+                        <li class="nav-header">Khách hàng</li>
+                        <li class="nav-item">
+                            <a href="{{route('all-customer')}}" class="nav-link">
+                                <i class="fas fa-comment nav-icon"></i>
+                                <p>Khách hàng</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -128,24 +156,6 @@
                             <a href="{{route('all-rating')}}" class="nav-link">
                                 <i class="fas fa-star nav-icon"></i>
                                 <p>Đánh giá sản phẩm</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('all-coupon')}}" class="nav-link">
-                                <i class="fas fa-gift nav-icon"></i>
-                                <p>Mã giảm giá</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('all-video')}}" class="nav-link">
-                                <i class="fas fa-video nav-icon"></i>
-                                <p>Video</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('fee-ship')}}" class="nav-link">
-                                <i class="fa fa-money-bill-alt nav-icon"></i>
-                                <p>Phí vận chuyển</p>
                             </a>
                         </li>
                     </ul>

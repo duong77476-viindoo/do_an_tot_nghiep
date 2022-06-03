@@ -54,26 +54,59 @@
                     </tbody>
                 </table>
             </div>
-            <footer class="panel-footer">
-                <div class="row">
-
-                    {{--                    <div class="col-sm-5 text-center">--}}
-                    {{--                        <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>--}}
-                    {{--                    </div>--}}
-                    <div class="col-sm-7 text-right text-center-xs">
-                        <ul class="pagination pagination-sm m-t-none m-b-none">
-                            {{--                            {{ $phieu_xuats->links() }}--}}
-                            {{--                            <li><a href=""><i class="fa fa-chevron-left"></i></a></li>--}}
-                            {{--                            <li><a href="">1</a></li>--}}
-                            {{--                            <li><a href="">2</a></li>--}}
-                            {{--                            <li><a href="">3</a></li>--}}
-                            {{--                            <li><a href="">4</a></li>--}}
-                            {{--                            <li><a href=""><i class="fa fa-chevron-right"></i></a></li>--}}
-                        </ul>
-                    </div>
-                </div>
-            </footer>
+        </div>
+        <div class="col-md-12">
+            <div id="stat_xuat_nhap_ton" style="height: 200px"></div>
         </div>
     </div>
 @endsection
+
+@section('pagescript')
+
+    <script type="text/javascript">
+        $(document).ready(function (){
+            xuat_nhap_ton_chart();
+
+
+            var chart = new Morris.Area({
+                // ID of the element in which to draw the chart.
+                element: 'stat_xuat_nhap_ton',
+                lineColors: ['#819C79','#FC8710','#FF6541','#A4ADD3'],
+                pointFillColors: ['#ffffff'],
+                pointStrokeColors: ['black'],
+                fillOpacity: 0.6,
+                hideHover:'auto',
+                parseTime:false,
+
+                // The name of the data record attribute that contains x-values.
+
+
+                xkey: 'month_year',
+                xLabelAngle: 45,
+
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['tong_nhap','tong_xuat','tong_ton'],
+                behaveLikeLine: true,
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Tổng nhập','Tổng xuất','Tổng tồn']
+            });
+
+            function xuat_nhap_ton_chart(){
+                $.ajax({
+                    url:"{{url('/xuat-nhap-ton-chart')}}",
+                    method:"POST",
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType:"JSON",
+                    success:function (data){
+                        chart.setData(data)
+                    }
+                })
+            }
+        })
+    </script>
+@endsection
+
 
