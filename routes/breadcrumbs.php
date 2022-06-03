@@ -28,6 +28,27 @@ Breadcrumbs::register('edit_user', function ($breadcrumbs, $user) {
     $breadcrumbs->push($user->name,route('edit-admin',['id'=>$user->id]));
 });
 
+//Khách hàng
+Breadcrumbs::register('customer', function ($breadcrumbs) {
+    $breadcrumbs->parent('admin');
+    $breadcrumbs->push('Khách hàng',route('all-customer'));
+});
+
+Breadcrumbs::register('add_customer', function ($breadcrumbs) {
+    $breadcrumbs->parent('customer');
+    $breadcrumbs->push('Thêm khách hàng',route('add-customer'));
+});
+
+Breadcrumbs::register('view_customer', function ($breadcrumbs, $customer) {
+    $breadcrumbs->parent('customer');
+    $breadcrumbs->push($customer->name,route('view-customer',['id'=>$customer->id]));
+});
+
+Breadcrumbs::register('edit_customer', function ($breadcrumbs, $customer) {
+    $breadcrumbs->parent('customer');
+    $breadcrumbs->push($customer->name,route('edit-customer',['id'=>$customer->id]));
+});
+
 //Nhà cung cấp
 Breadcrumbs::register('provider', function ($breadcrumbs) {
     $breadcrumbs->parent('admin');

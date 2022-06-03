@@ -47,18 +47,6 @@ class CustomerController extends Controller
             ->with('url_canonical',$url_canonical);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-
-
-
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -69,7 +57,6 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         //
-
         $data = $request->all();
         $existed_email = Customer::where('email',$data['email'])->first();
         if($existed_email){
@@ -89,51 +76,6 @@ class CustomerController extends Controller
             Session::put('customer_name',$customer->name);
             return Redirect::to('/trang-chu');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Customer $customer)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Customer $customer)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Customer $customer)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Customer $customer)
-    {
-        //
     }
 
     public function logout(){
@@ -407,4 +349,117 @@ class CustomerController extends Controller
             ->with('meta_title',$meta_title)
             ->with('url_canonical',$url_canonical);
     }
+
+    public function show_all_customers(){
+        //Hiển thị khachs hàng
+        $customers = Customer::all();
+        return view('admin.customer.index')
+            ->with('customers',$customers);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+        return view('admin.customer.create');
+    }
+
+    public function save(Request $request){
+        //Kiểm tra dữ liệu
+        $validated = $request->validate([
+            'name'=>'required',
+            'email'=>'required|email',
+            'phone'=>'required',
+            'password'=>'required',
+        ]);
+
+        //Thêm dữ liệu
+        $data = $request->all();
+        $customer = new Customer();
+        $customer->name = $data['name'];
+        $customer->email = $data['email'];
+        $customer->address = $data['address'];
+        $customer->phone = $data['phone'];
+        $customer->password = md5($data['password']);
+        $customer->save();
+
+        return \redirect()->route('view-customer',['id'=>$customer->id])->with('message','<p class="text-success">Thêm khách hàng thành công</p>');
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Customer  $customer
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+        $customer = Customer::find($id);
+        return view('admin.customer.view')->with('customer',$customer);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Customer  $customer
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+        $customer = Customer::find($id);
+        return view('admin.customer.edit')->with('customer',$customer);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Customer  $customer
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+        //Kiểm tra dữ liệu
+        $validated = $request->validate([
+            'name'=>'required',
+            'email'=>'required|email',
+            'phone'=>'required',
+        ]);
+
+        //Thêm dữ liệu
+        $data = $request->all();
+        $customer = Customer::find($id);
+        $customer->name = $data['name'];
+        $customer->email = $data['email'];
+        $customer->address = $data['address'];
+        $customer->phone = $data['phone'];
+        $customer->save();
+
+        return \redirect()->route('view-customer',['id'=>$customer->id])->with('message','<p class="text-success">Sửa khách hàng thành công</p>');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Customer  $customer
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+        $customer = Customer::find($id);
+        $customer->delete();
+        return \redirect()->route('all-customer')->with('message','<p class="text-success">Xóa khách hàng thành công</p>');
+
+    }
+
+
 }

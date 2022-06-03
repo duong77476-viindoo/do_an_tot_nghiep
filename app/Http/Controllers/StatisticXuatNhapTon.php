@@ -23,17 +23,16 @@ class StatisticXuatNhapTon extends Controller
     }
 
     public function xuat_nhap_ton_chart(){
-        $stat_xuat_nhap_ton = TonKho::groupBy('product_id')
-            ->selectRaw('product_id,
+        $stat_xuat_nhap_ton = TonKho::groupBy('year','month')
+            ->selectRaw('month,
+            year,
             sum(nhap_trong_thang) as tong_nhap,
             sum(xuat_trong_thang) as tong_xuat,
             sum(ton) as tong_ton')
             ->where('trang_thai','Hoàn thành')->get();
         foreach ($stat_xuat_nhap_ton as $stat){
-            $product = Product::find($stat->product_id);
             $chart_data[] = array(
-                'product_id'=>'#'.$stat->product_id,
-                'product_name'=>$product->name,
+                'month_year'=>$stat->month.'-'.$stat->year,
                 'tong_nhap'=>$stat->tong_nhap,
                 'tong_xuat'=>$stat->tong_xuat,
                 'tong_ton'=>$stat->tong_ton

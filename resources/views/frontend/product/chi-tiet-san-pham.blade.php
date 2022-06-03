@@ -169,7 +169,7 @@
             <li><a href="#details" data-toggle="tab">Mô tả sản phẩm</a></li>
             <li><a href="#companyprofile" data-toggle="tab">Thông số kỹ thuật</a></li>
             <li><a href="#comments" data-toggle="tab">Bình luận ({{$phien_ban_san_pham->comments->count()}})</a></li>
-            <li><a href="#reviews" data-toggle="tab">Đánh giá (5)</a></li>
+            <li><a href="#reviews" data-toggle="tab">Đánh giá ({{$phien_ban_san_pham->ratings->count()}})</a></li>
         </ul>
     </div>
     <div class="tab-content">
@@ -189,54 +189,22 @@
         </div>
 
         <div class="tab-pane fade" id="companyprofile" >
-            <div class="col-sm-3">
-                <div class="product-image-wrapper">
-                    <div class="single-products">
-                        <div class="productinfo text-center">
-                            <img src="images/home/gallery1.jpg" alt="" />
-                            <h2>$56</h2>
-                            <p>Easy Polo Black Edition</p>
-                            <button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="product-image-wrapper">
-                    <div class="single-products">
-                        <div class="productinfo text-center">
-                            <img src="images/home/gallery3.jpg" alt="" />
-                            <h2>$56</h2>
-                            <p>Easy Polo Black Edition</p>
-                            <button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="product-image-wrapper">
-                    <div class="single-products">
-                        <div class="productinfo text-center">
-                            <img src="images/home/gallery2.jpg" alt="" />
-                            <h2>$56</h2>
-                            <p>Easy Polo Black Edition</p>
-                            <button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="product-image-wrapper">
-                    <div class="single-products">
-                        <div class="productinfo text-center">
-                            <img src="images/home/gallery4.jpg" alt="" />
-                            <h2>$56</h2>
-                            <p>Easy Polo Black Edition</p>
-                            <button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h2>Cấu hình {{$phien_ban_san_pham->name}}</h2>
+            <table class="technique_parameter">
+                <thead>
+                <tr>
+
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($phien_ban_san_pham->product_specs as $spec)
+                <tr>
+                    <td>{{$spec->name}}</td>
+                    <td>{{$spec->value}}</td>
+                </tr>
+                @endforeach
+                </tbody>
+            </table>
         </div>
 
         <div class="tab-pane fade " id="comments" >
@@ -387,7 +355,7 @@
                         $('#form-comment')[0].reset();
                         $('#notify-comment').html('<span class="text text-success">Bình luận của bạn đang được duyệt</span>');
                         load_comment();
-                        $('#notify-comment').fadeOut(2000);
+                        $('#notify-comment').fadeOut(5000);
                     }
                 });
             });
@@ -439,7 +407,7 @@
                 }
             });
         }
-    });
+
     function remove_background(product_id){
         for(var count=1;count<=5;count++){
             $('#'+product_id+'-'+count).css('color','#ccc');
@@ -495,11 +463,11 @@
                 $('#form-rating')[0].reset();
                 $('#notify-rating').html('<span class="text text-success">Cảm ơn bạn đã đánh giá</span>');
                 // load_rating();
-                $('#notify-rating').fadeOut(2000);
+                $('#notify-rating').fadeOut(5000);
             }
         });
     });
-
+    });
 
 </script>
 

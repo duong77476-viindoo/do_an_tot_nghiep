@@ -70,7 +70,6 @@
 
 <footer id="footer"><!--Footer-->
     @include('frontend.footer')
-    @yield('pagescript')
 </footer><!--/Footer-->
 
 

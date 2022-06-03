@@ -29,7 +29,8 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table id="myTable" class="table table-striped b-t b-light">
+{{--                Để id myTable sê lỗi không phân quyền được nên tạm thời xóa đi, xem xét cách fix--}}
+                <table id="" class="table table-striped b-t b-light">
                     <thead>
                     <tr>
                         <th>Tên người dùng</th>
@@ -41,9 +42,10 @@
                     </tr>
                     </thead>
                     <tbody>
+
                     @foreach($admins as $key => $admin)
                         <form action="{{route('assign-roles')}}" method="post">
-                            @csrf
+                        @csrf
                         <tr>
                             <td>{{$admin->name}}</td>
                             <td>
@@ -51,10 +53,10 @@
                                 <input type="hidden" name="email" value="{{$admin->email}}">
                             </td>
                             @foreach($roles as $key=>$role)
-                                <td><input type="checkbox" name="{{$role->id}}" {{$admin->hasRole($role->name) ? 'checked' : ''}}></td>
+                                <td><input type="checkbox" name="{{$role->id}}" {{$admin->hasRole($role->name) ? 'checked' : ''}}/></td>
                             @endforeach
                             <td>
-                                <input type="submit" value="Phân quyền" class="btn btn-sm btn-default">
+                                <input type="submit" value="Phân quyền" class="btn btn-sm btn-default"/>
                                 <a href="{{route('edit-admin',['id'=>$admin->id])}}" class="active" ui-toggle-class="">
                                     <i class="fa fa-pen text-success text-active"></i>
                                 </a>
