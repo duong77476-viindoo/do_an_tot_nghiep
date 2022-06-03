@@ -14,19 +14,19 @@
             }
             ?>
             <div class="row w3-res-tb">
-                <div class="col-sm-3 m-b-xs">
-                    <form action="{{route('category-import-csv')}}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <input type="file" name="file" accept=".xlsx"><br>
-                        <input type="submit" value="Nhập file excel" name="import_csv" class="btn btn-warning">
-                    </form>
-                </div>
-                <div class="col-sm-2">
-                    <form action="{{route('category-export-csv')}}" method="POST">
-                        @csrf
-                        <input type="submit" value="Xuất file excel" name="export_csv" class="btn btn-success">
-                    </form>
-                </div>
+{{--                <div class="col-sm-3 m-b-xs">--}}
+{{--                    <form action="{{route('category-import-csv')}}" method="POST" enctype="multipart/form-data">--}}
+{{--                        @csrf--}}
+{{--                        <input type="file" name="file" accept=".xlsx"><br>--}}
+{{--                        <input type="submit" value="Nhập file excel" name="import_csv" class="btn btn-warning">--}}
+{{--                    </form>--}}
+{{--                </div>--}}
+{{--                <div class="col-sm-2">--}}
+{{--                    <form action="{{route('category-export-csv')}}" method="POST">--}}
+{{--                        @csrf--}}
+{{--                        <input type="submit" value="Xuất file excel" name="export_csv" class="btn btn-success">--}}
+{{--                    </form>--}}
+{{--                </div>--}}
                 <div class="col-sm-4">
                     <a href="{{route('add-category-product')}}"><span class="btn btn-primary fa fa-plus">Thêm phân loại</span></a>
                 </div>
