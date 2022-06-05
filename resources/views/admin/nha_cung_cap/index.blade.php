@@ -22,11 +22,6 @@
                 <table id="myTable" class="table table-striped b-t b-light">
                     <thead>
                     <tr>
-                        <th style="width:20px;">
-                            <label class="i-checks m-b-none">
-                                <input type="checkbox"><i></i>
-                            </label>
-                        </th>
                         <th>Tên nhà cung cấp</th>
                         <th>Điện thoại</th>
                         <th>Địa chỉ</th>
@@ -38,11 +33,10 @@
                     <tbody>
                     @foreach($nha_cung_caps as $key => $nha_cung_cap)
                         <tr>
-                            <td><label class="i-checks m-b-none"><input type="checkbox" name="nha_cung_cap[]"><i></i></label></td>
                             <td>{{$nha_cung_cap->name}}</td>
                             <td>{{$nha_cung_cap->phone}}</td>
                             <td>{{$nha_cung_cap->address}}</td>
-                            <td>{{$nha_cung_cap->so_tien_no}}</td>
+                            <td>{{number_format($nha_cung_cap->so_tien_no,2,",",".")}} đ</td>
                             <td>{{$nha_cung_cap->updated_at}}</td>
                             <td>
                                 <a href="{{route('edit-nha-cung-cap',['id'=>$nha_cung_cap->id])}}" class="active" ui-toggle-class="">

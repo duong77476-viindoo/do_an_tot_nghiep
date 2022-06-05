@@ -31,6 +31,7 @@
 
 </div><!--features_items-->
 
+@if(!is_null($brands))
 <div class="category-tab"><!--phụ-kiện-tab-->
     <div class="col-sm-12">
         <ul class="nav nav-tabs">
@@ -43,30 +44,31 @@
         @foreach($brands as $key=>$brand)
                 <div class="tab-pane fade {{$key==0 ? 'active in' : ''}} tab-product {{$brand->brand_slug}}" id="{{$brand->brand_slug}}">
                     @foreach($brand->product_groups as $san_pham_moi)
-                    <div class="col-sm-3">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    @foreach($san_pham_moi->products as $product)
-                                        <a href="{{route('product',['code'=>$product->code])}}">
-                                            @break
-                                            @endforeach
-                                            <img src="{{url('public/uploads/products/'.$san_pham_moi->anh_dai_dien)}}" alt="" />
-                                            <h2>{{number_format($san_pham_moi->products[0]->gia_ban,0,'','.')}} đ</h2>
-                                            <p>{{$san_pham_moi->name}}</p>
-                                        </a>
-                                        <button type="button" class="btn btn-default quick_view" data-toggle="modal" data-target="#quick_view"
-                                                name="add-to-cart" data-product_id="{{$san_pham_moi->id}}">
-                                            <i class="fa fa-eye"></i>Xem nhanh</button>
-                               </div>
+                        <div class="col-sm-3">
+                            <div class="product-image-wrapper">
+                                <div class="single-products">
+                                    <div class="productinfo text-center">
+                                        @foreach($san_pham_moi->products as $product)
+                                            <a href="{{route('product',['code'=>$product->code])}}">
+                                                @break
+                                                @endforeach
+                                                <img src="{{url('public/uploads/products/'.$san_pham_moi->anh_dai_dien)}}" alt="" />
+                                                <h2>{{number_format($san_pham_moi->products[0]->gia_ban,0,'','.')}} đ</h2>
+                                                <p>{{$san_pham_moi->name}}</p>
+                                            </a>
+                                            <button type="button" class="btn btn-default quick_view" data-toggle="modal" data-target="#quick_view"
+                                                    name="add-to-cart" data-product_id="{{$san_pham_moi->id}}">
+                                                <i class="fa fa-eye"></i>Xem nhanh</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
-        @endforeach
+            @endforeach
     </div>
 </div><!--/category-tab-->
+@endif
 
 <div class="recommended_items"><!--recommended_items-->
     <h2 class="title text-center">Sản phẩm nổi bật</h2>
@@ -204,6 +206,7 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function (){
+            @if(!is_null($brands))
             @foreach($brands as $brand)
 
             $('.tab-{{$brand->brand_slug}}').click(function (){
@@ -211,6 +214,7 @@
                 $('.{{$brand->brand_slug}}').addClass('active in');
             });
             @endforeach
+            @endif
         })
     </script>
 @endsection

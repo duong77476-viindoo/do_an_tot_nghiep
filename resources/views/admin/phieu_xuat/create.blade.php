@@ -41,7 +41,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                 </div>
-                                                <select class="form-control" name="order_id">
+                                                <select id="order_id" class="form-control" name="order_id">
                                                     @foreach($orders as $order)
                                                         <option value="{{$order->id}}">{{$order->id}}</option>
                                                     @endforeach
@@ -73,6 +73,21 @@
                                             </div>
                                             <!-- /.input group -->
                                         </div>
+                                        <div class="form-group">
+                                            <label>Trạng thái:</label>
+
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-square"></i></span>
+                                                </div>
+                                                <select class="form-control" name="trang_thai" >
+                                                    <option value="Chưa xác nhận" selected>Chưa xác nhận</option>
+                                                    <option value="Xác nhận">Xác nhận</option>
+                                                </select>
+                                            </div>
+                                            <!-- /.input group -->
+                                        </div>
+
                                         <!-- /.form group -->
                                     </div>
                                     <!-- /.card-body -->
@@ -94,7 +109,7 @@
                                                 <tbody id="DynamicTable">
                                                     <tr>
                                                         <td>
-                                                            <select class="form-control" name="san_pham[]">
+                                                            <select id="san_pham_xuat" class="form-control" name="san_pham[]">
                                                                 @foreach($products as $product)
                                                                     <option value="{{$product->id}}">{{$product->code}}</option>
                                                                 @endforeach
@@ -139,13 +154,16 @@
             var i = 1;
             $('#add').click(function (){
                 i++;
-                $('#DynamicTable').append('<tr id="row'+i+'"><td><select class="form-control" name="san_pham[]">@foreach($products as $product)<option value="{{$product->id}}">{{$product->code}}</option>@endforeach</select> </td> <td> <input type="number" class="form-control" name="so_luong_yeu_cau[]"> </td> <td> <input type="number" class="form-control so_luong" name="so_luong_thuc_xuat[]"> </td> <td> <input type="text" class="form-control money'+i+' gia_xuat"  name="gia_xuat[]"> </td> <td> <input readonly type="text" class="form-control thanh_tien" name="thanh_tien[]"> </td> <td> <button type="button" id="'+i+'" class="btn btn-danger remove_row"><i class="fa fa-minus"></i></button> </td> </tr>')
+                $('#DynamicTable').append('<tr id="row'+i+'"><td><select id="san_pham_xuat'+i+'" class="form-control" name="san_pham[]">@foreach($products as $product)<option value="{{$product->id}}">{{$product->code}}</option>@endforeach</select> </td> <td> <input type="number" class="form-control" name="so_luong_yeu_cau[]"> </td> <td> <input type="number" class="form-control so_luong" name="so_luong_thuc_xuat[]"> </td> <td> <input type="text" class="form-control money'+i+' gia_xuat"  name="gia_xuat[]"> </td> <td> <input readonly type="text" class="form-control thanh_tien" name="thanh_tien[]"> </td> <td> <button type="button" id="'+i+'" class="btn btn-danger remove_row"><i class="fa fa-minus"></i></button> </td> </tr>')
                 new AutoNumeric('.money'+i+'', {
                     currencySymbol :'đ',
                     decimalPlaces: 2,
                     digitGroupSeparator : ',',
                     decimalCharacter : '.',
                     currencySymbolPlacement : 's'
+                });
+                $('#san_pham'+i+'').selectize({
+                    sortField: "text",
                 });
             });
 
@@ -173,6 +191,15 @@
         });
     })
 </script>
+
+    <script type="text/javascript">
+        $('#san_pham_xuat').selectize({
+            sortField: "text",
+        });
+        $("#order_id").selectize({
+            sortField: "text",
+        });
+    </script
 
 @endsection
 

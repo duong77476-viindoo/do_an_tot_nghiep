@@ -14,7 +14,7 @@
         <div class="col-lg-12">
             <section class="panel">
                 <header class="panel-heading">
-                    Phiếu xuất #{{$phieu_xuat->id}} (Đơn hàng# <a href="{{route('view-customer-order',['id'=>$phieu_xuat->order_id])}}">{{$phieu_xuat->order_id}}</a>)
+                    Phiếu xuất #{{$phieu_xuat->id}} (<a href="{{route('view-customer-order',['id'=>$phieu_xuat->order_id])}}">Đơn hàng#{{$phieu_xuat->order_id}}</a>)
                 </header>
                 <?php
                 $message = \Illuminate\Support\Facades\Session::get('message');
@@ -40,7 +40,7 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                     </div>
-                                                    <input class="form-control" type="text" disabled value="{{$phieu_xuat->order_id}}">
+                                                    <input class="form-control" type="text" readonly value="{{$phieu_xuat->order_id}}">
                                                 </div>
                                                 <!-- /.input group -->
                                             </div>
@@ -55,7 +55,7 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                     </div>
-                                                    <input disabled class="form-control" type="text" value="{{$phieu_xuat->name}}" name="name" placeholder="Nhập tên phiếu">
+                                                    <input readonly class="form-control" type="text" value="{{$phieu_xuat->name}}" name="name" placeholder="Nhập tên phiếu">
                                                 </div>
                                                 <!-- /.input group -->
                                             </div>
@@ -67,7 +67,7 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                     </div>
-                                                    <input disabled class="form-control" id="noi_dung" type="text" value="{{$phieu_xuat->content}}" name="noi_dung" placeholder="Nhập nội dung">
+                                                    <input readonly class="form-control" id="noi_dung" type="text" value="{{$phieu_xuat->content}}" name="noi_dung" placeholder="Nhập nội dung">
                                                 </div>
                                                 <!-- /.input group -->
                                             </div>
@@ -79,7 +79,7 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                     </div>
-                                                    <input disabled class="form-control"  type="text" value="{{$phieu_xuat->trang_thai}}" name="trang_thai">
+                                                    <input readonly class="form-control"  type="text" value="{{$phieu_xuat->trang_thai}}" name="trang_thai">
                                                 </div>
                                                 <!-- /.input group -->
                                             </div>

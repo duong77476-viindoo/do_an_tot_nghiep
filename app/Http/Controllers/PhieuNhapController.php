@@ -63,12 +63,7 @@ class PhieuNhapController extends Controller
 
 
         $data = $request->all();
-//        $money_format = trim($data['thanh_tien'][0],"đ");
-//        VarDumper::dump($money_format);
-//        VarDumper::dump(floatval($money_format));
-//        VarDumper::dump($data['gia_nhap'][0]);
-//        VarDumper::dump(floatval($this->format_currency($data['gia_nhap'][0])));
-//        exit();
+
         $phieu_nhap = new PhieuNhap();
         $phieu_nhap->name = $data['name'];
         $phieu_nhap->content = $data['noi_dung'];
@@ -78,52 +73,12 @@ class PhieuNhapController extends Controller
         $phieu_nhap->nguoi_lap_id = Auth::id();
         $phieu_nhap->trang_thai = $data['trang_thai'];
         $phieu_nhap->save();
-
-
-
         $tong_tien = 0;
         foreach ($data['san_pham'] as $key=>$val){
-//            VarDumper::dump($val);
-//            VarDumper::dump($data['so_luong_yeu_cau'][$key]);
             //Tính tổng tiền nhập
             $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
             $tong_tien+=floatval($thanh_tien_format);
-
-//            //Cập nhật số lượng của mỗi sản phẩm trong tbl product
-            $product = Product::find($val);
-//            //Cập nhật giá tiền sản phẩm
-//            $phan_tram_loi_nhuan = 10;
-//
-//            $product->gia_ban =
-//                round(
-//                    (floatval($this->format_currency($data['gia_nhap'][$key])) / (100 - $phan_tram_loi_nhuan)) * 100
-//                );
-              $product->so_luong += $data['so_luong_thuc_nhap'][$key];
-              $product->save();
-
-
-            //Cộng dồn số lượng nhập của sản phẩm tương ứng vào bảng tồn kho
-            //Check tồn tài tồn của sản phẩm
-            $month = \date("m");
-            $year = \date('Y');
-            $ton_kho_by_product = TonKho::where('product_id',$val)->where('year',$year)->where('month',$month)->first();
-            if(is_null($ton_kho_by_product)){
-                $ton_kho_by_product = new TonKho();
-                $ton_kho_by_product->year = $year;
-                $ton_kho_by_product->month = $month;
-                $ton_kho_by_product->ton_dau_thang = 0;
-                $ton_kho_by_product->nhap_trong_thang = $data['so_luong_thuc_nhap'][$key];
-                $ton_kho_by_product->xuat_trong_thang = 0;
-                $ton_kho_by_product->ton = 0;
-                $ton_kho_by_product->product_id = $val;
-            }else{
-                $ton_kho_by_product->nhap_trong_thang += $data['so_luong_thuc_nhap'][$key];
-            }
-            $ton_kho_by_product->save();
-
-
-
-
+            //Tính tổng tiền nhập
             $chi_tiet_phieu_nhap = new ChiTietPhieuNhap();
             $chi_tiet_phieu_nhap->phieu_nhap_id = $phieu_nhap->id;
             $chi_tiet_phieu_nhap->product_id = $val;
@@ -134,29 +89,75 @@ class PhieuNhapController extends Controller
             $chi_tiet_phieu_nhap->save();
         }
         $phieu_nhap->tong_tien = $tong_tien;
-        //Cập nhật bảng công nợ ncc
-        $month = \date("m");
-        $year = \date('Y');
-        $cong_no_ncc = CongNoNcc::where('nha_cung_cap_id',$data['nha_cung_cap_id'])
-            ->where('year',$year)->where('month',$month)->first();
-        if(is_null($cong_no_ncc)){
-            $cong_no_ncc = new CongNoNcc();
-            $cong_no_ncc->year = $year;
-            $cong_no_ncc->month = $month;
-            $cong_no_ncc->cong_no_dau_thang = 0;
-            $cong_no_ncc->cong_no_cuoi_thang = $tong_tien;
-            $cong_no_ncc->cong_no_da_thanh_toan = 0;
-            $cong_no_ncc->cong_no_con = 0;
-            $cong_no_ncc->nha_cung_cap_id = $data['nha_cung_cap_id'];
-        }else{
-            $cong_no_ncc->cong_no_cuoi_thang += $tong_tien;
+
+
+        if($phieu_nhap->trang_thai=="Xác nhận"){
+            $tong_tien = 0;
+            foreach ($data['san_pham'] as $key=>$val){
+                //Tính tổng tiền nhập
+                $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
+                $tong_tien+=floatval($thanh_tien_format);
+
+//            //Cập nhật số lượng của mỗi sản phẩm trong tbl product
+                $product = Product::find($val);
+                $product->so_luong += $data['so_luong_thuc_nhap'][$key];
+                $product->save();
+
+
+                //Cộng dồn số lượng nhập của sản phẩm tương ứng vào bảng tồn kho
+                //Check tồn tài tồn của sản phẩm
+                $month = \date("m");
+                $year = \date('Y');
+                $ton_kho_by_product = TonKho::where('product_id',$val)->where('year',$year)->where('month',$month)->first();
+                if(is_null($ton_kho_by_product)){
+                    $ton_kho_by_product = new TonKho();
+                    $ton_kho_by_product->year = $year;
+                    $ton_kho_by_product->month = $month;
+                    $ton_kho_by_product->ton_dau_thang = 0;
+                    $ton_kho_by_product->nhap_trong_thang = $data['so_luong_thuc_nhap'][$key];
+                    $ton_kho_by_product->xuat_trong_thang = 0;
+                    $ton_kho_by_product->ton = 0;
+                    $ton_kho_by_product->product_id = $val;
+                }else{
+                    $ton_kho_by_product->nhap_trong_thang += $data['so_luong_thuc_nhap'][$key];
+                }
+                $ton_kho_by_product->save();
+
+
+//                $chi_tiet_phieu_nhap = new ChiTietPhieuNhap();
+//                $chi_tiet_phieu_nhap->phieu_nhap_id = $phieu_nhap->id;
+//                $chi_tiet_phieu_nhap->product_id = $val;
+//                $chi_tiet_phieu_nhap->gia_nhap = floatval($this->format_currency($data['gia_nhap'][$key]));
+//                $chi_tiet_phieu_nhap->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
+//                $chi_tiet_phieu_nhap->so_luong_thuc_nhap = $data['so_luong_thuc_nhap'][$key];
+//                $chi_tiet_phieu_nhap->thanh_tien = floatval($thanh_tien_format);
+//                $chi_tiet_phieu_nhap->save();
+            }
+            $phieu_nhap->tong_tien = $tong_tien;
+            //Cập nhật bảng công nợ ncc
+            $month = \date("m");
+            $year = \date('Y');
+            $cong_no_ncc = CongNoNcc::where('nha_cung_cap_id',$data['nha_cung_cap_id'])
+                ->where('year',$year)->where('month',$month)->first();
+            if(is_null($cong_no_ncc)){
+                $cong_no_ncc = new CongNoNcc();
+                $cong_no_ncc->year = $year;
+                $cong_no_ncc->month = $month;
+                $cong_no_ncc->cong_no_dau_thang = 0;
+                $cong_no_ncc->cong_no_cuoi_thang = $tong_tien;
+                $cong_no_ncc->cong_no_da_thanh_toan = 0;
+                $cong_no_ncc->cong_no_con = 0;
+                $cong_no_ncc->nha_cung_cap_id = $data['nha_cung_cap_id'];
+            }else{
+                $cong_no_ncc->cong_no_cuoi_thang += $tong_tien;
+            }
+            $cong_no_ncc->save();
+            //Cộng số tiền nợ của nhà cung cấp
+            $nha_cung_cap = NhaCungCap::find($data['nha_cung_cap_id']);
+            $nha_cung_cap->so_tien_no += $tong_tien;
+            $nha_cung_cap->save();
         }
         $phieu_nhap->save();
-        $cong_no_ncc->save();
-        //Cộng số tiền nợ của nhà cung cấp
-        $nha_cung_cap = NhaCungCap::find($data['nha_cung_cap_id']);
-        $nha_cung_cap->so_tien_no += $tong_tien;
-        $nha_cung_cap->save();
 
 
         return redirect()->route('view-phieu-nhap',['id'=>$phieu_nhap->id]);
@@ -226,62 +227,77 @@ class PhieuNhapController extends Controller
         $phieu_nhap->trang_thai = $data['trang_thai'];
         $phieu_nhap->save();
 
+        $chi_tiet_phieu_nhaps = ChiTietPhieuNhap::where('phieu_nhap_id',$phieu_nhap->id)->delete();
 
 
-        $tong_tien = 0;
-        foreach ($data['san_pham'] as $key=>$val){
+        if($phieu_nhap->trang_thai=="Xác nhận"){
+            $tong_tien = 0;
+            foreach ($data['san_pham'] as $key=>$val){
+                //Tính tổng tiền nhập
+                $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
+                $tong_tien+=floatval($thanh_tien_format);
 
-            //Xóa số lượng ở lần nhập trước ở bảng sản phẩm, bảng tồn kho
-            $old_chi_tiet_phieu_nhap = ChiTietPhieuNhap::where('phieu_nhap_id',$id)->where('product_id',$val)->first();
-            $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
-            $tong_tien+=floatval($thanh_tien_format);
-
-            //Cập nhật số lượng của mỗi sản phẩm trong tbl product
-            $product = Product::find($val);
-            $product->so_luong -= $old_chi_tiet_phieu_nhap->so_luong_thuc_nhap;
-            $product->so_luong += $data['so_luong_thuc_nhap'][$key];
-            $product->save();
+//            //Cập nhật số lượng của mỗi sản phẩm trong tbl product
+                $product = Product::find($val);
+                $product->so_luong += $data['so_luong_thuc_nhap'][$key];
+                $product->save();
 
 
-            //Cộng dồn số lượng nhập của sản phẩm tương ứng vào bảng tồn kho
-            //Check tồn tài tồn của sản phẩm
+                //Cộng dồn số lượng nhập của sản phẩm tương ứng vào bảng tồn kho
+                //Check tồn tài tồn của sản phẩm
+                $month = \date("m");
+                $year = \date('Y');
+                $ton_kho_by_product = TonKho::where('product_id',$val)->where('year',$year)->where('month',$month)->first();
+                if(is_null($ton_kho_by_product)){
+                    $ton_kho_by_product = new TonKho();
+                    $ton_kho_by_product->year = $year;
+                    $ton_kho_by_product->month = $month;
+                    $ton_kho_by_product->ton_dau_thang = 0;
+                    $ton_kho_by_product->nhap_trong_thang = $data['so_luong_thuc_nhap'][$key];
+                    $ton_kho_by_product->xuat_trong_thang = 0;
+                    $ton_kho_by_product->ton = 0;
+                    $ton_kho_by_product->product_id = $val;
+                }else{
+                    $ton_kho_by_product->nhap_trong_thang += $data['so_luong_thuc_nhap'][$key];
+                }
+                $ton_kho_by_product->save();
+
+                $chi_tiet_phieu_nhap = new ChiTietPhieuNhap();
+                $chi_tiet_phieu_nhap->phieu_nhap_id = $phieu_nhap->id;
+                $chi_tiet_phieu_nhap->product_id = $val;
+                $chi_tiet_phieu_nhap->gia_nhap = floatval($this->format_currency($data['gia_nhap'][$key]));
+                $chi_tiet_phieu_nhap->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
+                $chi_tiet_phieu_nhap->so_luong_thuc_nhap = $data['so_luong_thuc_nhap'][$key];
+                $chi_tiet_phieu_nhap->thanh_tien = floatval($thanh_tien_format);
+                $chi_tiet_phieu_nhap->save();
+
+            }
+            $phieu_nhap->tong_tien = $tong_tien;
+            //Cập nhật bảng công nợ ncc
             $month = \date("m");
             $year = \date('Y');
-            $ton_kho_by_product = TonKho::where('product_id',$val)->where('year',$year)->where('month',$month)->first();
-            $ton_kho_by_product->nhap_trong_thang -= $old_chi_tiet_phieu_nhap->so_luong_thuc_nhap;
-            $ton_kho_by_product->nhap_trong_thang += $data['so_luong_thuc_nhap'][$key];
+            $cong_no_ncc = CongNoNcc::where('nha_cung_cap_id',$data['nha_cung_cap_id'])
+                ->where('year',$year)->where('month',$month)->first();
+            if(is_null($cong_no_ncc)){
+                $cong_no_ncc = new CongNoNcc();
+                $cong_no_ncc->year = $year;
+                $cong_no_ncc->month = $month;
+                $cong_no_ncc->cong_no_dau_thang = 0;
+                $cong_no_ncc->cong_no_cuoi_thang = $tong_tien;
+                $cong_no_ncc->cong_no_da_thanh_toan = 0;
+                $cong_no_ncc->cong_no_con = 0;
+                $cong_no_ncc->nha_cung_cap_id = $data['nha_cung_cap_id'];
+            }else{
+                $cong_no_ncc->cong_no_cuoi_thang += $tong_tien;
+            }
+            $cong_no_ncc->save();
 
-            $ton_kho_by_product->save();
-            $old_chi_tiet_phieu_nhap->delete();
-
-            $chi_tiet_phieu_nhap = new ChiTietPhieuNhap();
-            $chi_tiet_phieu_nhap->phieu_nhap_id = $phieu_nhap->id;
-            $chi_tiet_phieu_nhap->product_id = $val;
-            $chi_tiet_phieu_nhap->gia_nhap = floatval($data['gia_nhap'][$key]);
-            $chi_tiet_phieu_nhap->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
-            $chi_tiet_phieu_nhap->so_luong_thuc_nhap = $data['so_luong_thuc_nhap'][$key];
-            $chi_tiet_phieu_nhap->thanh_tien = floatval($thanh_tien_format);
-            $chi_tiet_phieu_nhap->save();
+            //Cộng số tiền nợ của nhà cung cấp
+            $nha_cung_cap = NhaCungCap::find($data['nha_cung_cap_id']);
+            $nha_cung_cap->so_tien_no += $tong_tien;
+            $nha_cung_cap->save();
         }
-        //Cập nhật bảng công nợ ncc, trước tiên cần trừ đi số tiền của phiếu nhập lúc chưa cập nhật cho bảng công nợ và nhà cung cấp
-        $month = \date("m");
-        $year = \date('Y');
-        $cong_no_ncc = CongNoNcc::where('nha_cung_cap_id',$data['nha_cung_cap_id'])
-            ->where('year',$year)->where('month',$month)->first();
-
-        $cong_no_ncc->cong_no_cuoi_thang -= $phieu_nhap->tong_tien;
-        $nha_cung_cap = NhaCungCap::find($data['nha_cung_cap_id']);
-        $nha_cung_cap->so_tien_no -= $phieu_nhap->tong_tien;
-
-        $phieu_nhap->tong_tien = $tong_tien;
-        $cong_no_ncc->cong_no_cuoi_thang += $tong_tien;
-        $nha_cung_cap->so_tien_no += $tong_tien;
-        $nha_cung_cap->save();
-
-
         $phieu_nhap->save();
-        $cong_no_ncc->save();
-
         return redirect()->route('view-phieu-nhap',['id'=>$phieu_nhap->id]);
     }
 
@@ -291,9 +307,17 @@ class PhieuNhapController extends Controller
      * @param  \App\Models\PhieuNhap  $phieuNhap
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PhieuNhap $phieuNhap)
+    public function destroy($id)
     {
         //
+        $phieu_nhap = PhieuNhap::find($id);
+        if($phieu_nhap->trang_thai=="Xác nhận"){
+            return redirect()->route('view-phieu-nhap',['id'=>$phieu_nhap->id])
+                ->with('message','<p class="text-danger">Bạn không thể xóa phiếu nhập đã được xác nhận</p>');
+        }
+        else
+            $phieu_nhap->delete();
+        return redirect()->to('/phieu-nhap/all')->with('message','<p class="text-success">Xóa thành công</p>');
     }
 
     public function print_order($id){

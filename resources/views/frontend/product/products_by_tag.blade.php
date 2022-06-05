@@ -22,7 +22,7 @@
 
                                     <a href="{{route('product',['code'=>$san_pham->code])}}">
                                         <img src="{{url('public/uploads/products/'.$san_pham->anh_dai_dien)}}" alt="" />
-                                        <h2>{{number_format($san_pham->gia_ban,0,'','.')}} đ</h2>
+                                        <h2>{{number_format($san_pham->products[0]->gia_ban,0,'','.')}} đ</h2>
                                         <p>{{$san_pham->name}}</p>
                                         {{--                    <a href="{{route('product',['code'=>$san_pham->code])}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Xem chi tiết</a>--}}
 

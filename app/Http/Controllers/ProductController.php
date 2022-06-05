@@ -59,7 +59,7 @@ class ProductController extends Controller
            }
            $product->code=$product_group->code.$sku;
            $product->sku=$sku;
-           $product->name = $sku;
+           $product->name =$product_group->name.$sku;
            $gia_ban_format = $this->format_currency($data['gia_ban'][$i]);
            $product->gia_ban = floatval($gia_ban_format);
            $product->save();
@@ -117,8 +117,8 @@ class ProductController extends Controller
                                     <tr>
 
                                         <th>STT</th>
-
-                                        <th style="width: 20%">Tên</th>';
+                                        <th style="width: 20%">Tên</th>
+                                        <th>Số lượng còn</th>';
 
         foreach($dac_tinhs as $dac_tinh)
             $output.='<th>'.$dac_tinh->name.'</th>';
@@ -136,7 +136,8 @@ class ProductController extends Controller
 
                             <td>'.$i.'</td>
 
-                            <td><input type="text" class="form-control" name="product_name[]" value="'.$product->name.'"></td>';
+                            <td><input type="text" class="form-control" name="product_name[]" value="'.$product->name.'"></td>
+                            <td>'.$product->so_luong.'</td>';
                 foreach ($product->product_specs as $pro)
                     $output.='<td><input type="text" class="form-control" name="'.$pro->code.'[]" value="'.$pro->value.'"></td>';
                 $output.='<td><input min="'.$this->get_gia_goi_y($product->id).'" max="'.$this->get_gia_goi_y($product->id)*0.3.'" type="number" class="form-control" name="gia_ban[]" value="'.$product->gia_ban.'">

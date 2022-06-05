@@ -49,7 +49,7 @@ class PostController extends Controller
         //
         $validated = $request->validate([
             'title' => 'required|min:1',
-            'desc' => 'required|max:50',
+            'desc' => 'required|max:100',
             'content' => 'required',
             'post_type_id'=>'required',
             'meta_keywords'=>'required',
@@ -143,7 +143,7 @@ class PostController extends Controller
         //
         $validated = $request->validate([
             'title' => 'required|min:1',
-            'desc' => 'required|max:50',
+            'desc' => 'required|max:100',
             'content' => 'required',
             'post_type_id'=>'required',
             'meta_keywords'=>'required',

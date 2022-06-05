@@ -34,7 +34,7 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                     </div>
-                                                    <select name="nha_cung_cap_id" id="nha_cung_cap_id" class="form-control">
+                                                    <select readonly="" name="nha_cung_cap_id" id="nha_cung_cap_id" class="form-control">
                                                         {{--                                                    <option value="">---Chọn---</option>--}}
                                                         @foreach($nha_cung_caps as $key=>$nha_cung_cap)
                                                             <option {{$phieu_nhap->nha_cung_cap_id==$nha_cung_cap->id ? 'selected' : ''}} value="{{$nha_cung_cap->id}}">{{$nha_cung_cap->name}}</option>
@@ -115,19 +115,19 @@
                                                         @endphp
                                                         <td>
                                                             <input value="{{$product->id}}" type="hidden" name="san_pham[]">
-                                                            <input value="{{$product->name}}" class="form-control">
+                                                            <input readonly value="{{$product->name}}" class="form-control">
                                                         </td>
                                                         <td>
-                                                            <input type="number" value="{{$ctpn->so_luong_yeu_cau}}" class="form-control" name="so_luong_yeu_cau[]">
+                                                            <input readonly type="number" value="{{$ctpn->so_luong_yeu_cau}}" class="form-control" name="so_luong_yeu_cau[]">
                                                         </td>
                                                         <td>
                                                             <input type="number" value="{{$ctpn->so_luong_thuc_nhap}}" class="form-control so_luong" name="so_luong_thuc_nhap[]">
                                                         </td>
                                                         <td>
-                                                            <input type="text" value="{{number_format($ctpn->gia_nhap,0,",",".")}} đ" class="form-control gia_nhap" name="gia_nhap[]">
+                                                            <input type="number" value="{{$ctpn->gia_nhap}}" class="form-control gia_nhap" name="gia_nhap[]">
                                                         </td>
                                                         <td>
-                                                            <input type="text" value="{{number_format($ctpn->thanh_tien,0,",",".")}} đ" class="form-control thanh_tien" name="thanh_tien[]">
+                                                            <input readonly type="text" value="{{number_format($ctpn->thanh_tien,0,",",".")}} đ" class="form-control thanh_tien" name="thanh_tien[]">
                                                         </td>
                                                     </tr>
                                                 @endforeach

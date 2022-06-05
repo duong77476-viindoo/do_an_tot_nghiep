@@ -219,6 +219,8 @@ class SiteController extends Controller
             $brands = null;
 
         $sliders = Slider::where('an_hien',1)->get();
+        $san_phams_carousel = ProductGroup::where('an_hien',1)->where('nganh_hang_id',$nganh_hang->id)->get();
+
 
         $san_pham_mois = ProductGroup::where('an_hien',1)->where('nganh_hang_id',$nganh_hang->id)->get();
         return view('frontend.pages.home')
@@ -226,6 +228,7 @@ class SiteController extends Controller
             ->with('categories',$categories)
             ->with('brands',$brands)
             ->with('san_pham_mois',$san_pham_mois)
+            ->with('san_phams_carousel',$san_phams_carousel)
             ->with('sliders',$sliders)
             ->with('meta_desc',$meta_desc)
             ->with('meta_keywords',$meta_keywords)
@@ -328,7 +331,7 @@ class SiteController extends Controller
         $category_products = CategoryProduct::where('category_product_status',1)->get();
         $brands = Brand::where('brand_status',1)->get();
         $tag = Tag::where('code',$code)->first();
-        $sanphams_by_tag = $tag->products;
+        $sanphams_by_tag = $tag->product_groups;
         $sliders = Slider::where('an_hien',1)->get();
 
 

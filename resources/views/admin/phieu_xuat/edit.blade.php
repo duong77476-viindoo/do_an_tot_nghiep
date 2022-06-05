@@ -14,7 +14,7 @@
         <div class="col-lg-12">
             <section class="panel">
                 <header class="panel-heading">
-                    Phiếu xuất #{{$phieu_xuat->id}} (Đơn hàng# <a href="{{route('view-customer-order',['id'=>$phieu_xuat->order_id])}}">{{$phieu_xuat->order_id}}</a>)
+                    Phiếu xuất #{{$phieu_xuat->id}} ( <a href="{{route('view-customer-order',['id'=>$phieu_xuat->order_id])}}">Đơn hàng#{{$phieu_xuat->order_id}}</a>)
                 </header>
                 <?php
                 $message = \Illuminate\Support\Facades\Session::get('message');
@@ -80,7 +80,15 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                 </div>
-                                                <input readonly class="form-control"  type="text" value="{{$phieu_xuat->trang_thai}}" name="trang_thai">
+                                                <select class="form-control" name="trang_thai">
+                                                    @if($phieu_xuat->trang_thai=="Chưa xác nhận")
+                                                        <option value="Chưa xác nhận" selected>Chưa xác nhận</option>
+                                                        <option value="Xác nhận">Xác nhận</option>
+                                                    @else
+                                                        <option value="Chưa xác nhận">Chưa xác nhận</option>
+                                                        <option value="Xác nhận" selected>Xác nhận</option>
+                                                    @endif
+                                                </select>
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -119,7 +127,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <input  type="number" value="{{$ctpx->so_luong_yeu_cau}}" class="form-control" name="so_luong_yeu_cau[]">
+                                                        <input readonly  type="number" value="{{$ctpx->so_luong_yeu_cau}}" class="form-control" name="so_luong_yeu_cau[]">
                                                     </td>
                                                     <td>
                                                         <input  type="number" value="{{$ctpx->so_luong_thuc_xuat}}" class="form-control so_luong" name="so_luong_thuc_xuat[]">

@@ -9,6 +9,7 @@ use App\Models\NhaCungCap;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Symfony\Component\VarDumper\VarDumper;
 
 class CongNoNccController extends Controller
 {
@@ -20,7 +21,7 @@ class CongNoNccController extends Controller
     public function index()
     {
         //
-        $cong_no_nccs = CongNoNcc::all();
+        $cong_no_nccs = CongNoNcc::orderBy('trang_thai','ASC')->get();
         $nha_cung_caps = NhaCungCap::all();
         return view('admin.cong_no_ncc.index')
             ->with('cong_no_nccs',$cong_no_nccs)
@@ -93,25 +94,44 @@ class CongNoNccController extends Controller
         //
     }
     public function chot_cong_no(){
-        $cong_no_nccs = CongNoNcc::where('trang_thai','Chưa hoàn thành')->get();
-        //Lấy năm tháng tiếp theo
+
+        $date = date("Y-m-d");
+        //Lấy năm, tháng trước
+        $pre_month = date("m", strtotime ( '-1 month' , strtotime ( $date ) ));
+        $pre_year = date("Y", strtotime ( '-1 month' , strtotime ( $date ) ));
+        //Lấy năm tháng hiện tại
         $month = date("m");
         $year = date('Y');
+        $cong_no_nccs = CongNoNcc::where('trang_thai','Chưa hoàn thành')->where('year',$pre_year)->where('month',$pre_month)->get();
+;
         foreach ($cong_no_nccs as $cong_no_ncc){
             $cong_no_ncc->cong_no_con = $cong_no_ncc->cong_no_dau_thang - $cong_no_ncc->cong_no_da_thanh_toan
                 + $cong_no_ncc->cong_no_cuoi_thang;
             $cong_no_ncc->trang_thai = "Hoàn thành";
             $cong_no_ncc->save();
-            $cong_no_ncc_thang_toi = new CongNoNcc();
-            $cong_no_ncc_thang_toi->cong_no_dau_thang = $cong_no_ncc->cong_no_con;
-            $cong_no_ncc_thang_toi->year = $year;
-            $cong_no_ncc_thang_toi->month = $month;
-            $cong_no_ncc_thang_toi->cong_no_cuoi_thang = 0;
-            $cong_no_ncc_thang_toi->cong_no_da_thanh_toan = 0;
-            $cong_no_ncc_thang_toi->cong_no_con = 0;
-            $cong_no_ncc_thang_toi->nha_cung_cap_id = $cong_no_ncc->nha_cung_cap_id;
-            $cong_no_ncc_thang_toi->save();
+            //Kiêm tra dã có bản ghi công nợ thống kê của nhà cung cấp của tháng hiên tại chưa
+            //Nếu có thì chỉ cần gắn công nợ còn của bản ghi tháng trước sang công nợ đầu tháng của bản ghi tháng này
+            //Và không tạo mới, ngược lại sẽ tạo mới
+            $exist_cong_no_ncc = CongNoNcc::where('nha_cung_cap_id',$cong_no_ncc->nha_cung_cap_id)->where('year',$year)->where('month',$month)->first();
+            if(!is_null($exist_cong_no_ncc)){
+                $pre_cong_no_ncc = CongNoNcc::where('nha_cung_cap_id',$exist_cong_no_ncc->nha_cung_cap_id)->where('year',$pre_year)->where('month',$pre_month)->first();
+                $pre_cong_no_ncc->cong_no_con = $pre_cong_no_ncc->cong_no_dau_thang - $pre_cong_no_ncc->cong_no_da_thanh_toan
+                    + $pre_cong_no_ncc->cong_no_cuoi_thang;
+                $exist_cong_no_ncc->cong_no_dau_thang = $pre_cong_no_ncc->cong_no_con;
+                $exist_cong_no_ncc->save();
+            }else{
+                $cong_no_ncc_thang_toi = new CongNoNcc();
+                $cong_no_ncc_thang_toi->cong_no_dau_thang = $cong_no_ncc->cong_no_con;
+                $cong_no_ncc_thang_toi->year = $year;
+                $cong_no_ncc_thang_toi->month = $month;
+                $cong_no_ncc_thang_toi->cong_no_cuoi_thang = 0;
+                $cong_no_ncc_thang_toi->cong_no_da_thanh_toan = 0;
+                $cong_no_ncc_thang_toi->cong_no_con = 0;
+                $cong_no_ncc_thang_toi->nha_cung_cap_id = $cong_no_ncc->nha_cung_cap_id;
+                $cong_no_ncc_thang_toi->save();
+            }
         }
+        exit();
     }
 
     public function export_csv($id){
