@@ -93,10 +93,6 @@
                                                 <textarea id="mo_ta_chi_tiet" style="resize: none" class="form-control" id="exampleInputPassword1" name="mo_ta_chi_tiet" placeholder="Nhập mô tả chi tiết">{{$product_group->mo_ta_chi_tiet}}</textarea>
                                             </div>
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Giá bán</label>
-                                                <input value="{{$product_group->gia_ban}}" type="number" class="form-control" id="exampleInputEmail1" name="gia_ban" placeholder="Nhập giá bán">
-                                            </div>
-                                            <div class="form-group">
                                                 <label for="exampleInputEmail1">Ảnh đại diện</label>
                                                 <input type="file" class="form-control" id="exampleInputEmail1" name="anh_dai_dien" >
                                                 <img src="{{\Illuminate\Support\Facades\URL::to('public/uploads/products/'.$product_group->anh_dai_dien)}}" height="100" width="100">

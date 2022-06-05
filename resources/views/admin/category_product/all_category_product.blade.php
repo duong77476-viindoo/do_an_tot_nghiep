@@ -36,11 +36,6 @@
                 <table id="myTable" class="table table-striped b-t b-light">
                     <thead>
                     <tr>
-                        <th style="width:20px;">
-                            <label class="i-checks m-b-none">
-                                <input type="checkbox"><i></i>
-                            </label>
-                        </th>
                         <th>Tên phân loại</th>
                         <th>Danh mục cha</th>
                         <th>Từ khóa danh mục</th>
@@ -52,7 +47,6 @@
                     <tbody>
                     @foreach($category_products as $key => $category_product)
                     <tr>
-                        <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
                         <td>{{$category_product->category_product_name}}</td>
                         <td>{{$category_product->category->name}}</td>
                         <td>{{$category_product->meta_keywords}}</td>

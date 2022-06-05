@@ -61,9 +61,15 @@
                                 <a href="{{route('edit-phieu-xuat',['id'=>$phieu_xuat->id])}}" class="active" ui-toggle-class="">
                                     <i class="fa fa-pen text-success text-active"></i>
                                 </a>
-                                <a href="{{route('delete-phieu-xuat',['id'=>$phieu_xuat->id])}}"
-                                   onclick="return confirm('Bạn có chắc muốn xóa?')"
-                                   class="active" ui-toggle-class=""><i class="fa fa-trash text-danger text"></i></a>
+                                @if($phieu_xuat->trang_thai=="Xác nhận")
+                                    <a href="{{route('delete-phieu-xuat',['id'=>$phieu_xuat->id])}}"
+                                       onclick="return confirm('Bạn có chắc muốn xóa?')"
+                                       class="active" ui-toggle-class=""><i class="fa fa-trash text-danger text"></i></a>
+                                @else
+                                    <a href="{{route('delete-phieu-xuat',['id'=>$phieu_xuat->id])}}"
+                                       onclick="return confirm('Phiếu xuất này đang được liên kết với 1 đơn hàng, nếu như xóa thì bạn nên tạo thủ công phiếu xuất khác, bạn có muốn tiếp tục?')"
+                                       class="active" ui-toggle-class=""><i class="fa fa-trash text-danger text"></i></a>
+                                @endif
                                 <a href="{{route('view-phieu-xuat',['id'=>$phieu_xuat->id])}}" class="active" ui-toggle-class="">
                                     <i class="fa fa-eye text-success text-active"></i>
                                 </a>
@@ -73,25 +79,6 @@
                     </tbody>
                 </table>
             </div>
-            <footer class="panel-footer">
-                <div class="row">
-
-                    {{--                    <div class="col-sm-5 text-center">--}}
-                    {{--                        <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>--}}
-                    {{--                    </div>--}}
-                    <div class="col-sm-7 text-right text-center-xs">
-                        <ul class="pagination pagination-sm m-t-none m-b-none">
-{{--                            {{ $phieu_xuats->links() }}--}}
-                            {{--                            <li><a href=""><i class="fa fa-chevron-left"></i></a></li>--}}
-                            {{--                            <li><a href="">1</a></li>--}}
-                            {{--                            <li><a href="">2</a></li>--}}
-                            {{--                            <li><a href="">3</a></li>--}}
-                            {{--                            <li><a href="">4</a></li>--}}
-                            {{--                            <li><a href=""><i class="fa fa-chevron-right"></i></a></li>--}}
-                        </ul>
-                    </div>
-                </div>
-            </footer>
         </div>
     </div>
 @endsection

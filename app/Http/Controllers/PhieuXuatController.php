@@ -6,12 +6,14 @@ use App\Models\ChiTietPhieuXuat;
 use App\Models\CongNoNcc;
 use App\Models\NhaCungCap;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\PhieuXuat;
 use App\Models\Product;
 use App\Models\TonKho;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\VarDumper\VarDumper;
 
 class PhieuXuatController extends Controller
 {
@@ -58,51 +60,36 @@ class PhieuXuatController extends Controller
         ]);
 
         $data = $request->all();
-        $phieu_xuat = new PhieuXuat();
-        $phieu_xuat->name = $data['name'];
-        $phieu_xuat->content = $data['noi_dung'];
-        $phieu_xuat->order_id = $data['order_id'];
-        $phieu_xuat->created_at = now();
-        $phieu_xuat->updated_at = now();
-        $phieu_xuat->nguoi_lap_id = Auth::id();
-        $phieu_xuat->save();
+        $order = Order::find($data['order_id']);
+        $product_by_order = OrderDetail::where('order_id',$order->id)->get();
 
-        $tong_tien = 0;
+        if($product_by_order->count()!=count($data['san_pham'])){
+            return redirect()->back()->with('message','<p class="text-danger">Số lượng sản phẩm xuất không khớp đơn hàng</p>');
+        }
+        $product_ids = array();
+        foreach ($product_by_order as $key1=>$product){
+            array_push($product_ids,strval($product->product_id));
+        }
+        foreach ($data['san_pham'] as $product_id){
+            if(!in_array($product_id,$product_ids)){
+                return redirect()->back()->with('message','<p class="text-danger">Sản phẩm xuất không khớp với đơn hàng, mời nhập lại</p>');
+            }
+        }
+            $phieu_xuat = new PhieuXuat();
+            $phieu_xuat->name = $data['name'];
+            $phieu_xuat->content = $data['noi_dung'];
+            $phieu_xuat->order_id = $data['order_id'];
+            $phieu_xuat->created_at = now();
+            $phieu_xuat->updated_at = now();
+            $phieu_xuat->nguoi_lap_id = Auth::id();
+            $phieu_xuat->trang_thai = $data['trang_thai'];
+            $phieu_xuat->save();
+
         foreach ($data['san_pham'] as $key=>$val){
-//            VarDumper::dump($val);
-//            VarDumper::dump($data['so_luong_yeu_cau'][$key]);
-            //Tính tổng tiền xuất
+            //Tính tổng tiền nhập
             $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
             $tong_tien+=floatval($thanh_tien_format);
-
-            //Cập nhật số lượng của mỗi sản phẩm trong tbl product
-            $product = Product::find($val);
-            $product->so_luong -= $data['so_luong_thuc_xuat'][$key];
-            $product->save();
-
-
-            //Cộng dồn số lượng nhập của sản phẩm tương ứng vào bảng tồn kho
-            //Check tồn tài tồn của sản phẩm
-            $month = \date("m");
-            $year = \date('Y');
-            $ton_kho_by_product = TonKho::where('product_id',$val)->where('year',$year)->where('month',$month)->first();
-            if(is_null($ton_kho_by_product)){
-                $ton_kho_by_product = new TonKho();
-                $ton_kho_by_product->year = $year;
-                $ton_kho_by_product->month = $month;
-                $ton_kho_by_product->ton_dau_thang = 0;
-                $ton_kho_by_product->nhap_trong_thang = 0;
-                $ton_kho_by_product->xuat_trong_thang = $data['so_luong_thuc_xuat'][$key];
-                $ton_kho_by_product->ton = 0;
-                $ton_kho_by_product->product_id = $val;
-            }else{
-                $ton_kho_by_product->xuat_trong_thang += $data['so_luong_thuc_xuat'][$key];
-            }
-            $ton_kho_by_product->save();
-
-
-
-
+            //Tính tổng tiền nhập
             $chi_tiet_phieu_xuat = new ChiTietPhieuXuat();
             $chi_tiet_phieu_xuat->phieu_xuat_id = $phieu_xuat->id;
             $chi_tiet_phieu_xuat->product_id = $val;
@@ -112,11 +99,57 @@ class PhieuXuatController extends Controller
             $chi_tiet_phieu_xuat->thanh_tien = floatval($thanh_tien_format);
             $chi_tiet_phieu_xuat->save();
         }
-        $phieu_xuat->tong_tien = $tong_tien;
-        $phieu_xuat->save();
+        if($phieu_xuat->trang_thai=="Xác nhận") {
+
+            $tong_tien = 0;
+            foreach ($data['san_pham'] as $key => $val) {
+//            VarDumper::dump($val);
+//            VarDumper::dump($data['so_luong_yeu_cau'][$key]);
+                //Tính tổng tiền xuất
+                $thanh_tien_format = trim($data['thanh_tien'][$key], "đ");
+                $tong_tien += floatval($thanh_tien_format);
+
+                //Cập nhật số lượng của mỗi sản phẩm trong tbl product
+                $product = Product::find($val);
+                $product->so_luong -= $data['so_luong_thuc_xuat'][$key];
+                $product->save();
 
 
-        return redirect()->route('view-phieu-xuat',['id'=>$phieu_xuat->id]);
+                //Cộng dồn số lượng nhập của sản phẩm tương ứng vào bảng tồn kho
+                //Check tồn tài tồn của sản phẩm
+                $month = \date("m");
+                $year = \date('Y');
+                $ton_kho_by_product = TonKho::where('product_id', $val)->where('year', $year)->where('month', $month)->first();
+                if (is_null($ton_kho_by_product)) {
+                    $ton_kho_by_product = new TonKho();
+                    $ton_kho_by_product->year = $year;
+                    $ton_kho_by_product->month = $month;
+                    $ton_kho_by_product->ton_dau_thang = 0;
+                    $ton_kho_by_product->nhap_trong_thang = 0;
+                    $ton_kho_by_product->xuat_trong_thang = $data['so_luong_thuc_xuat'][$key];
+                    $ton_kho_by_product->ton = 0;
+                    $ton_kho_by_product->product_id = $val;
+                } else {
+                    $ton_kho_by_product->xuat_trong_thang += $data['so_luong_thuc_xuat'][$key];
+                }
+                $ton_kho_by_product->save();
+
+
+//                $chi_tiet_phieu_xuat = new ChiTietPhieuXuat();
+//                $chi_tiet_phieu_xuat->phieu_xuat_id = $phieu_xuat->id;
+//                $chi_tiet_phieu_xuat->product_id = $val;
+//                $chi_tiet_phieu_xuat->gia_xuat = floatval($this->format_currency($data['gia_xuat'][$key]));
+//                $chi_tiet_phieu_xuat->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
+//                $chi_tiet_phieu_xuat->so_luong_thuc_xuat = $data['so_luong_thuc_xuat'][$key];
+//                $chi_tiet_phieu_xuat->thanh_tien = floatval($thanh_tien_format);
+//                $chi_tiet_phieu_xuat->save();
+            }
+            $phieu_xuat->tong_tien = $tong_tien;
+        }
+            $phieu_xuat->save();
+
+            return redirect()->route('view-phieu-xuat', ['id' => $phieu_xuat->id]);
+
     }
 
     /**
@@ -170,62 +203,62 @@ class PhieuXuatController extends Controller
 
         $data = $request->all();
         $phieu_xuat = PhieuXuat::find($id);
-        if($data['trang_thai']=="Xác nhận")
+        if($phieu_xuat->trang_thai=="Xác nhận")
             return redirect()->back()->with('message','<p class="text-danger">Bạn không thể sửa một phiếu xuất đã được xác nhận</p>');
         $phieu_xuat->name = $data['name'];
         $phieu_xuat->content = $data['noi_dung'];
         $phieu_xuat->order_id = $data['order_id'];
-        $phieu_xuat->trang_thai = 'Xác nhận';
+        $phieu_xuat->trang_thai = $data['trang_thai'];
         $phieu_xuat->updated_at = now();
         $phieu_xuat->nguoi_lap_id = Auth::id();
         $phieu_xuat->save();
 
-        //Xóa các chi tiết phiếu xuất cũ
-        ChiTietPhieuXuat::where('phieu_xuat_id',$phieu_xuat->id)->delete();
+        $chi_tiet_phieu_xuats = ChiTietPhieuXuat::where('phieu_xuat_id',$phieu_xuat->id)->delete();
 
-        $tong_tien = 0;
-        foreach ($data['san_pham'] as $key=>$val){
-//            VarDumper::dump($val);
-//            VarDumper::dump($data['so_luong_yeu_cau'][$key]);
-            //Tính tổng tiền xuất
-            $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
-            $tong_tien+=floatval($thanh_tien_format);
+        if($phieu_xuat->trang_thai=="Xác nhận") {
+            $tong_tien = 0;
+            foreach ($data['san_pham'] as $key => $val) {
+                //Tính tổng tiền xuất
+                $thanh_tien_format = trim($data['thanh_tien'][$key], "đ");
+                $tong_tien += floatval($thanh_tien_format);
 
-            //Cập nhật số lượng của mỗi sản phẩm trong tbl product
-            $product = Product::find($val);
-            $product->so_luong -= $data['so_luong_thuc_xuat'][$key];
-            $product->save();
+                //Cập nhật số lượng của mỗi sản phẩm trong tbl product
+                $product = Product::find($val);
+                $product->so_luong -= $data['so_luong_thuc_xuat'][$key];
+                $product->save();
 
 
-            //Cộng dồn số lượng nhập của sản phẩm tương ứng vào bảng tồn kho
-            //Check tồn tài tồn của sản phẩm
-            $month = \date("m");
-            $year = \date('Y');
-            $ton_kho_by_product = TonKho::where('product_id',$val)->where('year',$year)->where('month',$month)->first();
-            if(is_null($ton_kho_by_product)){
-                $ton_kho_by_product = new TonKho();
-                $ton_kho_by_product->year = $year;
-                $ton_kho_by_product->month = $month;
-                $ton_kho_by_product->ton_dau_thang = 0;
-                $ton_kho_by_product->xuat_trong_thang = 0;
-                $ton_kho_by_product->xuat_trong_thang = $data['so_luong_thuc_xuat'][$key];
-                $ton_kho_by_product->ton = 0;
-                $ton_kho_by_product->product_id = $val;
-            }else{
-                $ton_kho_by_product->xuat_trong_thang += $data['so_luong_thuc_xuat'][$key];
+                //Cộng dồn số lượng nhập của sản phẩm tương ứng vào bảng tồn kho
+                //Check tồn tài tồn của sản phẩm
+                $month = \date("m");
+                $year = \date('Y');
+                $ton_kho_by_product = TonKho::where('product_id', $val)->where('year', $year)->where('month', $month)->first();
+                if (is_null($ton_kho_by_product)) {
+                    $ton_kho_by_product = new TonKho();
+                    $ton_kho_by_product->year = $year;
+                    $ton_kho_by_product->month = $month;
+                    $ton_kho_by_product->ton_dau_thang = 0;
+                    $ton_kho_by_product->nhap_trong_thang = 0;
+                    $ton_kho_by_product->xuat_trong_thang = $data['so_luong_thuc_xuat'][$key];
+                    $ton_kho_by_product->ton = 0;
+                    $ton_kho_by_product->product_id = $val;
+                } else {
+                    $ton_kho_by_product->xuat_trong_thang += $data['so_luong_thuc_xuat'][$key];
+                }
+                $ton_kho_by_product->save();
+
+
+                $chi_tiet_phieu_xuat = new ChiTietPhieuXuat();
+                $chi_tiet_phieu_xuat->phieu_xuat_id = $phieu_xuat->id;
+                $chi_tiet_phieu_xuat->product_id = $val;
+                $chi_tiet_phieu_xuat->gia_xuat = floatval($this->format_currency($data['gia_xuat'][$key]));
+                $chi_tiet_phieu_xuat->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
+                $chi_tiet_phieu_xuat->so_luong_thuc_xuat = $data['so_luong_thuc_xuat'][$key];
+                $chi_tiet_phieu_xuat->thanh_tien = floatval($thanh_tien_format);
+                $chi_tiet_phieu_xuat->save();
             }
-            $ton_kho_by_product->save();
-
-            $chi_tiet_phieu_xuat = new ChiTietPhieuXuat();
-            $chi_tiet_phieu_xuat->phieu_xuat_id = $phieu_xuat->id;
-            $chi_tiet_phieu_xuat->product_id = $val;
-            $chi_tiet_phieu_xuat->gia_xuat = floatval($this->format_currency($data['gia_xuat'][$key]));
-            $chi_tiet_phieu_xuat->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
-            $chi_tiet_phieu_xuat->so_luong_thuc_xuat = $data['so_luong_thuc_xuat'][$key];
-            $chi_tiet_phieu_xuat->thanh_tien = floatval($thanh_tien_format);
-            $chi_tiet_phieu_xuat->save();
+            $phieu_xuat->tong_tien = $tong_tien;
         }
-        $phieu_xuat->tong_tien = $tong_tien;
         $phieu_xuat->save();
 
 
@@ -238,9 +271,17 @@ class PhieuXuatController extends Controller
      * @param  \App\Models\PhieuXuat  $phieuXuat
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PhieuXuat $phieuXuat)
+    public function destroy($id)
     {
         //
+        $phieu_xuat = PhieuXuat::find($id);
+        if($phieu_xuat->trang_thai=="Xác nhận"){
+            return redirect()->route('view-phieu-xuat',['id'=>$phieu_xuat->id])
+                ->with('message','<p class="text-danger">Bạn không thể xóa phiếu xuất đã được xác nhận</p>');
+        }else{
+            return redirect()->route('view-phieu-xuat',['id'=>$phieu_xuat->id])
+                ->with('message','<p class="text-danger">Bạn không thể xóa phiếu xuất khi mà nó có đơn hàng đang được liên kết</p>');
+        }
     }
 
     public function print_order($id){

@@ -117,9 +117,8 @@ class CategoryProductController extends Controller
     {
         //
         $validated = $request->validate([
-            'category_product_name' => 'required|min:6|max:50',
+            'category_product_name' => 'required|min:1|max:50',
             'category_product_desc' => 'required',
-            'category_product_status' => 'required',
             'meta_keywords'=>'required',
             'category_id'=>'required',
         ]);

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\Rating;
 use App\Models\Role;
 use App\Models\Social;
 use App\Models\StatisticVisitor;
@@ -40,19 +43,13 @@ class AdminController extends Controller
         $admin_id_auth = Auth::id();
         if($admin_id_auth || $admin_id_social){
             $notifications = auth()->user()->unreadNotifications;
-//            $user_ip_address = $request->ip();
-//            $early_last_month =  Carbon::now('Asia/Ho_Chi_Minh')->subMonth()->startOfMonth()->toDateString();
-//            $end_last_month =  Carbon::now('Asia/Ho_Chi_Minh')->subMonth()->endOfMonth()->toDateString();
-//            $early_this_month =  Carbon::now('Asia/Ho_Chi_Minh')->startOfMonth()->toDateString();
-//            $oneyears =  Carbon::now('Asia/Ho_Chi_Minh')->subDays(365)->toDateString();
-//            $now =  Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
-//
-//            //total last month
-//            $visitor_of_lastmonth = StatisticVisitor::whereBetween('date_visit',[$early_last_month,$end_last_month])->get();
-//            $visitor_last_month_count = $visitor_of_lastmonth->count();
-
-            //total this month
-            return view('admin.dashboard')->with('notifications',$notifications);
+            $order_count = Order::all()->count();
+            $customer_count = Customer::all()->count();
+            $rating_count = Rating::all()->count();
+            $product_count = Product::all()->count();
+            return view('admin.dashboard')
+                ->with('notifications',$notifications)
+                ->with(compact('order_count','rating_count','product_count','customer_count'));
         }
         return view('admin.admin_login');
     }
@@ -187,7 +184,13 @@ class AdminController extends Controller
 
     public function dashboard(){
         $notifications = auth()->user()->unreadNotifications;
-        return view('admin.dashboard')->with('notifications',$notifications);
+        $order_count = Order::all()->count();
+        $customer_count = Customer::all()->count();
+        $rating_count = Rating::all()->count();
+        $product_count = Product::all()->count();
+        return view('admin.dashboard')
+            ->with('notifications',$notifications)
+            ->with(compact('order_count','rating_count','product_count','customer_count'));
     }
 
     public function admin_dashboard(Request $request){

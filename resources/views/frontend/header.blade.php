@@ -143,7 +143,7 @@
                             </ul>
                         </li>
                         <li><a href="{{route('gio-hang')}}">Giỏ hàng</a></li>
-                        <li><a href="{{route('contact')}}">Liên hệ</a></li>
+                        <li><a href="#">Liên hệ</a></li>
                     </ul>
                 </div>
             </div>

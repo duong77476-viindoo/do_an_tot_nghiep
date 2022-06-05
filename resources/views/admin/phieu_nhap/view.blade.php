@@ -128,8 +128,7 @@
                                             </table>
                                             <a href="{{route('print-phieu-nhap',['id'=>$phieu_nhap->id])}}"
                                                target="_blank"
-                                               class="btn btn-primary btn-lg"
-                                               onclick="return confirm('Việc xuất phiếu sẽ đặt trạng thái về xác nhận, điều đó có nghĩa bạn sẽ không thể sửa phiếu nhập nữa, bạn có muốn tiếp tục?')">Xuất phiếu nhập
+                                               class="btn btn-primary btn-lg">Xuất phiếu nhập
                                             </a>
                                         </div>
                                     </div>

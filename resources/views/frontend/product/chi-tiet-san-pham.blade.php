@@ -88,13 +88,18 @@
                     <input type="hidden"  class="product_qty_{{$phien_ban_san_pham->id}}" value="{{$phien_ban_san_pham->so_luong}}">
 
                     <span>{{number_format($phien_ban_san_pham->gia_ban,0,'','.')}} đ</span>
-                    <label>Quantity:</label>
-                    <input name="so_luong" class="cart_product_qty_{{$phien_ban_san_pham->id}}" type="number" min="1" max="{{$phien_ban_san_pham->so_luong}}" value="1" />
-                    <input name="product_id" class="product_id" type="hidden" value="{{$phien_ban_san_pham->id}}" />
-                    <button type="button" class="btn btn-fefault add-to-cart" name="add-to-cart" data-product_id="{{$phien_ban_san_pham->id}}">
+
+                    @if($phien_ban_san_pham->so_luong==0)
+                        <p class="text-primary">Sản phảm hiện hết hàng, bạn vẫn có thể liên hệ bộ phận hỗ trợ khách hàng ở góc phải màn hình để đặt hàng nhé!</p>
+                    @else
+                        <label>Quantity:</label>
+                        <input name="so_luong" class="cart_product_qty_{{$phien_ban_san_pham->id}}" type="number" min="1" max="{{$phien_ban_san_pham->so_luong}}" value="1" />
+                        <input name="product_id" class="product_id" type="hidden" value="{{$phien_ban_san_pham->id}}" />
+                        <button type="button" class="btn btn-fefault add-to-cart" name="add-to-cart" data-product_id="{{$phien_ban_san_pham->id}}">
                         <i class="fa fa-shopping-cart"></i>
                         Thêm vào giỏ hàng
                     </button>
+                    @endif
 
                 </span>
             </form>

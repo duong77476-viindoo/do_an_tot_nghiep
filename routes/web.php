@@ -80,13 +80,13 @@ Route::middleware('revalidate')->group(function() {
     Route::post('/quickview',[SiteController::class,'quick_view'])->name('quick-view');
 
 //Ngành hàng
-    Route::get('/nganh_hang_{code_nganh_hang}',[SiteController::class,'category_by_nganh_hang'])->name('category-by-nganh-hang');
+    Route::get('/nganh_hang/{code_nganh_hang}',[SiteController::class,'category_by_nganh_hang'])->name('category-by-nganh-hang');
 
 //Danh mục bài viết và bài viết
     Route::get('/danh-muc-bai-viet/{code}',[SiteController::class,'danh_muc_bai_viet'])->name('danh-muc-bai-viet');
     Route::get('/danh_muc_{danh_muc}/{bai_viet}',[SiteController::class,'chi_tiet_bai_viet'])->name('chi-tiet-bai-viet');
 //Khách hàng
-    Route::post('/add-customer',[CustomerController::class,'store'])->name('add-customer');
+    Route::post('/add-customer',[CustomerController::class,'store'])->name('add-new-customer');
 
     Route::get('/login',[CustomerController::class,'index'])->name('login');
     Route::post('/login-customer',[CustomerController::class,'login_customer'])->name('login-customer');
@@ -276,7 +276,7 @@ Route::middleware('check_login_admin')->group(function (){
             Route::get('/all', [PhieuNhapController::class, 'index'])->name('all-phieu-nhap');
             Route::get('/add', [PhieuNhapController::class, 'create'])->name('add-phieu-nhap');
             Route::get('/edit/{id}', [PhieuNhapController::class, 'edit'])->name('edit-phieu-nhap');
-            Route::get('/delete-/{id}', [PhieuNhapController::class, 'destroy'])->name('delete-phieu-nhap');
+            Route::get('/delete/{id}', [PhieuNhapController::class, 'destroy'])->name('delete-phieu-nhap');
             Route::post('/update/{id}', [PhieuNhapController::class, 'update'])->name('update-phieu-nhap');
             Route::get('/view/{id}', [PhieuNhapController::class, 'show'])->name('view-phieu-nhap');
 
@@ -296,7 +296,7 @@ Route::middleware('check_login_admin')->group(function (){
             Route::get('/all', [PhieuXuatController::class, 'index'])->name('all-phieu-xuat');
             Route::get('/add', [PhieuXuatController::class, 'create'])->name('add-phieu-xuat');
             Route::get('/edit/{id}', [PhieuXuatController::class, 'edit'])->name('edit-phieu-xuat');
-            Route::get('/delete-/{id}', [PhieuXuatController::class, 'destroy'])->name('delete-phieu-xuat');
+            Route::get('/delete/{id}', [PhieuXuatController::class, 'destroy'])->name('delete-phieu-xuat');
             Route::post('/update/{id}', [PhieuXuatController::class, 'update'])->name('update-phieu-xuat');
             Route::get('/view/{id}', [PhieuXuatController::class, 'show'])->name('view-phieu-xuat');
 
@@ -338,14 +338,13 @@ Route::middleware('check_login_admin')->group(function (){
             Route::post('/chot-ton-kho', [TonKhoController::class, 'chot_ton_kho'])->name('chot-ton-kho');
 
             //        Route::get('/print-order/{id}',[TonKhoController::class,'print_order'])->name('print-phieu-xuat');
-            Route::post('/export-csv', [TonKhoController::class, 'export_csv'])->name('ton-kho-export-csv');
         });
     });
-
-    //import export excel
-//    Route::post('/post/import-csv',[NhaCungCapController::class,'import_csv'])->name('post-import-csv');
-//    Route::post('/post/export-csv',[NhaCungCapController::class,'export_csv'])->name('post-export-csv');
-
+});
+Route::prefix('/ton-kho')->group(function (){
+    Route::group(['middleware'=>'admin:Admin,Quản lý kho'],function () {
+        Route::post('/export-csv', [TonKhoController::class, 'export_csv'])->name('ton-kho-export-csv');
+    });
 });
 
 //Bảng công nợ ncc
@@ -384,7 +383,7 @@ Route::middleware('check_login_admin')->group(function (){
             Route::get('/all', [ThanhToanCongNoNccController::class, 'index'])->name('all-thanh-toan-cong-no');
             Route::get('/add', [ThanhToanCongNoNccController::class, 'create'])->name('add-thanh-toan-cong-no');
             Route::get('/edit/{id}', [ThanhToanCongNoNccController::class, 'edit'])->name('edit-thanh-toan-cong-no');
-            Route::get('/delete-/{id}', [ThanhToanCongNoNccController::class, 'destroy'])->name('delete-thanh-toan-cong-no');
+            Route::get('/delete/{id}', [ThanhToanCongNoNccController::class, 'destroy'])->name('delete-thanh-toan-cong-no');
             Route::post('/update/{id}', [ThanhToanCongNoNccController::class, 'update'])->name('update-thanh-toan-cong-no');
             Route::get('/view/{id}', [ThanhToanCongNoNccController::class, 'show'])->name('view-thanh-toan-cong-no');
 
@@ -398,7 +397,7 @@ Route::middleware('check_login_admin')->group(function (){
 
 //Quản lý khách hàng
 Route::middleware('check_login_admin')->group(function (){
-    Route::group(['middleware'=>'admin:Admin'],function () {
+    Route::group(['middleware'=>'admin:Admin,Quản lý bán hàng'],function () {
         Route::prefix('customer')->group(function (){
             Route::get('/all',[CustomerController::class,'show_all_customers'])->name('all-customer');
             Route::get('/add',[CustomerController::class,'create'])->name('add-customer');

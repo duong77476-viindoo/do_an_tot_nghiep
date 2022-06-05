@@ -151,13 +151,17 @@ class OrderController extends Controller
             $this->send_mail_customer($order->id,$title);
         }else if($data['order_status']=="Đang giao hàng"){
             $phieu_xuat = PhieuXuat::where('order_id',$order->id)->first();
-            if($phieu_xuat->trang_thai=="Chưa xác nhận")
+            if(is_null($phieu_xuat))
+                return response()->json(['error'=>'không có phiếu xuất cho đơn hàng này, bạn cần tạo phiếu xuất sau đó mới có thể thay đổi trạng thái']);
+            else if($phieu_xuat->trang_thai=="Chưa xác nhận")
                 return response()->json(['error'=>'Không thể thay đổi trạng thái khi mà phiếu xuất chưa được xác nhận']);
             $title = "Đơn hàng "."#".$order->id." đang được giao";
             $this->send_mail_customer($order->id,$title);
         }else if($data['order_status']=="Đã giao hàng"){
             $phieu_xuat = PhieuXuat::where('order_id',$order->id)->first();
-            if($phieu_xuat->trang_thai=="Chưa xác nhận")
+            if(is_null($phieu_xuat))
+                return response()->json(['error'=>'không có phiếu xuất cho đơn hàng này, bạn cần tạo phiếu xuất sau đó mới có thể thay đổi trạng thái']);
+            else if($phieu_xuat->trang_thai=="Chưa xác nhận")
                 return response()->json(['error'=>'Không thể thay đổi trạng thái khi mà phiếu xuất chưa được xác nhận']);
 
             //Đã giao hàng xong thì update vào bảng statistic order

@@ -67,7 +67,7 @@
             <div class="col-sm-4">
                 <div class="signup-form"><!--sign up form-->
                     <h2>Đăng ký mới!</h2>
-                    <form action="{{route('add-customer')}}" method="post">
+                    <form action="{{route('add-new-customer')}}" method="post">
                         @csrf
                         <input name="name" type="text" placeholder="Họ tên"/>
                         <input name="email" type="email" placeholder="Email"/>

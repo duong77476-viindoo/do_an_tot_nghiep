@@ -289,14 +289,25 @@ class CheckoutController extends Controller
     }
 
     public function check_coupon($coupon){
-        $coupon = Coupon::where('code',$coupon)->first();
-        if($coupon){
-            $count_coupon = $coupon->count();
-            if($count_coupon>0){
-                $coupon_session = Session::get('coupon');
-                if($coupon_session==true){
-                    $ton_tai = 0;
-                    if($ton_tai==0){
+        if(is_null($coupon) || !isset($coupon))
+            Session::put('message','');
+        else{
+            $coupon = Coupon::where('code',$coupon)->first();
+            if($coupon){
+                $count_coupon = $coupon->count();
+                if($count_coupon>0){
+                    $coupon_session = Session::get('coupon');
+                    if($coupon_session==true){
+                        $ton_tai = 0;
+                        if($ton_tai==0){
+                            $cou[] = array(
+                                'code'=>$coupon->code,
+                                'tinh_nang'=>$coupon->tinh_nang,
+                                'tien_giam'=>$coupon->tien_giam
+                            );
+                            Session::put('coupon',$cou);
+                        }
+                    }else{
                         $cou[] = array(
                             'code'=>$coupon->code,
                             'tinh_nang'=>$coupon->tinh_nang,
@@ -304,18 +315,11 @@ class CheckoutController extends Controller
                         );
                         Session::put('coupon',$cou);
                     }
-                }else{
-                    $cou[] = array(
-                        'code'=>$coupon->code,
-                        'tinh_nang'=>$coupon->tinh_nang,
-                        'tien_giam'=>$coupon->tien_giam
-                    );
-                    Session::put('coupon',$cou);
+                    Session::save();
                 }
-                Session::save();
+            }else{
+                Session::put('message','Lỗi mã giảm giá không hợp lệ');
             }
-        }else{
-            Session::put('message','Lỗi mã giảm giá không hợp lệ');
         }
     }
 

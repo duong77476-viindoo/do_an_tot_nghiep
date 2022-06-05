@@ -15,7 +15,7 @@
             ?>
             <div style="display: block">
                 <div style="display:inline-block;">
-                    <button type="button" class="btn btn-primary chot_ton_kho">Chốt số lượng tồn</button>
+                    <button type="button" class="btn btn-primary chot_ton_kho">Chốt số liệu</button>
                 </div>
                 <div style="display:inline-block;">
                     <form action="{{route('ton-kho-export-csv')}}" method="POST">
@@ -62,55 +62,55 @@
                         <th>Xuất trong tháng</th>
                         <th>Tồn</th>
                         <th>Trạng thái</th>
-                        <th>Hành động</th>
+{{--                        <th>Hành động</th>--}}
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($ton_khos as $key => $ton_kho)
-                        <tr>
+                        <tr class="{{$ton_kho->trang_thai=="Hoàn thành" ? 'table-success' : 'table-active'}}">
                             <td>{{$ton_kho->product->name}}</td>
                             <td>{{$ton_kho->year}}</td>
-                            <td class="{{$ton_kho->trang_thai=='Chưa hoàn thành' ? 'ton_kho_month' : ''}}">{{$ton_kho->month}}</td>
+                            @php
+                                $date = date("Y-m-d");
+                                //Lấy năm, tháng trước
+                                $pre_month = date("m", strtotime ( '-1 month' , strtotime ( $date ) ));
+                                $pre_year = date("Y", strtotime ( '-1 month' , strtotime ( $date ) ));
+                                //Lấy năm tháng hiện tại
+                                $month = date("m");
+                                $year = date('Y');
+                            @endphp
+                            @if($ton_kho->trang_thai=="Chưa hoàn thành" && $ton_kho->month==$pre_month && $ton_kho->year==$pre_year)
+                                <td class="pre_ton_kho_month">{{$ton_kho->month}}</td>
+                            @elseif($ton_kho->trang_thai=="Chưa hoàn thành" && $ton_kho->month==$month && $ton_kho->year==$year)
+                                <td class="ton_kho_month">{{$ton_kho->month}}</td>
+                            @else
+                                <td>{{$ton_kho->month}}</td>
+                            @endif
                             <td>{{$ton_kho->ton_dau_thang}}</td>
                             <td>{{$ton_kho->nhap_trong_thang}}</td>
                             <td>{{$ton_kho->xuat_trong_thang}}</td>
                             <td>{{$ton_kho->ton}}</td>
-                            <td>{{$ton_kho->trang_thai}}</td>
-                            <td>
-                                <a href="{{route('edit-ton-kho',['id'=>$ton_kho->id])}}" class="active" ui-toggle-class="">
-                                    <i class="fa fa-pen text-success text-active"></i>
-                                </a>
-                                <a href="{{route('delete-ton-kho',['id'=>$ton_kho->id])}}"
-                                   onclick="return confirm('Bạn có chắc muốn xóa?')"
-                                   class="active" ui-toggle-class=""><i class="fa fa-trash text-danger text"></i></a>
-                                <a href="{{route('view-ton-kho',['id'=>$ton_kho->id])}}" class="active" ui-toggle-class="">
-                                    <i class="fa fa-eye text-success text-active"></i>
-                                </a>
-                            </td>
+                            @if($ton_kho->trang_thai=="Hoàn thành")
+                                <td>Đã chốt</td>
+                            @else
+                                <td>Chưa chốt</td>
+                            @endif
+{{--                            <td>--}}
+{{--                                <a href="{{route('edit-ton-kho',['id'=>$ton_kho->id])}}" class="active" ui-toggle-class="">--}}
+{{--                                    <i class="fa fa-pen text-success text-active"></i>--}}
+{{--                                </a>--}}
+{{--                                <a href="{{route('delete-ton-kho',['id'=>$ton_kho->id])}}"--}}
+{{--                                   onclick="return confirm('Bạn có chắc muốn xóa?')"--}}
+{{--                                   class="active" ui-toggle-class=""><i class="fa fa-trash text-danger text"></i></a>--}}
+{{--                                <a href="{{route('view-ton-kho',['id'=>$ton_kho->id])}}" class="active" ui-toggle-class="">--}}
+{{--                                    <i class="fa fa-eye text-success text-active"></i>--}}
+{{--                                </a>--}}
+{{--                            </td>--}}
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
             </div>
-            <footer class="panel-footer">
-                <div class="row">
-
-                    {{--                    <div class="col-sm-5 text-center">--}}
-                    {{--                        <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>--}}
-                    {{--                    </div>--}}
-                    <div class="col-sm-7 text-right text-center-xs">
-                        <ul class="pagination pagination-sm m-t-none m-b-none">
-{{--                            {{ $phieu_xuats->links() }}--}}
-                            {{--                            <li><a href=""><i class="fa fa-chevron-left"></i></a></li>--}}
-                            {{--                            <li><a href="">1</a></li>--}}
-                            {{--                            <li><a href="">2</a></li>--}}
-                            {{--                            <li><a href="">3</a></li>--}}
-                            {{--                            <li><a href="">4</a></li>--}}
-                            {{--                            <li><a href=""><i class="fa fa-chevron-right"></i></a></li>--}}
-                        </ul>
-                    </div>
-                </div>
-            </footer>
         </div>
     </div>
 @endsection
@@ -121,12 +121,52 @@
             $('.chot_ton_kho').click(function(){
                 var currentdate = new Date();
                 var currentmonth = String(currentdate.getMonth() + 1).padStart(2, '0');
-                var ton_kho_month = $('.ton_kho_month').text()[0] + $('.ton_kho_month').text()[1] ;
-                alert(ton_kho_month);
-                if(currentmonth==ton_kho_month || ton_kho_month==null || ton_kho_month===""){
+                var ton_kho_month = $('.ton_kho_month').text()[0] + $('.ton_kho_month').text()[1];
+                var pre_ton_kho_month = $('.pre_ton_kho_month').text()[0] + $('.pre_ton_kho_month').text()[1];
+                if(pre_ton_kho_month){
                     swal({
-                        title: "Không thể chốt số lượng tồn tháng này",
-                        text: "Do chưa đến thời hạn",
+                            title: "Chốt số lượng tồn tháng này",
+                            text: "Vui lòng check kỹ lại thông tin",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "Xác nhận",
+                            cancelButtonText: "Hủy bỏ!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function(isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    url: '{{url('/ton-kho/chot-ton-kho')}}',
+                                    method: 'POST',
+                                    headers:{
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    success:function()
+                                    {
+                                        swal({
+                                                title: "Chốt số liệu tồn kho thành công",
+                                                text: "",
+                                                confirmButtonClass: "btn-success",
+                                                confirmButtonText: "Tiếp tục",
+                                                closeOnConfirm: false
+                                            },
+                                            function() {
+                                                window.location.href = "{{url('/ton-kho/all')}}";
+                                            });
+                                    }
+                                });
+                            } else {
+                                swal("Đã hủy", "Tiếp tục theo dõi", "error");
+                            }
+                        });
+                }
+
+                else if(currentmonth==ton_kho_month || ton_kho_month==null || ton_kho_month===""){
+                    swal({
+                        title: "Không thể thực hiện hành động này, do chưa đến thời hạn",
+                        text: "Bạn vẫn còn số liệu liên quan cần xử lý",
                         type: "warning",
                         confirmButtonClass: "btn-danger",
                         confirmButtonText: "Tiếp tục",
@@ -140,7 +180,7 @@
                             type: "warning",
                             showCancelButton: true,
                             confirmButtonClass: "btn-danger",
-                            confirmButtonText: "Chốt",
+                            confirmButtonText: "Xác nhận",
                             cancelButtonText: "Hủy bỏ!",
                             closeOnConfirm: false,
                             closeOnCancel: false

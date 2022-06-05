@@ -1,7 +1,7 @@
 <table>
     <thead>
     <tr>
-        <td>BÁO CÁO TỔNG HỢP CÔNG NỢ PHẢI TRẢ/td>
+        <td>BÁO CÁO TỔNG HỢP CÔNG NỢ PHẢI TRẢ</td>
     </tr>
     <tr>
         <td>Năm: {{$cong_no_nccs[0]->year}}</td>

@@ -20,6 +20,6 @@ class AccessAdmin
         //Trong middleware ko cho phép truy xuất trực tiếp đến model
         if(Auth::user()->hasAnyRoles($role))
             return $next($request);
-        return redirect('dashboard');
+        return redirect('dashboard')->with('message','<p class="text-warning">Bạn không có quyền truy cập</p>');
     }
 }
