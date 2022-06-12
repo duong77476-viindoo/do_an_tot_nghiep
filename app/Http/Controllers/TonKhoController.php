@@ -20,7 +20,7 @@ class TonKhoController extends Controller
     public function index()
     {
         //
-        $ton_khos = TonKho::orderBy('trang_thai','ASC')->get();
+        $ton_khos = TonKho::orderBy('trang_thai','ASC')->orderBy('month','ASC')->get();
         return view('admin.ton_kho.index')
             ->with('ton_khos',$ton_khos);
     }

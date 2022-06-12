@@ -21,7 +21,7 @@ class CongNoNccController extends Controller
     public function index()
     {
         //
-        $cong_no_nccs = CongNoNcc::orderBy('trang_thai','ASC')->get();
+        $cong_no_nccs = CongNoNcc::orderBy('trang_thai','ASC')->orderBy('month','ASC')->get();
         $nha_cung_caps = NhaCungCap::all();
         return view('admin.cong_no_ncc.index')
             ->with('cong_no_nccs',$cong_no_nccs)

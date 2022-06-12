@@ -53,8 +53,12 @@ class ProductController extends Controller
 
            foreach ($dac_tinhs as $key=>$dac_tinh){
                if($key<3){
-                   $sku .= '-'.Str::slug($data[$dac_tinh->code][$i]);
-                   $attr.= '-'.$data[$dac_tinh->code][$i];
+                   $sku .= Str::slug($data[$dac_tinh->code][$i]);
+                   $attr.= $data[$dac_tinh->code][$i];
+                   if($key<2){
+                       $sku .= '-';
+                       $attr.= '-';
+                   }
                }
            }
            $product->code=$product_group->code.$sku;

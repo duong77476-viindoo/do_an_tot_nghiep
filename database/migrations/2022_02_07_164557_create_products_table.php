@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration
                 ->references('id')
                 ->on('product_groups')
                 ->onDelete('cascade');
-            $table->string('sku')->unique();
+            $table->string('sku');
             $table->string('code');
             $table->string('name')->comment('ví dụ xiaomi redmi 9C 3GB-64GB');
             $table->integer('so_luong')->default(0);
