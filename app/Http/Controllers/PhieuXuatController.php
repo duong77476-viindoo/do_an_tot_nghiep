@@ -99,7 +99,7 @@ class PhieuXuatController extends Controller
             $chi_tiet_phieu_xuat->thanh_tien = floatval($thanh_tien_format);
             $chi_tiet_phieu_xuat->save();
         }
-        if($phieu_xuat->trang_thai=="Xác nhận") {
+        if($data['trang_thai']=="Xác nhận") {
 
             $tong_tien = 0;
             foreach ($data['san_pham'] as $key => $val) {
@@ -199,6 +199,7 @@ class PhieuXuatController extends Controller
             'name' => 'required|max:50',
             'noi_dung' => 'required',
             'san_pham'=>'required',
+            'trang_thai'=>'required'
         ]);
 
         $data = $request->all();
@@ -213,9 +214,9 @@ class PhieuXuatController extends Controller
         $phieu_xuat->nguoi_lap_id = Auth::id();
         $phieu_xuat->save();
 
-        $chi_tiet_phieu_xuats = ChiTietPhieuXuat::where('phieu_xuat_id',$phieu_xuat->id)->delete();
 
-        if($phieu_xuat->trang_thai=="Xác nhận") {
+        if($data['trang_thai']=="Xác nhận") {
+            $chi_tiet_phieu_xuats = ChiTietPhieuXuat::where('phieu_xuat_id',$phieu_xuat->id)->delete();
             $tong_tien = 0;
             foreach ($data['san_pham'] as $key => $val) {
                 //Tính tổng tiền xuất
@@ -247,6 +248,24 @@ class PhieuXuatController extends Controller
                 }
                 $ton_kho_by_product->save();
 
+
+                $chi_tiet_phieu_xuat = new ChiTietPhieuXuat();
+                $chi_tiet_phieu_xuat->phieu_xuat_id = $phieu_xuat->id;
+                $chi_tiet_phieu_xuat->product_id = $val;
+                $chi_tiet_phieu_xuat->gia_xuat = floatval($this->format_currency($data['gia_xuat'][$key]));
+                $chi_tiet_phieu_xuat->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
+                $chi_tiet_phieu_xuat->so_luong_thuc_xuat = $data['so_luong_thuc_xuat'][$key];
+                $chi_tiet_phieu_xuat->thanh_tien = floatval($thanh_tien_format);
+                $chi_tiet_phieu_xuat->save();
+            }
+            $phieu_xuat->tong_tien = $tong_tien;
+        }else{
+            $tong_tien = 0;
+            $chi_tiet_phieu_xuats = ChiTietPhieuXuat::where('phieu_xuat_id',$phieu_xuat->id)->delete();
+            foreach ($data['san_pham'] as $key => $val) {
+                //Tính tổng tiền xuất
+                $thanh_tien_format = trim($data['thanh_tien'][$key], "đ");
+                $tong_tien += floatval($thanh_tien_format);
 
                 $chi_tiet_phieu_xuat = new ChiTietPhieuXuat();
                 $chi_tiet_phieu_xuat->phieu_xuat_id = $phieu_xuat->id;

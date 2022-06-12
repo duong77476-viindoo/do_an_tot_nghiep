@@ -183,27 +183,27 @@ class OrderController extends Controller
                     $so_luong_nhap += $chi_tiet_phieu_nhap->so_luong_thuc_nhap;
                     $tong_tien_nhap += $chi_tiet_phieu_nhap->thanh_tien;
                 }
-                //Trù đi số lượng tồn
-                $product->so_luong -= $order_detail->so_luong;
-                $product->save();
-
-                //Cộng thêm vào cột xuất trong tháng ở bảng tồn kho
-                $month = \date("m");
-                $year = \date('Y');
-                $ton_kho_by_product = TonKho::where('product_id',$product->id)->where('year',$year)->where('month',$month)->first();
-                if(is_null($ton_kho_by_product)){
-                    $ton_kho_by_product = new TonKho();
-                    $ton_kho_by_product->year = $year;
-                    $ton_kho_by_product->month = $month;
-                    $ton_kho_by_product->ton_dau_thang = 0;
-                    $ton_kho_by_product->nhap_trong_thang = 0;
-                    $ton_kho_by_product->xuat_trong_thang = $order_detail->so_luong;
-                    $ton_kho_by_product->ton = 0;
-                    $ton_kho_by_product->product_id = $product->id;
-                }else{
-                    $ton_kho_by_product->xuat_trong_thang += $order_detail->so_luong;
-                }
-                $ton_kho_by_product->save();
+//                //Trù đi số lượng tồn
+//                $product->so_luong -= $order_detail->so_luong;
+//                $product->save();
+//
+//                //Cộng thêm vào cột xuất trong tháng ở bảng tồn kho
+//                $month = \date("m");
+//                $year = \date('Y');
+//                $ton_kho_by_product = TonKho::where('product_id',$product->id)->where('year',$year)->where('month',$month)->first();
+//                if(is_null($ton_kho_by_product)){
+//                    $ton_kho_by_product = new TonKho();
+//                    $ton_kho_by_product->year = $year;
+//                    $ton_kho_by_product->month = $month;
+//                    $ton_kho_by_product->ton_dau_thang = 0;
+//                    $ton_kho_by_product->nhap_trong_thang = 0;
+//                    $ton_kho_by_product->xuat_trong_thang = $order_detail->so_luong;
+//                    $ton_kho_by_product->ton = 0;
+//                    $ton_kho_by_product->product_id = $product->id;
+//                }else{
+//                    $ton_kho_by_product->xuat_trong_thang += $order_detail->so_luong;
+//                }
+//                $ton_kho_by_product->save();
             }
 
             $order_date = $order->order_date;

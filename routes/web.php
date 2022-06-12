@@ -178,7 +178,7 @@ Route::middleware('revalidate')->group(function (){ //Middleware fix lỗi khi l
 
 //Báo cáo thống kê
 Route::middleware('check_login_admin')->group(function (){
-    Route::group(['middleware'=>'admin:Admin,Báo cáo thống kê'],function (){
+    Route::group(['middleware'=>'admin:Admin,Báo cáo thống kê,Quản lý bán hàng,Quản lý kho'],function (){
         Route::get('/statistic-order',[StatisticOrderController::class,'statistic_order'])->name('statistic-order');
         Route::get('/statistic-product-post',[StatisticOrderController::class,'statistic_product_post'])->name('statistic-product-post');
         Route::post('/filter-by-date',[StatisticOrderController::class,'filter_by_date'])->name('filter-by-date');

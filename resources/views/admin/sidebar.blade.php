@@ -66,7 +66,7 @@
                 </li>
                 @endhasRole
 
-                @hasRole(['Admin','Quản lý bán hàng'])
+                @hasRole(['Admin','Quản lý bán hàng','Quản lý kho'])
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-choose">
                         <i class="nav-icon fas fa-th"></i>
@@ -302,7 +302,6 @@
                         <i class="nav-icon fa fa-mail-bulk"></i>
                         <p>
                             Email Marketing
-                            <span class="badge badge-info right">Test</span>
                         </p>
                     </a>
                 </li>
