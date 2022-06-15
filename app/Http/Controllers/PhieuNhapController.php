@@ -7,6 +7,7 @@ use App\Models\CongNoNcc;
 use App\Models\NhaCungCap;
 use App\Models\PhieuNhap;
 use App\Models\Product;
+use App\Models\ProductIdentity;
 use App\Models\TonKho;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -56,16 +57,25 @@ class PhieuNhapController extends Controller
         //
         $validated = $request->validate([
             'nha_cung_cap_id' => 'required',
-            'name' => 'required|max:50',
             'noi_dung' => 'required',
             'san_pham'=>'required',
         ]);
+        $data = $request->all();
 
+        foreach ($data['san_pham'] as $key=>$val){
+            //Thêm imei cho mỗi số lượng nhập
+            for ($i=0;$i<$data['so_luong_thuc_nhap'][$key];$i++){
+                $so_luong_thuc_nhap_id = "so_luong_thuc_nhap" . ($key + 1);
+                $name_of_imei_input =  $so_luong_thuc_nhap_id."imei".$i;
+                $request->validate([
+                   $name_of_imei_input=>'unique:product_identities,code'
+                ]);
+            }
+        }
 
         $data = $request->all();
 
         $phieu_nhap = new PhieuNhap();
-        $phieu_nhap->name = $data['name'];
         $phieu_nhap->content = $data['noi_dung'];
         $phieu_nhap->nha_cung_cap_id = $data['nha_cung_cap_id'];
         $phieu_nhap->created_at = now();
@@ -75,6 +85,17 @@ class PhieuNhapController extends Controller
         $phieu_nhap->save();
         $tong_tien = 0;
         foreach ($data['san_pham'] as $key=>$val){
+            //Thêm imei cho mỗi số lượng nhập
+            for ($i=0;$i<$data['so_luong_thuc_nhap'][$key];$i++){
+                $so_luong_thuc_nhap_id = "so_luong_thuc_nhap" . ($key + 1);
+                $name_of_imei_input =  $so_luong_thuc_nhap_id."imei".$i;
+                $product_indentity = new ProductIdentity();
+                $product_indentity->code = $data[$name_of_imei_input];
+                $product_indentity->product_id = $val;
+                $product_indentity->phieu_nhap_id = $phieu_nhap->id;
+                $product_indentity->save();
+            }
+
             //Tính tổng tiền nhập
             $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
             $tong_tien+=floatval($thanh_tien_format);
@@ -210,7 +231,6 @@ class PhieuNhapController extends Controller
     {
         $validated = $request->validate([
             'nha_cung_cap_id' => 'required',
-            'name' => 'required|max:50',
             'noi_dung' => 'required',
             'san_pham'=>'required',
         ]);
@@ -218,7 +238,6 @@ class PhieuNhapController extends Controller
 
         $data = $request->all();
         $phieu_nhap = PhieuNhap::find($id);
-        $phieu_nhap->name = $data['name'];
         $phieu_nhap->content = $data['noi_dung'];
         $phieu_nhap->nha_cung_cap_id = $data['nha_cung_cap_id'];
         $phieu_nhap->created_at = now();
@@ -227,12 +246,23 @@ class PhieuNhapController extends Controller
         $phieu_nhap->trang_thai = $data['trang_thai'];
         $phieu_nhap->save();
 
-        $chi_tiet_phieu_nhaps = ChiTietPhieuNhap::where('phieu_nhap_id',$phieu_nhap->id)->delete();
 
 
         if($phieu_nhap->trang_thai=="Xác nhận"){
+            $chi_tiet_phieu_nhaps = ChiTietPhieuNhap::where('phieu_nhap_id',$phieu_nhap->id)->delete();
             $tong_tien = 0;
             foreach ($data['san_pham'] as $key=>$val){
+                //Thêm imei cho mỗi số lượng nhập
+                $old_product_indentities = ProductIdentity::where('product_id',$val)->delete();
+                for ($i=0;$i<$data['so_luong_thuc_nhap'][$key];$i++){
+                    $so_luong_thuc_nhap_id = "so_luong_thuc_nhap" . ($key + 1);
+                    $name_of_imei_input =  $so_luong_thuc_nhap_id."imei".$i;
+                    $product_indentity = new ProductIdentity();
+                    $product_indentity->code = $data[$name_of_imei_input];
+                    $product_indentity->product_id = $val;
+                    $product_indentity->phieu_nhap_id = $phieu_nhap->id;
+                    $product_indentity->save();
+                }
                 //Tính tổng tiền nhập
                 $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
                 $tong_tien+=floatval($thanh_tien_format);
@@ -296,6 +326,36 @@ class PhieuNhapController extends Controller
             $nha_cung_cap = NhaCungCap::find($data['nha_cung_cap_id']);
             $nha_cung_cap->so_tien_no += $tong_tien;
             $nha_cung_cap->save();
+        }else{
+            $chi_tiet_phieu_nhaps = ChiTietPhieuNhap::where('phieu_nhap_id',$phieu_nhap->id)->delete();
+            $tong_tien = 0;
+            foreach ($data['san_pham'] as $key=>$val){
+                //Thêm imei cho mỗi số lượng nhập
+                $old_product_indentities = ProductIdentity::where('product_id',$val)->delete();
+                for ($i=0;$i<$data['so_luong_thuc_nhap'][$key];$i++){
+                    $so_luong_thuc_nhap_id = "so_luong_thuc_nhap" . ($key + 1);
+                    $name_of_imei_input =  $so_luong_thuc_nhap_id."imei".$i;
+                    $product_indentity = new ProductIdentity();
+                    $product_indentity->code = $data[$name_of_imei_input];
+                    $product_indentity->product_id = $val;
+                    $product_indentity->phieu_nhap_id = $phieu_nhap->id;
+                    $product_indentity->save();
+                }
+                //Tính tổng tiền nhập
+                $thanh_tien_format = trim($data['thanh_tien'][$key],"đ");
+                $tong_tien+=floatval($thanh_tien_format);
+
+
+                $chi_tiet_phieu_nhap = new ChiTietPhieuNhap();
+                $chi_tiet_phieu_nhap->phieu_nhap_id = $phieu_nhap->id;
+                $chi_tiet_phieu_nhap->product_id = $val;
+                $chi_tiet_phieu_nhap->gia_nhap = floatval($this->format_currency($data['gia_nhap'][$key]));
+                $chi_tiet_phieu_nhap->so_luong_yeu_cau = $data['so_luong_yeu_cau'][$key];
+                $chi_tiet_phieu_nhap->so_luong_thuc_nhap = $data['so_luong_thuc_nhap'][$key];
+                $chi_tiet_phieu_nhap->thanh_tien = floatval($thanh_tien_format);
+                $chi_tiet_phieu_nhap->save();
+            }
+            $phieu_nhap->tong_tien = $tong_tien;
         }
         $phieu_nhap->save();
         return redirect()->route('view-phieu-nhap',['id'=>$phieu_nhap->id]);

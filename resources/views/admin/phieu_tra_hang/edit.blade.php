@@ -1,6 +1,5 @@
 @extends('admin.admin_layout')
 @section('admin_content')
-    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('edit-phieu-xuat',$phieu_xuat) }}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -14,7 +13,7 @@
         <div class="col-lg-12">
             <section class="panel">
                 <header class="panel-heading">
-                    Phiếu xuất #{{$phieu_xuat->id}} ( <a href="{{route('view-customer-order',['id'=>$phieu_xuat->order_id])}}">Đơn hàng#{{$phieu_xuat->order_id}}</a>)
+                    Phiếu trả hàng #{{$phieu_tra_hang->id}} ( <a href="{{route('view-customer-order',['id'=>$phieu_tra_hang->order_id])}}">Đơn hàng#{{$phieu_tra_hang->order_id}}</a>)
                 </header>
                 <?php
                 $message = \Illuminate\Support\Facades\Session::get('message');
@@ -27,11 +26,11 @@
                     <div class="position-center">
                         <div class="row">
                             <div class="col-md-12">
-                                <form role="form" action="{{route('update-phieu-xuat',['id'=>$phieu_xuat->id])}}" method="post" >
+                                <form role="form" action="{{route('update-phieu-tra-hang',['id'=>$phieu_tra_hang->id])}}" method="post" >
                                     {{csrf_field()}}
                                 <div class="card card-danger">
                                     <div class="card-header">
-                                        <h3 class="card-title">Thông tin cơ bản Phiếu xuất</h3>
+                                        <h3 class="card-title">Thông tin cơ bản phiếu trả hàng</h3>
                                     </div>
                                     <div class="card-body">
                                         <!-- Date dd/mm/yyyy -->
@@ -42,7 +41,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                 </div>
-                                                <input readonly class="form-control" type="text" name="order_id" value="{{$phieu_xuat->order_id}}">
+                                                <input readonly class="form-control" type="text" name="order_id" value="{{$phieu_tra_hang->order_id}}">
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -55,7 +54,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                 </div>
-                                                <input  class="form-control" id="noi_dung" type="text" value="{{$phieu_xuat->content}}" name="noi_dung" placeholder="Nhập nội dung">
+                                                <input  class="form-control" id="noi_dung" type="text" value="{{$phieu_tra_hang->content}}" name="noi_dung" placeholder="Nhập nội dung">
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -67,7 +66,7 @@
                                                     <span class="input-group-text"><i class="fas fa-square"></i></span>
                                                 </div>
                                                 <select class="form-control" name="trang_thai">
-                                                    @if($phieu_xuat->trang_thai=="Chưa xác nhận")
+                                                    @if($phieu_tra_hang->trang_thai=="Chưa xác nhận")
                                                         <option value="Chưa xác nhận" selected>Chưa xác nhận</option>
                                                         <option value="Xác nhận">Xác nhận</option>
                                                     @else
@@ -91,14 +90,14 @@
                                             <thead>
                                             <tr>
                                                 <th>Sản phẩm</th>
-                                                <th>Số lượng yêu cầu</th>
-                                                <th>Số lượng thực xuất</th>
+                                                <th>Số lượng trong đơn hàng</th>
+                                                <th>Số lượng thực trả</th>
                                                 <th>Giá xuất</th>
                                                 <th>Thành tiền</th>
                                             </tr>
                                             </thead>
                                             <tbody id="DynamicTable">
-                                            @foreach($chi_tiet_phieu_xuat as $key=>$ctpx)
+                                            @foreach($chi_tiet_phieu_tra_hang as $ctpx)
                                                 <tr>
                                                     @php
                                                         $product = \App\Models\Product::find($ctpx->product_id);
@@ -113,13 +112,10 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <input readonly  type="number" value="{{$ctpx->so_luong_yeu_cau}}" class="form-control" name="so_luong_yeu_cau[]">
+                                                        <input readonly  type="number" value="{{$ctpx->so_luong_trong_don_hang}}" class="form-control" name="so_luong_trong_don_hang[]">
                                                     </td>
                                                     <td>
-                                                        <input id="so_luong_thuc_xuat{{$key+1}}"  type="number" value="{{$ctpx->so_luong_thuc_xuat}}" class="form-control so_luong" name="so_luong_thuc_xuat[]">
-                                                        <button id="product_identity{{$key+1}}" type="button" data-index="{{$key+1}}" class="btn-product-indentity">Mã định danh</button>
-                                                        <div id="container{{$key+1}}" data-index="{{$key+1}}">
-                                                        </div>
+                                                        <input  type="number" value="{{$ctpx->so_luong_thuc_tra}}" class="form-control so_luong" name="so_luong_thuc_tra[]">
                                                     </td>
                                                     <td>
                                                         <input  type="text" value="{{$ctpx->gia_xuat}}" class="form-control money gia_xuat" name="gia_xuat[]">
@@ -153,7 +149,7 @@
             var i = 1;
             $('#add').click(function (){
                 i++;
-                $('#DynamicTable').append('<tr id="row'+i+'"><td><select class="form-control" name="san_pham[]">@foreach($products as $product)<option value="{{$product->id}}">{{$product->code}}</option>@endforeach</select> </td> <td> <input type="number" class="form-control" name="so_luong_yeu_cau[]"> </td> <td> <input type="number" class="form-control so_luong" name="so_luong_thuc_xuat[]"> </td> <td> <input type="text" class="form-control money'+i+' gia_xuat"  name="gia_xuat[]"> </td> <td> <input readonly type="text" class="form-control thanh_tien" name="thanh_tien[]"> </td> <td> <button type="button" id="'+i+'" class="btn btn-danger remove_row"><i class="fa fa-minus"></i></button> </td> </tr>')
+                $('#DynamicTable').append('<tr id="row'+i+'"><td><select class="form-control" name="san_pham[]">@foreach($products as $product)<option value="{{$product->id}}">{{$product->code}}</option>@endforeach</select> </td> <td> <input type="number" class="form-control" name="so_luong_trong_don_hang[]"> </td> <td> <input type="number" class="form-control so_luong" name="so_luong_thuc_tra[]"> </td> <td> <input type="text" class="form-control money'+i+' gia_xuat"  name="gia_xuat[]"> </td> <td> <input readonly type="text" class="form-control thanh_tien" name="thanh_tien[]"> </td> <td> <button type="button" id="'+i+'" class="btn btn-danger remove_row"><i class="fa fa-minus"></i></button> </td> </tr>')
                 new AutoNumeric('.money'+i+'', {
                     currencySymbol :'đ',
                     decimalPlaces: 2,
@@ -187,35 +183,5 @@
             });
         })
     </script>
-    <script type='text/javascript'>
-        $(document).on('click','.btn-product-indentity',function (){
-            var id = $(this).data('index');
-            var so_luong_thuc_xuat_id = 'so_luong_thuc_xuat'+id;
-            var container_id = 'container'+id;
-            addFields(so_luong_thuc_xuat_id,container_id);
-        })
-        function addFields(so_luong_thuc_xuat_id,container_id){
-            // Generate a dynamic number of inputs
-            var number = document.getElementById(so_luong_thuc_xuat_id).value;
-            // Get the element where the inputs will be added to
-            var container = document.getElementById(container_id);
-            // Remove every children it had before
-            while (container.hasChildNodes()) {
-                container.removeChild(container.lastChild);
-            }
-            for (i=0;i<number;i++){
-                // Append a node with a random text
-                container.appendChild(document.createTextNode("IMEI " + (i+1)));
-                // Create an <input> element, set its type and name attributes
-                var input = document.createElement("input");
-                input.type = "text";
-                input.name = so_luong_thuc_xuat_id+"imei" + i;
-                container.appendChild(input);
-                // Append a line break
-                container.appendChild(document.createElement("br"));
-            }
-        }
-    </script>
-
 
 @endsection

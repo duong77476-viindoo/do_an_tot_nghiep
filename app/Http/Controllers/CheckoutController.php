@@ -8,6 +8,7 @@ use App\Models\Brand;
 use App\Models\CategoryProduct;
 use App\Models\City;
 use App\Models\Coupon;
+use App\Models\Customer;
 use App\Models\fee_ship;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -26,6 +27,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\VarDumper;
 
 class CheckoutController extends Controller
@@ -216,6 +218,26 @@ class CheckoutController extends Controller
     public function confirm_order(Request $request){
         $data = $request->all();
 
+        //Thêm đơn hàng
+        //Thêm vào bảng order
+        $order = new Order();
+        if(Session::get('customer_id')==null){
+            $validator= Validator::make($request->all(), [
+                'email'=>'unique:customers',
+            ]);
+            if($validator->fails())
+                return response()->json(['error'=>'lỗi']);
+            $khach_hang_vang_lai = new Customer();
+            $khach_hang_vang_lai->name = $data['name'];
+            $khach_hang_vang_lai->email = $data['email'];
+            $khach_hang_vang_lai->address = $data['address'];
+            $khach_hang_vang_lai->phone = $data['phone'];
+            $khach_hang_vang_lai->password = '';
+            $khach_hang_vang_lai->save();
+            $order->customer_id = $khach_hang_vang_lai->id;
+        }else{
+            $order->customer_id = Session::get('customer_id');
+        }
         $shipping = new Shipping();
         $shipping->name = $data['name'];//tên khách hàng dc ship
         $shipping->email = $data['email'];
@@ -230,15 +252,9 @@ class CheckoutController extends Controller
         $payment->status = 'Đang chờ xử lý';
 
         $payment->save();
-
-        //Thêm đơn hàng
-        //Thêm vào bảng order
-        $order = new Order();
-        $order->customer_id = Session::get('customer_id');
         $order->shipping_id = $shipping->id;
         $order->payment_id = $payment->id;
         $order->fee_ship = $data['fee_ship'];
-
         $tong_tien = 0;
         $tien_duoc_giam = 0;
         $phi_van_chuyen = $data['fee_ship'];

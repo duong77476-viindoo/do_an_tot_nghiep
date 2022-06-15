@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OrderExport;
 use App\Models\ChiTietPhieuNhap;
+use App\Models\ChiTietPhieuTraHang;
 use App\Models\ChiTietPhieuXuat;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\PhieuTraHang;
 use App\Models\PhieuXuat;
 use App\Models\Product;
 use App\Models\ProductGroup;
@@ -130,7 +133,6 @@ class OrderController extends Controller
 //        }
         if($data['order_status']=="Đang xử lý"){
             $phieu_xuat = new PhieuXuat();
-            $phieu_xuat->name = "Phiếu xuất bán hàng";
             $phieu_xuat->content = "Phiếu xuất cho đơn hàng mã ".$data['order_id'];
             $phieu_xuat->order_id = $data['order_id'];
             $phieu_xuat->nguoi_lap_id = Auth::id();
@@ -223,7 +225,28 @@ class OrderController extends Controller
             $title = "Đơn hàng "."#".$order->id." đã giao thành công";
             $this->send_mail_customer($order->id,$title);
         }
-        else if($data['order_status']=="Đã hủy"){
+        else if($data['order_status']=="Chờ xác nhận hủy"){
+            $phieu_tra_hang = new PhieuTraHang();
+            $phieu_tra_hang->content = "Phiếu hoàn trả cho đơn hàng mã ".$data['order_id'];
+            $phieu_tra_hang->order_id = $data['order_id'];
+            $phieu_tra_hang->nguoi_lap_id = Auth::id();
+            $phieu_tra_hang->tong_tien = $order->tong_tien;
+            $phieu_tra_hang->created_at = now();
+            $phieu_tra_hang->updated_at = now();
+            $phieu_tra_hang->save();
+            foreach ($data['order_product_id'] as $key=>$product_id){
+                $product = Product::find($product_id);
+                $chi_tiet_phieu_tra_hang = new ChiTietPhieuTraHang();
+                $chi_tiet_phieu_tra_hang->phieu_tra_hang_id = $phieu_tra_hang->id;
+                $chi_tiet_phieu_tra_hang->product_id = $product_id;
+                $chi_tiet_phieu_tra_hang->gia_xuat = $product->gia_ban;
+                $chi_tiet_phieu_tra_hang->so_luong_trong_don_hang = $data['order_product_qty'][$key];
+                $chi_tiet_phieu_tra_hang->save();
+            }
+
+            $title = "Đơn hàng "."#".$order->id." chờ xác nhận hủy";
+            $this->send_mail_customer($order->id,$title);
+        }else{
             $title = "Đơn hàng "."#".$order->id." đã hủy";
             $this->send_mail_customer($order->id,$title);
         }
@@ -241,4 +264,10 @@ class OrderController extends Controller
             });
     }
 
+    public function export_order($id){
+        $order = Order::find($id);
+        $order_export =  new OrderExport();
+        $order_export->setID($order->id);
+        return \Maatwebsite\Excel\Facades\Excel::download($order_export,'HoaDon.xlsx');
+    }
 }

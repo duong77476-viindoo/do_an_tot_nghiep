@@ -17,9 +17,11 @@ use App\Models\Rating;
 use App\Models\Slider;
 use App\Models\Tag;
 use App\Models\Video;
+use App\Rules\Captcha;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\VarDumper;
 
 class SiteController extends Controller
@@ -519,14 +521,22 @@ class SiteController extends Controller
     }
 
     public function insert_rating(Request $request){
-        $data = $request->all();
-        $rating = new Rating();
-        $rating->product_id = $data['product_id'];
-        $rating->rating = $data['index'];
-        $rating->name = $data['rating_name'];
-        $rating->email = $data['rating_email'];
-        $rating->content = $data['rating_content'];
-        $rating->save();
+       $validator= Validator::make($request->all(), [
+            'g-recaptcha-response'=>new Captcha(),
+       ]);
+
+        if(!$validator->fails()){
+            $data = $request->all();
+            $rating = new Rating();
+            $rating->product_id = $data['product_id'];
+            $rating->rating = $data['index'];
+            $rating->name = $data['rating_name'];
+            $rating->email = $data['rating_email'];
+            $rating->content = $data['rating_content'];
+            $rating->save();
+            return response()->json(['success'=>'Added new records.']);
+        }
+        return response()->json(['error','Chưa check captcha']);
     }
 }
 

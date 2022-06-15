@@ -30,7 +30,6 @@
                 <table id="myTable" class="table table-striped b-t b-light">
                     <thead>
                     <tr>
-                        <th>Tên phiếu nhập</th>
                         <th>Nhà cung cấp</th>
                         <th>Nội dung</th>
                         <th>Tổng tiền</th>
@@ -43,7 +42,6 @@
                     <tbody>
                     @foreach($phieu_nhaps as $key => $phieu_nhap)
                         <tr>
-                            <td>{{$phieu_nhap->name}}</td>
                             <td>{{$phieu_nhap->nha_cung_cap->name}}</td>
                             <td>{{$phieu_nhap->content}}</td>
                             <td>{{number_format($phieu_nhap->tong_tien,2,",",".")}} đ</td>

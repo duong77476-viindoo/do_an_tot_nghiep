@@ -18,6 +18,7 @@ use App\Http\Controllers\NganhHangController;
 use App\Http\Controllers\NhaCungCapController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PhieuNhapController;
+use App\Http\Controllers\PhieuTraHangController;
 use App\Http\Controllers\PhieuXuatController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostTypeController;
@@ -49,6 +50,9 @@ Route::get('/test_noti',function (){
     return view('admin.test_noti');
     //event(new \App\Events\ConfirmOrder("hello"));
 });
+
+Route::get('/export-order/{id}', [OrderController::class, 'export_order'])->name('export-order');
+
 
 Route::post('/mark-read-notification',[AdminController::class,'markNotificaion'])->name('admin.markNotification');
 
@@ -287,6 +291,40 @@ Route::middleware('check_login_admin')->group(function (){
     });
 
 });
+
+//Phiếu trả hàng
+Route::middleware('check_login_admin')->group(function (){
+    Route::prefix('/phieu-tra-hang')->group(function (){
+        Route::group(['middleware'=>'admin:Admin,Quản lý kho'],function () {
+
+            Route::get('/all', [PhieuTraHangController::class, 'index'])->name('all-phieu-tra-hang');
+            Route::get('/add', [PhieuTraHangController::class, 'create'])->name('add-phieu-tra-hang');
+            Route::get('/edit/{id}', [PhieuTraHangController::class, 'edit'])->name('edit-phieu-tra-hang');
+            Route::get('/delete/{id}', [PhieuTraHangController::class, 'destroy'])->name('delete-phieu-tra-hang');
+            Route::post('/update/{id}', [PhieuTraHangController::class, 'update'])->name('update-phieu-tra-hang');
+            Route::get('/view/{id}', [PhieuTraHangController::class, 'show'])->name('view-phieu-tra-hang');
+
+
+            Route::post('/save-phieu-tra-hang', [PhieuTraHangController::class, 'store'])->name('save-phieu-tra-hang');
+            Route::get('/print-order/{id}', [PhieuTraHangController::class, 'print_order'])->name('print-phieu-tra-hang');
+        });
+    });
+
+
+//
+//    Route::get('/active-nha-cung-cap/{id}',[NhaCungCapController::class,'active_nha-cung-cap'])->name('active-nha-cung-cap');
+//    Route::get('/unactive-nha-cung-cap/{id}',[NhaCungCapController::class,'unactive_nha-cung-cap'])->name('unactive-nha-cung-cap');
+//
+//    Route::get('/add-dac-tinh/{id}',[NhaCungCapController::class,'add_dac_tinh'])->name('add-dac-tinh');
+//    Route::post('/save-dac-tinh',[NhaCungCapController::class,'save_dac_tinh'])->name('save-dac-tinh');
+//    Route::get('/delete-dac-tinh/{id}',[NhaCungCapController::class,'delete_dac_tinh'])->name('delete-dac-tinh');
+
+    //import export excel
+//    Route::post('/post/import-csv',[NhaCungCapController::class,'import_csv'])->name('post-import-csv');
+//    Route::post('/post/export-csv',[NhaCungCapController::class,'export_csv'])->name('post-export-csv');
+
+});
+
 
 //Phiếu xuất
 Route::middleware('check_login_admin')->group(function (){

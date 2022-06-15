@@ -28,9 +28,9 @@ class CartController extends Controller
                     $ton_tai++;
                     $cart[$key]['product_qty']+=$data['cart_product_qty'];
                 }
-                //kiểm tra số lượng đã đặt xem có lớn hơn trong kho hay không
-//                if($cart[$key]['product_qty'] > $data['product_qty'])//Nếu số lượng đã đặt lớn hơn số lượng tồn
-//                    return response()->json(['error'=>"Lỗi"]);
+//                kiểm tra số lượng đã đặt xem có lớn hơn trong kho hay không
+                if($cart[$key]['product_qty'] > $data['product_qty'])//Nếu số lượng đã đặt lớn hơn số lượng tồn
+                    return response()->json(['error'=>"Lỗi"]);
                 Session::put('cart',$cart);
             }
             if($ton_tai==0){

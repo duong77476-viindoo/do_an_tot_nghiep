@@ -107,9 +107,14 @@
                         @elseif($customer_id!=null && $shipping_id=!null)
                             <a class="btn btn-default check_out" href="{{route('payment')}}"> Thanh toán</a>
                         @else
-                            <a class="btn btn-default check_out"href="{{route('login')}}"> Thanh toán</a>
+                            <a class="btn btn-default check_out"href="{{route('login')}}"> Thanh toán đăng nhập</a>
                         @endif
                     </td>
+                    @if($customer_id==null)
+                    <td>
+                        <a class="btn btn-default check_out"href="{{route('checkout')}}"> Thanh toán không cần đăng nhập</a>
+                    </td>
+                    @endif
                 </tr>
                 @else
                     <tr>

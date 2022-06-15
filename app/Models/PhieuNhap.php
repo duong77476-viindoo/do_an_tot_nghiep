@@ -20,4 +20,8 @@ class PhieuNhap extends Model
     public function products(){
         return $this->belongsToMany(Product::class);
     }
+
+    public function product_identities(){
+        return $this->hasMany(ProductIdentity::class);
+    }
 }
