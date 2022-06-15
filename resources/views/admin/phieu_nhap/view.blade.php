@@ -47,19 +47,6 @@
                                             <!-- /.form group -->
 
 
-                                            <!-- phone mask -->
-                                            <div class="form-group">
-                                                <label>Tên phiếu:</label>
-
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i class="fas fa-square"></i></span>
-                                                    </div>
-                                                    <input disabled class="form-control" type="text" value="{{$phieu_nhap->name}}" name="name" placeholder="Nhập tên phiếu">
-                                                </div>
-                                                <!-- /.input group -->
-                                            </div>
-
                                             <div class="form-group">
                                                 <label>Nội dung:</label>
 
@@ -102,6 +89,9 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody id="DynamicTable">
+                                                @php
+                                                    $count = 1;
+                                                @endphp
                                                 @foreach($chi_tiet_phieu_nhap as $ctpn)
                                                 <tr>
                                                     @php
@@ -115,6 +105,14 @@
                                                     </td>
                                                     <td>
                                                         <input disabled type="number" value="{{$ctpn->so_luong_thuc_nhap}}" class="form-control so_luong" name="so_luong_thuc_nhap[]">
+                                                        <div class="product-indentity">
+                                                            @php
+                                                                $product_identities = \App\Models\ProductIdentity::where('product_id',$product->id)->where('phieu_nhap_id',$phieu_nhap->id)->get();
+                                                            @endphp
+                                                            @foreach($product_identities as $key=>$product_identity)
+                                                                <input readonly name="so_luong_thuc_nhap{{$count}}imei{{$key}}" value="{{$product_identity->code}}">
+                                                            @endforeach
+                                                        </div>
                                                     </td>
                                                     <td>
                                                         <input disabled type="text" value="{{number_format($ctpn->gia_nhap,0,",",".")}} đ" class="form-control gia_nhap" name="gia_nhap[]">
@@ -123,6 +121,9 @@
                                                         <input disabled type="text" value="{{number_format($ctpn->thanh_tien,0,",",".")}} đ" class="form-control thanh_tien" name="thanh_tien[]">
                                                     </td>
                                                 </tr>
+                                                    @php
+                                                        $count = $count + 1;
+                                                    @endphp
                                                 @endforeach
                                                 </tbody>
                                             </table>

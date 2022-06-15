@@ -279,12 +279,12 @@ Breadcrumbs::register('add-phieu-nhap', function ($breadcrumbs) {
 
 Breadcrumbs::register('view-phieu-nhap', function ($breadcrumbs, $phieu_nhap) {
     $breadcrumbs->parent('phieu-nhap');
-    $breadcrumbs->push($phieu_nhap->name, route('view-phieu-nhap', ['id' => $phieu_nhap->id]));
+    $breadcrumbs->push($phieu_nhap->id, route('view-phieu-nhap', ['id' => $phieu_nhap->id]));
 });
 
 Breadcrumbs::register('edit-phieu-nhap', function ($breadcrumbs, $phieu_nhap) {
     $breadcrumbs->parent('phieu-nhap');
-    $breadcrumbs->push($phieu_nhap->name,route('edit-phieu-nhap',['id'=>$phieu_nhap->id]));
+    $breadcrumbs->push($phieu_nhap->id,route('edit-phieu-nhap',['id'=>$phieu_nhap->id]));
 });
 
 //Phiếu xuất
@@ -300,12 +300,12 @@ Breadcrumbs::register('add-phieu-xuat', function ($breadcrumbs) {
 
 Breadcrumbs::register('view-phieu-xuat', function ($breadcrumbs, $phieu_xuat) {
     $breadcrumbs->parent('phieu-xuat');
-    $breadcrumbs->push($phieu_xuat->name, route('view-phieu-xuat', ['id' => $phieu_xuat->id]));
+    $breadcrumbs->push($phieu_xuat->id, route('view-phieu-xuat', ['id' => $phieu_xuat->id]));
 });
 
 Breadcrumbs::register('edit-phieu-xuat', function ($breadcrumbs, $phieu_xuat) {
     $breadcrumbs->parent('phieu-xuat');
-    $breadcrumbs->push($phieu_xuat->name,route('edit-phieu-xuat',['id'=>$phieu_xuat->id]));
+    $breadcrumbs->push($phieu_xuat->id,route('edit-phieu-xuat',['id'=>$phieu_xuat->id]));
 });
 
 //Tồn kho

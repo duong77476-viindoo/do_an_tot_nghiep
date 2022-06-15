@@ -50,7 +50,7 @@
         <div class="product-information"><!--/product-information-->
             <img src="images/product-details/new.jpg" class="newarrival" alt="" />
             <h2>{{$nhom_san_pham->name}}</h2>
-            <p>ID: {{$nhom_san_pham->id}}</p>
+{{--            <p>ID: {{$nhom_san_pham->id}}</p>--}}
             <div class="row">
                 @foreach($nhom_san_pham->products as $product)
                     <div class="col-md-4 btn btn-default text-white box-version {{$product->code==$phien_ban_san_pham->code ? 'box-active':''}}">
@@ -92,7 +92,7 @@
                     @if($phien_ban_san_pham->so_luong==0)
                         <p class="text-primary">Sản phảm hiện hết hàng, bạn vẫn có thể liên hệ bộ phận hỗ trợ khách hàng ở góc phải màn hình để đặt hàng nhé!</p>
                     @else
-                        <label>Quantity:</label>
+                        <label>Số lượng:</label>
                         <input name="so_luong" class="cart_product_qty_{{$phien_ban_san_pham->id}}" type="number" min="1" max="{{$phien_ban_san_pham->so_luong}}" value="1" />
                         <input name="product_id" class="product_id" type="hidden" value="{{$phien_ban_san_pham->id}}" />
                         <button type="button" class="btn btn-fefault add-to-cart" name="add-to-cart" data-product_id="{{$phien_ban_san_pham->id}}">
@@ -226,9 +226,16 @@
                         <input class="comment_email form-control" type="email" placeholder="Địa chỉ email"/>
                     </span>
                     <textarea class="comment_content form-control" rows="8" name="" ></textarea>
-                    <button type="button" class="btn btn-default pull-right send-comment">
+                    <button disabled id="btn-comment" type="button" class="btn btn-default pull-right send-comment">
                         Gửi
                     </button>
+                    <div class="g-recaptcha" data-callback="recaptchaCallback1" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
+                    <br/>
+                    @if($errors->has('g-recaptcha-response'))
+                        <span class="invalid-feedback" style="display:block">
+                        <strong>{{$errors->first('g-recaptcha-response')}}</strong>
+                    </span>
+                    @endif
                     <div id="notify-comment">
 
                     </div>
@@ -237,6 +244,9 @@
         </div>
         <div class="tab-pane fade " id="reviews" >
             <div class="col-sm-12">
+                <div class="alert alert-danger print-error-msg" style="display:none">
+                    <ul></ul>
+                </div>
                 <div id="load-rating">
 
                 </div>
@@ -261,9 +271,16 @@
                         <input class="rating_email" type="email" placeholder="Địa chỉ email"/>
                     </span>
                     <textarea class="rating_content" name="" ></textarea>
-                    <button type="button" class="btn btn-default pull-right send-rating">
+                    <button id="btn-rating" disabled type="button" class="btn btn-default pull-right send-rating">
                         Gửi
                     </button>
+                    <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
+                    <br/>
+                    @if($errors->has('g-recaptcha-response'))
+                        <span class="invalid-feedback" style="display:block">
+                        <strong>{{$errors->first('g-recaptcha-response')}}</strong>
+                    </span>
+                    @endif
                     <div id="notify-rating">
 
                     </div>
@@ -465,17 +482,54 @@
                 rating_content:rating_content
             },
             success:function (data){
-                $('#form-rating')[0].reset();
-                $('#notify-rating').html('<span class="text text-success">Cảm ơn bạn đã đánh giá</span>');
-                // load_rating();
-                $('#notify-rating').fadeOut(5000);
+                if($.isEmptyObject(data.error)){
+                    $("#form-rating")[0].reset();
+                    $(".print-error-msg").css('display','none');
+                    swal({
+                        title: "Đánh giá thành công",
+                        closeOnConfirm: false
+                    },
+                        function(isConfirm) {
+                        if (isConfirm) {
+                            location.reload();
+                        }
+                    })
+                }else{
+                    swal({
+                        title: "Vui lòng check captcha",
+                        // text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
+                        // showCancelButton: true,
+                        // cancelButtonText: "Tiếp tục",
+                        // confirmButtonClass: "btn-success",
+                        // confirmButtonText: "Đi đến giỏ hàng",
+                        closeOnConfirm: false
+                    })
+                }
             }
         });
     });
+        function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+        }
     });
+    function recaptchaCallback() {
+        $('#btn-rating').removeAttr('disabled');
+    };
+    function recaptchaCallback1() {
+        $('#btn-comment').removeAttr('disabled');
+    };
+
+
 
 </script>
+{{--script check capcha cho đánh giá--}}
+<script type="text/javascript">
 
+</script>
 @endsection
 
 

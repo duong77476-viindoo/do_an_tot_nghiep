@@ -20,7 +20,6 @@ class CreatePhieuNhapsTable extends Migration
                 ->references('id')
                 ->on('nha_cung_caps')
                 ->onDelete('cascade');
-            $table->string('name')->comment('Tên phiếu nhập');
             $table->text('content')->comment('Nội dung phiếu nhập');
             $table->decimal('tong_tien',14,2)->default(0);
             $table->enum('trang_thai',['Chưa xác nhận','Xác nhận'])->default('Chưa xác nhận');

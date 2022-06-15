@@ -36,4 +36,7 @@ class Product extends Model
         return $this->belongsToMany(PhieuXuat::class);
     }
 
+    public function product_identities(){
+        return $this->hasMany(ProductIdentity::class);
+    }
 }

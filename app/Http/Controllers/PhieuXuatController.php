@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PhieuXuat;
 use App\Models\Product;
+use App\Models\ProductIdentity;
 use App\Models\TonKho;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -54,7 +55,6 @@ class PhieuXuatController extends Controller
     {
         //
         $validated = $request->validate([
-            'name' => 'required|max:50',
             'noi_dung' => 'required',
             'san_pham'=>'required',
         ]);
@@ -76,7 +76,6 @@ class PhieuXuatController extends Controller
             }
         }
             $phieu_xuat = new PhieuXuat();
-            $phieu_xuat->name = $data['name'];
             $phieu_xuat->content = $data['noi_dung'];
             $phieu_xuat->order_id = $data['order_id'];
             $phieu_xuat->created_at = now();
@@ -196,7 +195,6 @@ class PhieuXuatController extends Controller
     {
         //
         $validated = $request->validate([
-            'name' => 'required|max:50',
             'noi_dung' => 'required',
             'san_pham'=>'required',
             'trang_thai'=>'required'
@@ -206,7 +204,6 @@ class PhieuXuatController extends Controller
         $phieu_xuat = PhieuXuat::find($id);
         if($phieu_xuat->trang_thai=="Xác nhận")
             return redirect()->back()->with('message','<p class="text-danger">Bạn không thể sửa một phiếu xuất đã được xác nhận</p>');
-        $phieu_xuat->name = $data['name'];
         $phieu_xuat->content = $data['noi_dung'];
         $phieu_xuat->order_id = $data['order_id'];
         $phieu_xuat->trang_thai = $data['trang_thai'];
@@ -219,6 +216,7 @@ class PhieuXuatController extends Controller
             $chi_tiet_phieu_xuats = ChiTietPhieuXuat::where('phieu_xuat_id',$phieu_xuat->id)->delete();
             $tong_tien = 0;
             foreach ($data['san_pham'] as $key => $val) {
+
                 //Tính tổng tiền xuất
                 $thanh_tien_format = trim($data['thanh_tien'][$key], "đ");
                 $tong_tien += floatval($thanh_tien_format);
@@ -248,7 +246,6 @@ class PhieuXuatController extends Controller
                 }
                 $ton_kho_by_product->save();
 
-
                 $chi_tiet_phieu_xuat = new ChiTietPhieuXuat();
                 $chi_tiet_phieu_xuat->phieu_xuat_id = $phieu_xuat->id;
                 $chi_tiet_phieu_xuat->product_id = $val;
@@ -257,15 +254,27 @@ class PhieuXuatController extends Controller
                 $chi_tiet_phieu_xuat->so_luong_thuc_xuat = $data['so_luong_thuc_xuat'][$key];
                 $chi_tiet_phieu_xuat->thanh_tien = floatval($thanh_tien_format);
                 $chi_tiet_phieu_xuat->save();
+
+                //Đặt imei cho mỗi số lượng xuất gắn cho nó phiếu xuất id là imei đó đã xuất
+                for ($i=0;$i<$data['so_luong_thuc_xuat'][$key];$i++){
+                    $so_luong_thuc_xuat_id = "so_luong_thuc_xuat" . ($key + 1);
+                    $name_of_imei_input =  $so_luong_thuc_xuat_id."imei".$i;
+                    $product_indentity = ProductIdentity::where('code',$data[$name_of_imei_input])->where('product_id',$val)->first();
+                    if(is_null($product_indentity))
+                        return redirect()->back()->with('message','<p class="text-danger">Mã định danh imei '.$data[$name_of_imei_input].' không khớp với bất ký sản phẩm nào</p>');
+                    $product_indentity->phieu_xuat_id = $phieu_xuat->id;
+                    $product_indentity->trang_thai = "Đã xuất";
+                    $product_indentity->save();
+                }
             }
             $phieu_xuat->tong_tien = $tong_tien;
         }else{
             $tong_tien = 0;
-            $chi_tiet_phieu_xuats = ChiTietPhieuXuat::where('phieu_xuat_id',$phieu_xuat->id)->delete();
             foreach ($data['san_pham'] as $key => $val) {
                 //Tính tổng tiền xuất
                 $thanh_tien_format = trim($data['thanh_tien'][$key], "đ");
                 $tong_tien += floatval($thanh_tien_format);
+                $chi_tiet_phieu_xuats = ChiTietPhieuXuat::where('phieu_xuat_id',$phieu_xuat->id)->delete();
 
                 $chi_tiet_phieu_xuat = new ChiTietPhieuXuat();
                 $chi_tiet_phieu_xuat->phieu_xuat_id = $phieu_xuat->id;

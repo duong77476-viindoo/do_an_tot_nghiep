@@ -50,17 +50,6 @@
                                             <!-- /.input group -->
                                         </div>
 
-                                        <div class="form-group">
-                                            <label>Tên phiếu:</label>
-
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="fas fa-square"></i></span>
-                                                </div>
-                                               <input class="form-control" type="text" name="name" placeholder="Nhập tên phiếu">
-                                            </div>
-                                            <!-- /.input group -->
-                                        </div>
 
                                         <div class="form-group">
                                             <label>Nội dung:</label>

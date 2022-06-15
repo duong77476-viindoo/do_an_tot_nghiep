@@ -84,7 +84,7 @@
                                     <div class="cart_quantity_button">
 
                                         {{--                            <a class="cart_quantity_up" href=""> + </a>--}}
-                                        <input disabled class="cart_quantity_input" type="number" min="1" name="cart_qty[{{$cart['session_id']}}]" value="{{$cart['product_qty']}}" autocomplete="off" size="2">
+                                        <input readonly class="cart_quantity_input" type="number" min="1" name="cart_qty[{{$cart['session_id']}}]" value="{{$cart['product_qty']}}" autocomplete="off" size="2">
                                         <input type="hidden" value="" name="rowId">
 
                                         {{--                            <a class="cart_quantity_down" href=""> - </a>--}}

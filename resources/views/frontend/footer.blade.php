@@ -28,17 +28,6 @@
             </div>
             <div class="col-sm-2">
                 <div class="single-widget">
-                    <h2>Quick Shop</h2>
-                    <ul class="nav nav-pills nav-stacked">
-                        <li><a href="#">Điện thoại</a></li>
-                        <li><a href="#">Laptop</a></li>
-                        <li><a href="#">Phụ kiện</a></li>
-                        <li><a href="#">Máy tính bảng</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-2">
-                <div class="single-widget">
                     <h2>Chính sách</h2>
                     <ul class="nav nav-pills nav-stacked">
                         <li><a href="#">Điểu khoản sử dụng</a></li>
@@ -48,22 +37,11 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-sm-2">
-                <div class="single-widget">
-                    <h2>BC Phone</h2>
-                    <ul class="nav nav-pills nav-stacked">
-                        <li><a href="#">Thông tin chung</a></li>
-                        <li><a href="#">Cơ hội việc làm</a></li>
-                        <li><a href="#">Địa điểm cửa hàng</a></li>
-                        <li><a href="#">Copyright</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-3 col-sm-offset-1">
+            <div class="col-sm-6 pull-right">
                 <div class="single-widget">
                     <h2>Về cửa hàng</h2>
                     <form action="#" class="searchform">
-                        <input type="text" placeholder="Your email address" />
+                        <input type="text" placeholder="Địa chỉ email" />
                         <button type="submit" class="btn btn-default"><i class="fa fa-arrow-circle-o-right"></i></button>
                         <p>Nhận thông tin mới nhận về sản phẩm, chương trình khuyến mại</p>
                     </form>
@@ -608,19 +586,34 @@
                                 coupon:coupon,
                                 _token:_token
                             },
-                            success:function()
+                            success:function(data)
                             {
-                                swal({
-                                        title: "Đặt hàng thành công",
-                                        text: "Cảm ơn bạn đã mua hàng của chúng tôi!",
-                                        confirmButtonClass: "btn-success",
-                                        confirmButtonText: "Đi đến xem đơn hàng của bạn",
-                                        closeOnConfirm: false
-                                    },
-                                    function() {
-                                        window.location.href = "{{url('/purchase-history')}}";
-                                    });
-                            }
+                                if($.isEmptyObject(data.error)){
+                                    swal({
+                                            title: "Đặt hàng thành công",
+                                            text: "Cảm ơn bạn đã mua hàng của chúng tôi!",
+                                            confirmButtonClass: "btn-success",
+                                            confirmButtonText: "Đi đến xem đơn hàng của bạn",
+                                            closeOnConfirm: false
+                                        },
+                                        function() {
+                                            window.location.href = "{{url('/purchase-history')}}";
+                                        });
+                                }
+                               else{
+                                    swal({
+                                        title: "Thanh toán thất bại",
+                                        text: "Đã tồn tại địa chỉ email trên",
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonClass: "btn-danger",
+                                        confirmButtonText: "Tiếp tục",
+                                        cancelButtonText: "Hủy bỏ!",
+                                        closeOnConfirm: false,
+                                        closeOnCancel: false
+                                    })
+                                }
+                            },
                         });
                     } else {
                         swal("Hủy đặt hàng thành công", "Tiếp tục hoàn tất đơn hàng nhé", "error");

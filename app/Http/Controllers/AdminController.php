@@ -71,7 +71,7 @@ class AdminController extends Controller
             $admin->name = $data['name'];
             $admin->email = $data['email'];
             $admin->phone = $data['phone'];
-            $admin->password = md5($data['password']);
+            $admin->password = bcrypt($data['password']);
             $admin->save();
             Session::put('message','<p class="text-success">Tạo mời người dùng thành công</p>');
             return \redirect()->route('view-admin',['id'=>$admin->id]);
@@ -92,7 +92,7 @@ class AdminController extends Controller
             'email'=>'required|email',
             'phone'=>'required|numeric',
         ]);
-        if (md5($request->current_password)!=Auth::user()->getAuthPassword()) {
+        if (bcrypt($request->current_password)!=Auth::user()->getAuthPassword()) {
             // The passwords matches
             Session::put('message','<p class="text-danger">Password hiện tại không khớp</p>');
             return redirect()->back();
@@ -111,7 +111,7 @@ class AdminController extends Controller
             $admin->name = $data['name'];
             $admin->email = $data['email'];
             $admin->phone = $data['phone'];
-            $admin->password = md5($data['new_password']);
+            $admin->password = bcrypt($data['new_password']);
             $admin->updated_at = now();
             $admin->save();
             Session::put('message','<p class="text-success">Cập nhật người dùng thành công</p>');
@@ -163,7 +163,6 @@ class AdminController extends Controller
         $validated = $request->validate([
             'email'=>'required',
             'password'=>'required',
-//            'g-recaptcha-response'=>new Captcha(),
         ]);
         $data = $request->all();
         if(Auth::attempt(['email'=>$data['email'],'password'=>$data['password']])){
