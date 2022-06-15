@@ -374,7 +374,7 @@ Route::middleware('check_login_admin')->group(function (){
 
             Route::post('/save-ton-kho', [TonKhoController::class, 'store'])->name('save-ton-kho');
             Route::post('/chot-ton-kho', [TonKhoController::class, 'chot_ton_kho'])->name('chot-ton-kho');
-
+            Route::get('/view-chi-tiet-nhap-xuat/{id}',[TonKhoController::class,'view_chi_tiet_nhap_xuat'])->name('view-chi-tiet-nhap-xuat');
             //        Route::get('/print-order/{id}',[TonKhoController::class,'print_order'])->name('print-phieu-xuat');
         });
     });

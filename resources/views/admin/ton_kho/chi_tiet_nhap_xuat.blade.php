@@ -1,10 +1,9 @@
 @extends('admin.admin_layout')
 @section('admin_content')
-    {{ \DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs::render('ton-kho') }}
     <div class="table-agile-info">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Thống kê tồn kho theo từng sản phẩm
+                Chi tiết nhập xuất {{$ton_kho->product->name}} tháng {{$ton_kho->month}} năm {{$ton_kho->year}}
             </div>
             <?php
             $message = \Illuminate\Support\Facades\Session::get('message');
@@ -13,95 +12,24 @@
                 \Illuminate\Support\Facades\Session::put('message',null);
             }
             ?>
-            <div style="display: block">
-                <div style="display:inline-block;">
-                    <button type="button" class="btn btn-primary chot_ton_kho">Chốt số liệu</button>
-                </div>
-                <div style="display:inline-block;">
-                    <form action="{{route('ton-kho-export-csv')}}" method="POST">
-                        @csrf
-                        <label>
-                            Năm
-                            <select class="form-control" name="year">
-                                <option>2019</option>
-                                <option>2020</option>
-                                <option>2021</option>
-                                <option>2022</option>
-                            </select>
-                        </label>
-                        <label>
-                            Tháng
-                            <select class="form-control" name="month">
-                                <option>01</option>
-                                <option>02</option>
-                                <option>03</option>
-                                <option>04</option>
-                                <option>05</option>
-                                <option>06</option>
-                                <option>07</option>
-                                <option>08</option>
-                                <option>09</option>
-                                <option>10</option>
-                                <option>11</option>
-                                <option>12</option>
-                            </select>
-                        </label>
-                        <input type="submit" value="Xuất báo cáo tồn kho" name="export_csv" class="btn btn-success">
-                    </form>
-                </div>
-            </div>
+
             <div class="table-responsive">
                 <table id="myTable" class="table table-striped b-t b-light">
                     <thead>
                     <tr>
-                        <th>Sản phẩm</th>
-                        <th>Năm</th>
-                        <th>Tháng</th>
-                        <th>Tồn đầu tháng</th>
-                        <th>Nhập trong tháng</th>
-                        <th>Xuất trong tháng</th>
-                        <th>Tồn</th>
+                        <th>Mã định danh</th>
                         <th>Trạng thái</th>
-                        <th>Chi tiết nhập xuất</th>
-{{--                        <th>Hành động</th>--}}
+                        <th>Phiếu nhập</th>
+                        <th>Phiếu xuất</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($ton_khos as $key => $ton_kho)
-                        <tr class="{{$ton_kho->trang_thai=="Hoàn thành" ? 'table-success' : 'table-active'}}">
-                            <td>{{$ton_kho->product->name}}</td>
-                            <td>{{$ton_kho->year}}</td>
-                            @php
-                                $date = date("Y-m-d");
-                                //Lấy năm, tháng trước
-                                $pre_month = date("m", strtotime ( '-1 month' , strtotime ( $date ) ));
-                                $pre_year = date("Y", strtotime ( '-1 month' , strtotime ( $date ) ));
-                                //Lấy năm tháng hiện tại
-                                $month = date("m");
-                                $year = date('Y');
-                            @endphp
-                            @if($ton_kho->trang_thai=="Chưa hoàn thành" && $ton_kho->month==$pre_month && $ton_kho->year==$pre_year)
-                                <td class="pre_ton_kho_month">{{$ton_kho->month}}</td>
-                            @elseif($ton_kho->trang_thai=="Chưa hoàn thành" && $ton_kho->month==$month && $ton_kho->year==$year)
-                                <td class="ton_kho_month">{{$ton_kho->month}}</td>
-                            @else
-                                <td>{{$ton_kho->month}}</td>
-                            @endif
-                            <td>{{$ton_kho->ton_dau_thang}}</td>
-                            <td>{{$ton_kho->nhap_trong_thang}}</td>
-                            <td>{{$ton_kho->xuat_trong_thang}}</td>
-                            <td>{{$ton_kho->ton}}</td>
-                            @if($ton_kho->trang_thai=="Hoàn thành")
-                                <td>Đã chốt</td>
-                            @else
-                                <td>Chưa chốt</td>
-                            @endif
-                            <td>
-                                <a href="{{route('view-chi-tiet-nhap-xuat',['id'=>$ton_kho->id])}}" class="active" ui-toggle-class="">
-                                    Chi tiết
-                                    <i class="fa fa-pen text-success text-active"></i>
-                                </a>
-                            </td>
+                    @foreach($product->product_identities as $key => $product)
+                        <tr class="{{$product->trang_thai=="Đã xuất" ? 'table-success' : 'table-active'}}">
+                            <td>{{$product->code}}</td>
+                            <td>{{$product->trang_thai}}</td>
+                            <td>{{$product->phieu_nhap_id}}</td>
+                            <td>{{$product->phieu_xuat_id}}</td>
                         </tr>
                     @endforeach
                     </tbody>

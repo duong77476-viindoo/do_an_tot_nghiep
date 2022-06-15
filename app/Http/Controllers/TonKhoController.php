@@ -162,4 +162,11 @@ class TonKhoController extends Controller
         $ton_kho_export->setMonth($data['month']);
         return \Maatwebsite\Excel\Facades\Excel::download($ton_kho_export,'BaoCaoTonKho.xlsx');
     }
+
+    public function view_chi_tiet_nhap_xuat($id){
+        $ton_kho = TonKho::find($id);
+        $product = Product::find($ton_kho->product_id);
+        return view('admin.ton_kho.chi_tiet_nhap_xuat')
+            ->with(compact('ton_kho','product'));
+    }
 }
