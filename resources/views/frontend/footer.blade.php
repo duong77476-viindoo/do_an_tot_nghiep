@@ -544,7 +544,6 @@
         });
     })
 </script>
-
 {{--Script xác nhận đơn hàng--}}
 <script type="text/javascript">
     $(document).ready(function(){
